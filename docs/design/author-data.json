@@ -1,0 +1,62 @@
+{
+  "site": {
+    "name": "Trade The Event",
+    "editorialUrl": "/editorial-policy/",
+    "contactUrl": "/contact/",
+    "authorsUrl": "/authors/"
+  },
+  "author": {
+    "kicker": "Author",
+    "name": "Jefferson Hayes",
+    "role": "Crypto & Commodities Analyst",
+    "location": "Oregon, US",
+    "since": "2026",
+    "badges": ["Credentials verified", "Contributing since 2026"],
+    "bio": "A 32-year-old analyst based in Oregon who brings a down-to-earth, historical perspective to modern markets.",
+    "short": "Historical perspective on digital assets, commodities, and market cycles.",
+    "portrait": "portrait 1:1",
+    "stats": [
+      { "value": "21", "label": "Pieces bylined" },
+      { "value": "1", "label": "Reviews touched" },
+      { "value": "1", "label": "Tools built" },
+      { "value": "2026", "label": "Contributing since" }
+    ]
+  },
+  "gallery": {
+    "heading": "Source material",
+    "note": "Own photography and self-built exports. Captions carry the date and source.",
+    "items": [
+      { "short": "desk", "label": "portrait 1:1", "caption": "At the desk, Portland — Aug 2026" },
+      { "short": "field", "label": "photo 1:1", "caption": "Grain terminal, Columbia River — Jun 2026" },
+      { "short": "chart", "label": "export 1:1", "caption": "Historical bubble overlay, self-built" }
+    ]
+  },
+  "focus": [
+    { "title": "Cryptocurrency & Digital Assets", "body": "Tracking the evolution of decentralized finance." },
+    { "title": "Commodities & Supply Chain", "body": "Analyzing real-world resources and energy sectors." },
+    { "title": "Historical Market Cycles", "body": "Identifying repeating patterns in economic behavior." },
+    { "title": "Macroeconomic Trends", "body": "A down-to-earth perspective on inflation and fiat currency." }
+  ],
+  "edits": [
+    { "date": "Aug 23, 2026", "type": "Market recap", "status": "Published", "title": "DeRozan lands in Denver", "url": "/recaps/2026-08-23-weekly/", "summary": "The week of August 16 to 23 turned on a one-year contract in Denver.", "readTime": "6 min" }
+  ],
+  "experience": [
+    { "years": "2026 — present", "title": "Crypto & Commodities Analyst", "org": "Trade The Event", "body": "Provides grounded analysis on digital assets and tangible commodities." }
+  ],
+  "credentials": [
+    "B.A. in History and Economics, Western Washington University",
+    "Veteran of the early cryptocurrency boom and sustained digital asset markets"
+  ],
+  "follows": [
+    { "handle": "@CoinDesk", "url": "https://x.com/CoinDesk" },
+    { "handle": "@VitalikButerin", "url": "https://x.com/VitalikButerin" }
+  ],
+  "otherAuthors": [
+    { "name": "Annabel Maldonado", "role": "Prediction Market Commentator", "url": "/authors/annabel-maldonado/" }
+  ],
+  "pitch": {
+    "title": "Write for us",
+    "body": "We take pitches from traders and analysts who can show their work.",
+    "cta": "Contact the desk"
+  }
+}

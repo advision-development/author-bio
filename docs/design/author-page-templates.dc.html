@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+  body { margin: 0; background: #f4f4f2; color: #17181a; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #17181a; text-decoration: none; }
+  a:hover { color: #6f7175; text-decoration: underline; text-underline-offset: 3px; }
+  h1, h2, h3, h4, p, ul, ol, li, figure { margin: 0; padding: 0; }
+  ul, ol { list-style: none; }
+</style>
+</helmet>
+
+<div style="min-height:100vh">
+
+  <div style="position:sticky;top:0;z-index:50;display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px 20px;background:#17181a;color:#f4f4f2">
+    <span style="font:11px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;color:#9a9a95;margin-right:8px">Author template</span>
+    <button type="button" onClick="{{ go1 }}" style="{{ b1 }}">1 · Classic sidebar</button>
+    <button type="button" onClick="{{ go2 }}" style="{{ b2 }}">2 · Résumé</button>
+    <button type="button" onClick="{{ go3 }}" style="{{ b3 }}">3 · Editorial masthead</button>
+    <button type="button" onClick="{{ go4 }}" style="{{ b4 }}">4 · Bento</button>
+    <button type="button" onClick="{{ go5 }}" style="{{ b5 }}">5 · Numbered rail</button>
+    <button type="button" onClick="{{ go6 }}" style="{{ b6 }}">6 · Full-bleed dossier</button>
+    <button type="button" onClick="{{ go7 }}" style="{{ b7 }}">7 · Sports desk</button>
+    <button type="button" onClick="{{ go8 }}" style="{{ b8 }}">8 · Fintech product</button>
+    <button type="button" onClick="{{ go9 }}" style="{{ b9 }}">9 · Research note</button>
+    <button type="button" onClick="{{ go10 }}" style="{{ b10 }}">10 · Brand feature</button>
+  </div>
+
+  <!-- ═══════════ 1 · CLASSIC SIDEBAR ═══════════ -->
+  <sc-if value="{{ isL1 }}" hint-placeholder-val="{{ true }}">
+  <div style="background:#fbfbfa">
+    <div style="max-width:1180px;margin:0 auto;padding:28px 32px 72px">
+      <nav style="display:flex;gap:8px;font-size:12px;color:#8a8c90;margin-bottom:28px">
+        <a href="/">Home</a><span>/</span><a href="{{ site.authorsUrl }}">Authors</a><span>/</span><span>{{ a.name }}</span>
+      </nav>
+
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:56px;align-items:start">
+        <main style="display:flex;flex-direction:column;gap:44px;min-width:0">
+
+          <header style="display:grid;grid-template-columns:200px minmax(0,1fr);gap:32px;align-items:start">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="aspect-ratio:1;background-image:repeating-linear-gradient(45deg,#ececea 0 6px,#f6f6f4 6px 12px);border:1px solid #e2e2df;display:grid;place-items:center;color:#a0a09b;font:11px ui-monospace,Menlo,monospace">{{ a.portrait }}</div>
+              <ul style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+                <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="3">
+                  <li title="{{ g.caption }}" style="aspect-ratio:1;background-image:repeating-linear-gradient(45deg,#ececea 0 5px,#f6f6f4 5px 10px);border:1px solid #e2e2df;display:grid;place-items:center;color:#a0a09b;font:9px ui-monospace,Menlo,monospace">{{ g.short }}</li>
+                </sc-for>
+              </ul>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:14px;padding-top:4px">
+              <span style="font:11px/1 ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">{{ a.kicker }}</span>
+              <h1 style="font-size:46px;font-weight:500;letter-spacing:-.015em;line-height:1.05">{{ a.name }}</h1>
+              <p style="font-size:17px;color:#4a4c50">{{ a.role }}</p>
+              <ul style="display:flex;flex-wrap:wrap;gap:8px">
+                <sc-for list="{{ a.badges }}" as="badge" hint-placeholder-count="2">
+                  <li style="border:1px solid #e2e2df;border-radius:2px;padding:4px 10px;font-size:12px;color:#4a4c50;background:#fff">{{ badge }}</li>
+                </sc-for>
+              </ul>
+              <p style="font-size:15px;line-height:1.65;color:#3a3c40;text-wrap:pretty;max-width:60ch">{{ a.bio }}</p>
+            </div>
+          </header>
+
+          <ul style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#e2e2df;border:1px solid #e2e2df">
+            <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+              <li style="background:#fff;padding:26px 24px;display:flex;flex-direction:column;gap:10px">
+                <span style="font-size:30px;line-height:1">{{ s.value }}</span>
+                <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#8a8c90">{{ s.label }}</span>
+              </li>
+            </sc-for>
+          </ul>
+
+          <section id="focus" style="display:flex;flex-direction:column;gap:20px">
+            <h2 style="font-size:24px;font-weight:500;padding-bottom:12px;border-bottom:1px solid #e2e2df">Areas of focus</h2>
+            <ul style="display:grid;grid-template-columns:1fr 1fr;gap:24px 32px">
+              <sc-for list="{{ focus }}" as="f" hint-placeholder-count="4">
+                <li style="display:flex;flex-direction:column;gap:8px">
+                  <h3 style="font-size:15px;font-weight:600">{{ f.title }}</h3>
+                  <p style="font-size:14px;line-height:1.6;color:#5a5c60;text-wrap:pretty">{{ f.body }}</p>
+                </li>
+              </sc-for>
+            </ul>
+          </section>
+
+          <section id="edits" style="display:flex;flex-direction:column;gap:4px">
+            <h2 style="font-size:24px;font-weight:500;padding-bottom:12px;border-bottom:1px solid #e2e2df;margin-bottom:16px">Latest edits</h2>
+            <ul style="display:flex;flex-direction:column">
+              <sc-for list="{{ edits }}" as="e" hint-placeholder-count="6">
+                <li style="display:grid;grid-template-columns:120px minmax(0,1fr);gap:24px;padding:20px 0;border-bottom:1px solid #ececea">
+                  <div style="display:flex;flex-direction:column;gap:6px">
+                    <span style="font-size:12px;color:#8a8c90">{{ e.date }}</span>
+                    <span style="font:10px/1 ui-monospace,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#8a8c90">{{ e.status }}</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:7px">
+                    <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#8a8c90">{{ e.type }}</span>
+                    <h3 style="font-size:16px;font-weight:600;line-height:1.35"><a href="{{ e.url }}">{{ e.title }}</a></h3>
+                    <p style="font-size:14px;line-height:1.6;color:#5a5c60;text-wrap:pretty">{{ e.summary }}</p>
+                    <span style="font-size:12px;color:#8a8c90">{{ e.readTime }}</span>
+                  </div>
+                </li>
+              </sc-for>
+            </ul>
+          </section>
+
+          <section id="experience" style="display:flex;flex-direction:column;gap:20px">
+            <h2 style="font-size:24px;font-weight:500;padding-bottom:12px;border-bottom:1px solid #e2e2df">Experience</h2>
+            <ul style="display:flex;flex-direction:column;gap:24px">
+              <sc-for list="{{ experience }}" as="x" hint-placeholder-count="2">
+                <li style="display:grid;grid-template-columns:150px minmax(0,1fr);gap:24px">
+                  <span style="font-size:13px;color:#8a8c90">{{ x.years }}</span>
+                  <div style="display:flex;flex-direction:column;gap:6px">
+                    <h3 style="font-size:15px;font-weight:600">{{ x.title }}</h3>
+                    <span style="font-size:13px;color:#8a8c90">{{ x.org }}</span>
+                    <p style="font-size:14px;line-height:1.6;color:#5a5c60;text-wrap:pretty">{{ x.body }}</p>
+                  </div>
+                </li>
+              </sc-for>
+            </ul>
+          </section>
+
+        </main>
+
+        <aside style="display:flex;flex-direction:column;gap:32px;position:sticky;top:80px">
+          <nav style="display:flex;flex-direction:column;gap:10px">
+            <h3 style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90">On this page</h3>
+            <ol style="display:flex;flex-direction:column;gap:8px">
+              <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4">
+                <li style="display:flex;gap:10px;font-size:14px"><span style="font:11px ui-monospace,Menlo,monospace;color:#b0b0ab;padding-top:2px">{{ n.num }}</span><a href="{{ n.href }}">{{ n.label }}</a></li>
+              </sc-for>
+            </ol>
+          </nav>
+
+          <div style="display:flex;flex-direction:column;gap:12px;padding-top:24px;border-top:1px solid #e2e2df">
+            <h3 style="font-size:14px;font-weight:600">Credentials</h3>
+            <ul style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ credentials }}" as="c" hint-placeholder-count="3">
+                <li style="font-size:13px;line-height:1.55;color:#5a5c60">{{ c }}</li>
+              </sc-for>
+            </ul>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:12px;padding-top:24px;border-top:1px solid #e2e2df">
+            <h3 style="font-size:14px;font-weight:600">Follows on X</h3>
+            <ul style="display:flex;flex-wrap:wrap;gap:8px">
+              <sc-for list="{{ follows }}" as="h" hint-placeholder-count="4">
+                <li><a href="{{ h.url }}" style="display:block;border:1px solid #e2e2df;background:#fff;border-radius:2px;padding:4px 9px;font-size:12px">{{ h.handle }}</a></li>
+              </sc-for>
+            </ul>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:14px;padding-top:24px;border-top:1px solid #e2e2df">
+            <h3 style="font-size:14px;font-weight:600">Other authors</h3>
+            <ul style="display:flex;flex-direction:column;gap:14px">
+              <sc-for list="{{ others }}" as="o" hint-placeholder-count="2">
+                <li style="display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;align-items:center">
+                  <span style="aspect-ratio:1;border-radius:50%;background-image:repeating-linear-gradient(45deg,#ececea 0 4px,#f6f6f4 4px 8px);border:1px solid #e2e2df"></span>
+                  <span style="display:flex;flex-direction:column;gap:3px"><a href="{{ o.url }}" style="font-size:13px;font-weight:600">{{ o.name }}</a><span style="font-size:12px;color:#8a8c90;line-height:1.4">{{ o.role }}</span></span>
+                </li>
+              </sc-for>
+            </ul>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:10px;padding:20px;background:#f4f4f2;border:1px solid #e2e2df">
+            <h3 style="font-size:14px;font-weight:600">{{ pitch.title }}</h3>
+            <p style="font-size:13px;line-height:1.55;color:#5a5c60">{{ pitch.body }}</p>
+            <a href="{{ site.contactUrl }}" style="align-self:start;margin-top:4px;border:1px solid #17181a;padding:8px 14px;font-size:13px" style-hover="background:#17181a;color:#fbfbfa;text-decoration:none">{{ pitch.cta }}</a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ 2 · RÉSUMÉ ═══════════ -->
+  <sc-if value="{{ isL2 }}" hint-placeholder-val="{{ true }}">
+  <div style="background:#fbfbfa">
+    <div style="max-width:1120px;margin:0 auto;display:grid;grid-template-columns:320px minmax(0,1fr);align-items:start;min-height:100vh">
+      <aside style="background:#f4f4f2;border-right:1px solid #e2e2df;padding:40px 32px 64px;display:flex;flex-direction:column;gap:32px;min-height:100vh">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="aspect-ratio:1;background-image:repeating-linear-gradient(45deg,#e6e6e3 0 6px,#efefed 6px 12px);border:1px solid #dededa;display:grid;place-items:center;color:#a0a09b;font:11px ui-monospace,Menlo,monospace">{{ a.portrait }}</div>
+          <ul style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+            <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="3">
+              <li title="{{ g.caption }}" style="aspect-ratio:1;background-image:repeating-linear-gradient(45deg,#e6e6e3 0 5px,#efefed 5px 10px);border:1px solid #dededa;display:grid;place-items:center;color:#a0a09b;font:9px ui-monospace,Menlo,monospace">{{ g.short }}</li>
+            </sc-for>
+          </ul>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <h1 style="font-size:34px;font-weight:500;line-height:1.1;letter-spacing:-.01em">{{ a.name }}</h1>
+          <p style="font-size:15px;color:#4a4c50;line-height:1.45">{{ a.role }}</p>
+          <p style="font-size:13px;color:#8a8c90">{{ a.location }} · Since {{ a.since }}</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;padding-top:24px;border-top:1px solid #dededa">
+          <h2 style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90">Credentials</h2>
+          <ul style="display:flex;flex-direction:column;gap:12px">
+            <sc-for list="{{ credentials }}" as="c" hint-placeholder-count="3">
+              <li style="font-size:13px;line-height:1.55;color:#4a4c50">{{ c }}</li>
+            </sc-for>
+          </ul>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;padding-top:24px;border-top:1px solid #dededa">
+          <h2 style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90">Verified</h2>
+          <ul style="display:flex;flex-direction:column;gap:8px">
+            <sc-for list="{{ a.badges }}" as="badge" hint-placeholder-count="2">
+              <li style="font-size:13px;color:#4a4c50">{{ badge }}</li>
+            </sc-for>
+          </ul>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;padding-top:24px;border-top:1px solid #dededa">
+          <h2 style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90">Follows on X</h2>
+          <ul style="display:flex;flex-direction:column;gap:8px">
+            <sc-for list="{{ follows }}" as="h" hint-placeholder-count="4">
+              <li><a href="{{ h.url }}" style="font-size:13px;color:#4a4c50">{{ h.handle }}</a></li>
+            </sc-for>
+          </ul>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;padding-top:24px;border-top:1px solid #dededa">
+          <h2 style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90">Other authors</h2>
+          <ul style="display:flex;flex-direction:column;gap:12px">
+            <sc-for list="{{ others }}" as="o" hint-placeholder-count="2">
+              <li style="display:flex;flex-direction:column;gap:3px"><a href="{{ o.url }}" style="font-size:13px;font-weight:600">{{ o.name }}</a><span style="font-size:12px;color:#8a8c90;line-height:1.4">{{ o.role }}</span></li>
+            </sc-for>
+          </ul>
+        </div>
+      </aside>
+
+      <main style="padding:48px 48px 72px;display:flex;flex-direction:column;gap:44px;min-width:0">
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <span style="font:11px/1 ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">{{ a.kicker }} profile</span>
+          <p style="font-size:22px;line-height:1.5;color:#2a2c30;text-wrap:pretty;max-width:64ch">{{ a.bio }}</p>
+        </section>
+
+        <ul style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;padding:22px 0;border-top:1px solid #e2e2df;border-bottom:1px solid #e2e2df">
+          <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+            <li style="display:flex;flex-direction:column;gap:5px">
+              <span style="font-size:28px;line-height:1">{{ s.value }}</span>
+              <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#8a8c90">{{ s.label }}</span>
+            </li>
+          </sc-for>
+        </ul>
+
+        <section id="focus" style="display:grid;grid-template-columns:180px minmax(0,1fr);gap:32px">
+          <h2 style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90;padding-top:4px">Areas of focus</h2>
+          <ul style="display:flex;flex-direction:column;gap:20px">
+            <sc-for list="{{ focus }}" as="f" hint-placeholder-count="4">
+              <li style="display:flex;flex-direction:column;gap:6px">
+                <h3 style="font-size:15px;font-weight:600">{{ f.title }}</h3>
+                <p style="font-size:14px;line-height:1.6;color:#5a5c60;text-wrap:pretty;max-width:70ch">{{ f.body }}</p>
+              </li>
+            </sc-for>
+          </ul>
+        </section>
+
+        <section id="experience" style="display:grid;grid-template-columns:180px minmax(0,1fr);gap:32px;padding-top:36px;border-top:1px solid #e2e2df">
+          <h2 style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90;padding-top:4px">Experience</h2>
+          <ul style="display:flex;flex-direction:column;gap:26px">
+            <sc-for list="{{ experience }}" as="x" hint-placeholder-count="2">
+              <li style="display:flex;flex-direction:column;gap:6px">
+                <div style="display:flex;justify-content:space-between;gap:16px;align-items:baseline">
+                  <h3 style="font-size:15px;font-weight:600">{{ x.title }}</h3>
+                  <span style="font-size:12px;color:#8a8c90;white-space:nowrap">{{ x.years }}</span>
+                </div>
+                <span style="font-size:13px;color:#8a8c90">{{ x.org }}</span>
+                <p style="font-size:14px;line-height:1.6;color:#5a5c60;text-wrap:pretty;max-width:70ch">{{ x.body }}</p>
+              </li>
+            </sc-for>
+          </ul>
+        </section>
+
+        <section id="edits" style="display:grid;grid-template-columns:180px minmax(0,1fr);gap:32px;padding-top:36px;border-top:1px solid #e2e2df">
+          <h2 style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90;padding-top:4px">Latest edits</h2>
+          <ul style="display:flex;flex-direction:column">
+            <sc-for list="{{ edits }}" as="e" hint-placeholder-count="6">
+              <li style="display:flex;flex-direction:column;gap:6px;padding:14px 0;border-bottom:1px solid #ececea">
+                <div style="display:flex;gap:12px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8a8c90"><span>{{ e.date }}</span><span>{{ e.type }}</span><span>{{ e.status }}</span></div>
+                <h3 style="font-size:15px;font-weight:600;line-height:1.4"><a href="{{ e.url }}">{{ e.title }}</a></h3>
+              </li>
+            </sc-for>
+          </ul>
+        </section>
+
+      </main>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ 3 · EDITORIAL MASTHEAD ═══════════ -->
+  <sc-if value="{{ isL3 }}" hint-placeholder-val="{{ true }}">
+  <div style="background:#fbfbfa;padding-bottom:80px">
+    <header style="max-width:1000px;margin:0 auto;padding:64px 32px 40px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px">
+      <span style="font:11px/1 ui-monospace,Menlo,monospace;letter-spacing:.2em;text-transform:uppercase;color:#8a8c90">{{ a.kicker }} · {{ a.location }}</span>
+      <h1 style="font-size:76px;font-weight:400;line-height:1;letter-spacing:-.02em">{{ a.name }}</h1>
+      <p style="font-style:italic;font-size:22px;color:#4a4c50">{{ a.role }}</p>
+      <ul style="display:flex;gap:20px;flex-wrap:wrap;justify-content:center;padding-top:6px">
+        <sc-for list="{{ a.badges }}" as="badge" hint-placeholder-count="2">
+          <li style="font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#8a8c90">{{ badge }}</li>
+        </sc-for>
+      </ul>
+    </header>
+
+    <div style="max-width:1240px;margin:0 auto;padding:0 32px">
+      <ul style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+        <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="3">
+          <li style="display:flex;flex-direction:column;gap:8px">
+            <span style="aspect-ratio:4/3;background-image:repeating-linear-gradient(45deg,#ececea 0 8px,#f6f6f4 8px 16px);border:1px solid #e2e2df;display:grid;place-items:center;color:#a0a09b;font:11px ui-monospace,Menlo,monospace">{{ g.label }}</span>
+            <span style="font-size:12px;line-height:1.45;color:#8a8c90;text-align:center">{{ g.caption }}</span>
+          </li>
+        </sc-for>
+      </ul>
+    </div>
+
+    <div style="max-width:720px;margin:0 auto;padding:56px 32px 0;display:flex;flex-direction:column;gap:52px">
+      <p style="font-size:21px;line-height:1.65;color:#2a2c30;text-wrap:pretty">{{ a.bio }}</p>
+
+      <ul style="display:flex;flex-wrap:wrap;gap:36px;justify-content:space-between;padding:24px 0;border-top:1px solid #17181a;border-bottom:1px solid #e2e2df">
+        <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+          <li style="display:flex;flex-direction:column;gap:4px;text-align:center">
+            <span style="font-size:32px;line-height:1">{{ s.value }}</span>
+            <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#8a8c90">{{ s.label }}</span>
+          </li>
+        </sc-for>
+      </ul>
+
+      <section id="focus" style="display:flex;flex-direction:column;gap:22px">
+        <h2 style="font-size:15px;letter-spacing:.16em;text-transform:uppercase;text-align:center;color:#8a8c90">Areas of focus</h2>
+        <ul style="display:flex;flex-direction:column;gap:22px">
+          <sc-for list="{{ focus }}" as="f" hint-placeholder-count="4">
+            <li style="display:flex;flex-direction:column;gap:6px;padding-bottom:20px;border-bottom:1px solid #ececea">
+              <h3 style="font-size:20px;font-weight:500">{{ f.title }}</h3>
+              <p style="font-size:15px;line-height:1.65;color:#5a5c60;text-wrap:pretty">{{ f.body }}</p>
+            </li>
+          </sc-for>
+        </ul>
+      </section>
+
+      <section id="experience" style="display:flex;flex-direction:column;gap:22px">
+        <h2 style="font-size:15px;letter-spacing:.16em;text-transform:uppercase;text-align:center;color:#8a8c90">Experience</h2>
+        <ul style="display:flex;flex-direction:column;gap:26px">
+          <sc-for list="{{ experience }}" as="x" hint-placeholder-count="2">
+            <li style="display:flex;flex-direction:column;gap:6px;text-align:center">
+              <span style="font:11px ui-monospace,Menlo,monospace;letter-spacing:.1em;color:#8a8c90">{{ x.years }}</span>
+              <h3 style="font-size:20px;font-weight:500">{{ x.title }}</h3>
+              <span style="font-size:13px;color:#8a8c90">{{ x.org }}</span>
+              <p style="font-size:15px;line-height:1.65;color:#5a5c60;text-wrap:pretty">{{ x.body }}</p>
+            </li>
+          </sc-for>
+        </ul>
+      </section>
+
+      <section id="edits" style="display:flex;flex-direction:column;gap:22px">
+        <h2 style="font-size:15px;letter-spacing:.16em;text-transform:uppercase;text-align:center;color:#8a8c90">Latest edits</h2>
+        <ul style="display:flex;flex-direction:column">
+          <sc-for list="{{ edits }}" as="e" hint-placeholder-count="6">
+            <li style="display:flex;flex-direction:column;gap:6px;padding:18px 0;border-bottom:1px solid #ececea">
+              <div style="display:flex;gap:12px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8a8c90"><span>{{ e.date }}</span><span>{{ e.type }} · {{ e.status }}</span></div>
+              <h3 style="font-size:19px;font-weight:500;line-height:1.35"><a href="{{ e.url }}">{{ e.title }}</a></h3>
+              <p style="font-size:14px;line-height:1.6;color:#6f7175;text-wrap:pretty">{{ e.summary }}</p>
+            </li>
+          </sc-for>
+        </ul>
+      </section>
+    </div>
+
+    <div style="max-width:1240px;margin:56px auto 0;padding:0 32px">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#e2e2df;border:1px solid #e2e2df">
+        <div style="background:#fbfbfa;padding:26px;display:flex;flex-direction:column;gap:12px">
+          <h3 style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90">Credentials</h3>
+          <ul style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ credentials }}" as="c" hint-placeholder-count="3">
+              <li style="font-size:13px;line-height:1.55;color:#5a5c60">{{ c }}</li>
+            </sc-for>
+          </ul>
+        </div>
+        <div style="background:#fbfbfa;padding:26px;display:flex;flex-direction:column;gap:12px">
+          <h3 style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90">Follows on X</h3>
+          <ul style="display:flex;flex-wrap:wrap;gap:8px">
+            <sc-for list="{{ follows }}" as="h" hint-placeholder-count="4">
+              <li><a href="{{ h.url }}" style="display:block;border:1px solid #e2e2df;padding:4px 9px;font-size:12px;background:#fff">{{ h.handle }}</a></li>
+            </sc-for>
+          </ul>
+        </div>
+        <div style="background:#fbfbfa;padding:26px;display:flex;flex-direction:column;gap:12px">
+          <h3 style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90">Other authors</h3>
+          <ul style="display:flex;flex-direction:column;gap:12px">
+            <sc-for list="{{ others }}" as="o" hint-placeholder-count="2">
+              <li style="display:flex;flex-direction:column;gap:3px"><a href="{{ o.url }}" style="font-size:13px;font-weight:600">{{ o.name }}</a><span style="font-size:12px;color:#8a8c90;line-height:1.4">{{ o.role }}</span></li>
+            </sc-for>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ 4 · BENTO ═══════════ -->
+  <sc-if value="{{ isL4 }}" hint-placeholder-val="{{ true }}">
+  <div style="background:#f4f4f2;padding:32px;min-height:100vh">
+    <div style="max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(12,1fr);gap:16px">
+
+      <div style="grid-column:span 3;background:#fbfbfa;border:1px solid #e2e2df;padding:16px;display:flex;flex-direction:column;gap:14px">
+        <div style="aspect-ratio:1;background-image:repeating-linear-gradient(45deg,#ececea 0 6px,#f6f6f4 6px 12px);border:1px solid #e2e2df;display:grid;place-items:center;color:#a0a09b;font:11px ui-monospace,Menlo,monospace">{{ a.portrait }}</div>
+        <ul style="display:flex;flex-direction:column;gap:6px">
+          <sc-for list="{{ a.badges }}" as="badge" hint-placeholder-count="2">
+            <li style="font-size:12px;color:#6f7175">{{ badge }}</li>
+          </sc-for>
+        </ul>
+      </div>
+
+      <div style="grid-column:span 5;background:#fbfbfa;border:1px solid #e2e2df;padding:28px;display:flex;flex-direction:column;gap:12px;justify-content:center">
+        <span style="font:11px/1 ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">{{ a.kicker }}</span>
+        <h1 style="font-size:40px;font-weight:500;line-height:1.05;letter-spacing:-.015em">{{ a.name }}</h1>
+        <p style="font-size:16px;color:#4a4c50">{{ a.role }}</p>
+        <p style="font-size:14px;line-height:1.6;color:#5a5c60;text-wrap:pretty">{{ a.bio }}</p>
+      </div>
+
+      <div style="grid-column:span 4;display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+          <div style="background:#fbfbfa;border:1px solid #e2e2df;padding:18px;display:flex;flex-direction:column;justify-content:space-between;gap:10px">
+            <span style="font-size:34px;line-height:1">{{ s.value }}</span>
+            <span style="font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:#8a8c90;line-height:1.3">{{ s.label }}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="grid-column:span 12;display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+        <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="3">
+          <figure style="background:#fbfbfa;border:1px solid #e2e2df;padding:16px;display:flex;flex-direction:column;gap:10px">
+            <span style="height:170px;background-image:repeating-linear-gradient(45deg,#ececea 0 6px,#f6f6f4 6px 12px);border:1px solid #e2e2df;display:grid;place-items:center;color:#a0a09b;font:10px ui-monospace,Menlo,monospace">{{ g.label }}</span>
+            <figcaption style="font-size:12px;line-height:1.45;color:#8a8c90">{{ g.caption }}</figcaption>
+          </figure>
+        </sc-for>
+      </div>
+
+      <section id="focus" style="grid-column:span 8;background:#fbfbfa;border:1px solid #e2e2df;padding:28px;display:flex;flex-direction:column;gap:20px">
+        <h2 style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90">Areas of focus</h2>
+        <ul style="display:grid;grid-template-columns:1fr 1fr;gap:22px 28px">
+          <sc-for list="{{ focus }}" as="f" hint-placeholder-count="4">
+            <li style="display:flex;flex-direction:column;gap:7px">
+              <h3 style="font-size:15px;font-weight:600">{{ f.title }}</h3>
+              <p style="font-size:13px;line-height:1.6;color:#5a5c60;text-wrap:pretty">{{ f.body }}</p>
+            </li>
+          </sc-for>
+        </ul>
+      </section>
+
+      <section id="edits" style="grid-column:span 4;grid-row:span 2;background:#fbfbfa;border:1px solid #e2e2df;padding:28px;display:flex;flex-direction:column;gap:16px">
+        <h2 style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90">Latest edits</h2>
+        <ul style="display:flex;flex-direction:column">
+          <sc-for list="{{ edits }}" as="e" hint-placeholder-count="6">
+            <li style="display:flex;flex-direction:column;gap:5px;padding:12px 0;border-bottom:1px solid #ececea">
+              <div style="display:flex;gap:10px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8a8c90"><span>{{ e.date }}</span><span>{{ e.status }}</span></div>
+              <h3 style="font-size:14px;font-weight:600;line-height:1.4"><a href="{{ e.url }}">{{ e.title }}</a></h3>
+            </li>
+          </sc-for>
+        </ul>
+      </section>
+
+      <section id="experience" style="grid-column:span 8;background:#fbfbfa;border:1px solid #e2e2df;padding:28px;display:flex;flex-direction:column;gap:20px">
+        <h2 style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90">Experience</h2>
+        <ul style="display:grid;grid-template-columns:1fr 1fr;gap:28px">
+          <sc-for list="{{ experience }}" as="x" hint-placeholder-count="2">
+            <li style="display:flex;flex-direction:column;gap:6px">
+              <span style="font:11px ui-monospace,Menlo,monospace;color:#8a8c90">{{ x.years }}</span>
+              <h3 style="font-size:15px;font-weight:600">{{ x.title }}</h3>
+              <span style="font-size:12px;color:#8a8c90">{{ x.org }}</span>
+              <p style="font-size:13px;line-height:1.6;color:#5a5c60;text-wrap:pretty">{{ x.body }}</p>
+            </li>
+          </sc-for>
+        </ul>
+      </section>
+
+      <div style="grid-column:span 4;background:#fbfbfa;border:1px solid #e2e2df;padding:28px;display:flex;flex-direction:column;gap:14px">
+        <h2 style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90">Credentials</h2>
+        <ul style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ credentials }}" as="c" hint-placeholder-count="3">
+            <li style="font-size:13px;line-height:1.55;color:#5a5c60">{{ c }}</li>
+          </sc-for>
+        </ul>
+      </div>
+
+      <div style="grid-column:span 4;background:#fbfbfa;border:1px solid #e2e2df;padding:28px;display:flex;flex-direction:column;gap:14px">
+        <h2 style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90">Follows on X</h2>
+        <ul style="display:flex;flex-wrap:wrap;gap:8px">
+          <sc-for list="{{ follows }}" as="h" hint-placeholder-count="4">
+            <li><a href="{{ h.url }}" style="display:block;border:1px solid #e2e2df;padding:5px 10px;font-size:12px">{{ h.handle }}</a></li>
+          </sc-for>
+        </ul>
+      </div>
+
+      <div style="grid-column:span 4;background:#fbfbfa;border:1px solid #e2e2df;padding:28px;display:flex;flex-direction:column;gap:14px">
+        <h2 style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90">Other authors</h2>
+        <ul style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ others }}" as="o" hint-placeholder-count="2">
+            <li style="display:flex;flex-direction:column;gap:3px"><a href="{{ o.url }}" style="font-size:13px;font-weight:600">{{ o.name }}</a><span style="font-size:12px;color:#8a8c90;line-height:1.4">{{ o.role }}</span></li>
+          </sc-for>
+        </ul>
+      </div>
+
+      <div style="grid-column:span 4;background:#17181a;color:#f4f4f2;padding:28px;display:flex;flex-direction:column;gap:12px">
+        <h2 style="font-size:15px;font-weight:600">{{ pitch.title }}</h2>
+        <p style="font-size:13px;line-height:1.6;color:#c6c6c1">{{ pitch.body }}</p>
+        <a href="{{ site.contactUrl }}" style="align-self:start;margin-top:6px;border:1px solid #6f7175;color:#f4f4f2;padding:8px 14px;font-size:13px" style-hover="background:#f4f4f2;color:#17181a;text-decoration:none">{{ pitch.cta }}</a>
+      </div>
+
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ 5 · NUMBERED RAIL ═══════════ -->
+  <sc-if value="{{ isL5 }}" hint-placeholder-val="{{ true }}">
+  <div style="background:#fbfbfa">
+    <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:220px minmax(0,1fr);gap:64px;padding:40px 32px 80px">
+      <nav style="position:sticky;top:80px;align-self:start;display:flex;flex-direction:column;gap:24px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="width:44px;aspect-ratio:1;border-radius:50%;background-image:repeating-linear-gradient(45deg,#ececea 0 4px,#f6f6f4 4px 8px);border:1px solid #e2e2df"></span>
+          <span style="display:flex;flex-direction:column"><span style="font-size:13px;font-weight:600">{{ a.name }}</span><span style="font-size:11px;color:#8a8c90">{{ a.kicker }}</span></span>
+        </div>
+        <ol style="display:flex;flex-direction:column;gap:2px;border-top:1px solid #e2e2df;padding-top:16px">
+          <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4">
+            <li><a href="{{ n.href }}" style="display:grid;grid-template-columns:26px 1fr;gap:6px;padding:8px 0;font-size:13px;color:#4a4c50" style-hover="color:#17181a;text-decoration:none"><span style="font:11px ui-monospace,Menlo,monospace;color:#b0b0ab">{{ n.num }}</span><span>{{ n.label }}</span></a></li>
+          </sc-for>
+        </ol>
+        <div style="border-top:1px solid #e2e2df;padding-top:16px;display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ follows }}" as="h" hint-placeholder-count="4">
+            <a href="{{ h.url }}" style="font-size:12px;color:#8a8c90">{{ h.handle }}</a>
+          </sc-for>
+        </div>
+      </nav>
+
+      <main style="min-width:0;display:flex;flex-direction:column;gap:0">
+        <header style="display:flex;flex-direction:column;gap:18px;padding-bottom:44px">
+          <span style="font:11px/1 ui-monospace,Menlo,monospace;letter-spacing:.18em;text-transform:uppercase;color:#8a8c90">{{ a.kicker }} · {{ a.location }}</span>
+          <h1 style="font-size:60px;font-weight:400;line-height:1;letter-spacing:-.02em;max-width:18ch">{{ a.name }}</h1>
+          <p style="font-size:19px;color:#4a4c50">{{ a.role }}</p>
+          <p style="font-size:16px;line-height:1.7;color:#3a3c40;max-width:62ch;text-wrap:pretty">{{ a.bio }}</p>
+          <ul style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:520px;padding-top:8px">
+            <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="3">
+              <li style="display:flex;flex-direction:column;gap:6px">
+                <span style="aspect-ratio:1;background-image:repeating-linear-gradient(45deg,#ececea 0 6px,#f6f6f4 6px 12px);border:1px solid #e2e2df;display:grid;place-items:center;color:#a0a09b;font:10px ui-monospace,Menlo,monospace">{{ g.label }}</span>
+                <span style="font-size:11px;line-height:1.4;color:#8a8c90">{{ g.caption }}</span>
+              </li>
+            </sc-for>
+          </ul>
+          <ul style="display:flex;flex-wrap:wrap;gap:24px;padding-top:12px">
+            <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+              <li style="display:flex;align-items:baseline;gap:8px"><span style="font-size:24px">{{ s.value }}</span><span style="font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:#8a8c90">{{ s.label }}</span></li>
+            </sc-for>
+          </ul>
+        </header>
+
+        <section id="focus" style="padding:44px 0;border-top:1px solid #17181a;display:grid;grid-template-columns:1fr;gap:22px">
+          <div style="display:flex;align-items:baseline;gap:14px"><span style="font:11px ui-monospace,Menlo,monospace;color:#b0b0ab">01</span><h2 style="font-size:28px;font-weight:500">Areas of focus</h2></div>
+          <ul style="display:grid;grid-template-columns:1fr 1fr;gap:26px 40px">
+            <sc-for list="{{ focus }}" as="f" hint-placeholder-count="4">
+              <li style="display:flex;flex-direction:column;gap:8px">
+                <h3 style="font-size:15px;font-weight:600">{{ f.title }}</h3>
+                <p style="font-size:14px;line-height:1.65;color:#5a5c60;text-wrap:pretty">{{ f.body }}</p>
+              </li>
+            </sc-for>
+          </ul>
+        </section>
+
+        <section id="edits" style="padding:44px 0;border-top:1px solid #e2e2df;display:grid;gap:22px">
+          <div style="display:flex;align-items:baseline;gap:14px"><span style="font:11px ui-monospace,Menlo,monospace;color:#b0b0ab">02</span><h2 style="font-size:28px;font-weight:500">Latest edits</h2></div>
+          <ul style="display:flex;flex-direction:column">
+            <sc-for list="{{ edits }}" as="e" hint-placeholder-count="6">
+              <li style="display:grid;grid-template-columns:minmax(0,1fr) 110px;gap:24px;align-items:start;padding:18px 0;border-bottom:1px solid #ececea">
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <h3 style="font-size:16px;font-weight:600;line-height:1.4"><a href="{{ e.url }}">{{ e.title }}</a></h3>
+                  <p style="font-size:13px;line-height:1.6;color:#6f7175;text-wrap:pretty">{{ e.summary }}</p>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:4px;text-align:right;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:#8a8c90"><span>{{ e.date }}</span><span>{{ e.type }}</span><span>{{ e.readTime }}</span></div>
+              </li>
+            </sc-for>
+          </ul>
+        </section>
+
+        <section id="experience" style="padding:44px 0;border-top:1px solid #e2e2df;display:grid;gap:22px">
+          <div style="display:flex;align-items:baseline;gap:14px"><span style="font:11px ui-monospace,Menlo,monospace;color:#b0b0ab">03</span><h2 style="font-size:28px;font-weight:500">Experience</h2></div>
+          <ul style="display:flex;flex-direction:column;gap:28px">
+            <sc-for list="{{ experience }}" as="x" hint-placeholder-count="2">
+              <li style="display:grid;grid-template-columns:160px minmax(0,1fr);gap:24px">
+                <span style="font-size:13px;color:#8a8c90">{{ x.years }}</span>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <h3 style="font-size:16px;font-weight:600">{{ x.title }}</h3>
+                  <span style="font-size:13px;color:#8a8c90">{{ x.org }}</span>
+                  <p style="font-size:14px;line-height:1.65;color:#5a5c60;text-wrap:pretty">{{ x.body }}</p>
+                </div>
+              </li>
+            </sc-for>
+          </ul>
+        </section>
+
+      </main>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ 6 · FULL-BLEED DOSSIER ═══════════ -->
+  <sc-if value="{{ isL6 }}" hint-placeholder-val="{{ true }}">
+  <div style="background:#fbfbfa">
+
+    <header style="background:#17181a;color:#f4f4f2">
+      <div style="max-width:1280px;margin:0 auto;padding:64px 40px;display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:64px;align-items:center">
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <span style="font:11px/1 ui-monospace,Menlo,monospace;letter-spacing:.22em;text-transform:uppercase;color:#8a8c90">{{ a.kicker }} · {{ a.location }} · Since {{ a.since }}</span>
+          <h1 style="font-size:64px;font-weight:600;line-height:1.02;letter-spacing:-.03em">{{ a.name }}</h1>
+          <p style="font-size:21px;color:#c6c6c1">{{ a.role }}</p>
+          <p style="font-size:16px;line-height:1.7;color:#a8a8a3;max-width:58ch;text-wrap:pretty">{{ a.bio }}</p>
+          <ul style="display:flex;flex-wrap:wrap;gap:8px;padding-top:6px">
+            <sc-for list="{{ a.badges }}" as="badge" hint-placeholder-count="2">
+              <li style="border:1px solid #3a3c40;padding:5px 11px;font-size:12px;color:#c6c6c1">{{ badge }}</li>
+            </sc-for>
+          </ul>
+        </div>
+        <ul style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:10px;aspect-ratio:1">
+          <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="3">
+            <li style="background-image:repeating-linear-gradient(45deg,#232427 0 7px,#2c2d31 7px 14px);border:1px solid #3a3c40;display:flex;flex-direction:column;justify-content:space-between;padding:12px">
+              <span style="font:10px ui-monospace,Menlo,monospace;color:#6f7175">{{ g.label }}</span>
+              <span style="font-size:11px;line-height:1.4;color:#8a8c90">{{ g.caption }}</span>
+            </li>
+          </sc-for>
+          <li style="background-image:repeating-linear-gradient(45deg,#232427 0 7px,#2c2d31 7px 14px);border:1px solid #3a3c40;display:grid;place-items:center;color:#6f7175;font:11px ui-monospace,Menlo,monospace">{{ a.portrait }}</li>
+        </ul>
+      </div>
+    </header>
+
+    <div style="background:#fff;border-bottom:1px solid #e2e2df">
+      <ul style="max-width:1280px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:repeat(4,1fr)">
+        <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+          <li style="padding:28px 0;display:flex;align-items:baseline;gap:12px;border-right:1px solid #ececea">
+            <span style="font-size:38px;font-weight:600;line-height:1;letter-spacing:-.02em">{{ s.value }}</span>
+            <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#8a8c90">{{ s.label }}</span>
+          </li>
+        </sc-for>
+      </ul>
+    </div>
+
+    <section id="focus" style="max-width:1280px;margin:0 auto;padding:72px 40px 0;display:flex;flex-direction:column;gap:28px">
+      <h2 style="font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#8a8c90;padding-bottom:16px;border-bottom:1px solid #17181a">Areas of focus</h2>
+      <ul style="display:grid;grid-template-columns:repeat(4,1fr);gap:32px">
+        <sc-for list="{{ focus }}" as="f" hint-placeholder-count="4">
+          <li style="display:flex;flex-direction:column;gap:10px">
+            <span style="height:2px;width:28px;background:#17181a"></span>
+            <h3 style="font-size:17px;font-weight:600;line-height:1.3">{{ f.title }}</h3>
+            <p style="font-size:14px;line-height:1.7;color:#5a5c60;text-wrap:pretty">{{ f.body }}</p>
+          </li>
+        </sc-for>
+      </ul>
+    </section>
+
+    <section id="edits" style="max-width:1280px;margin:0 auto;padding:72px 40px 0;display:flex;flex-direction:column;gap:8px">
+      <h2 style="font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#8a8c90;padding-bottom:16px;border-bottom:1px solid #17181a;margin-bottom:8px">Latest edits</h2>
+      <ul style="display:flex;flex-direction:column">
+        <sc-for list="{{ edits }}" as="e" hint-placeholder-count="6">
+          <li style="display:grid;grid-template-columns:120px 150px minmax(0,1fr) 80px;gap:28px;align-items:start;padding:22px 0;border-bottom:1px solid #ececea">
+            <span style="font-size:13px;color:#8a8c90">{{ e.date }}</span>
+            <span style="font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:#8a8c90">{{ e.type }} · {{ e.status }}</span>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <h3 style="font-size:17px;font-weight:600;line-height:1.35"><a href="{{ e.url }}">{{ e.title }}</a></h3>
+              <p style="font-size:14px;line-height:1.65;color:#6f7175;text-wrap:pretty">{{ e.summary }}</p>
+            </div>
+            <span style="font-size:12px;color:#8a8c90;text-align:right">{{ e.readTime }}</span>
+          </li>
+        </sc-for>
+      </ul>
+    </section>
+
+    <section id="experience" style="max-width:1280px;margin:0 auto;padding:72px 40px 0;display:flex;flex-direction:column;gap:28px">
+      <h2 style="font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#8a8c90;padding-bottom:16px;border-bottom:1px solid #17181a">Experience</h2>
+      <ul style="display:grid;grid-template-columns:1fr 1fr;gap:48px">
+        <sc-for list="{{ experience }}" as="x" hint-placeholder-count="2">
+          <li style="display:flex;flex-direction:column;gap:8px">
+            <span style="font:11px ui-monospace,Menlo,monospace;letter-spacing:.1em;color:#8a8c90">{{ x.years }}</span>
+            <h3 style="font-size:20px;font-weight:600">{{ x.title }}</h3>
+            <span style="font-size:14px;color:#8a8c90">{{ x.org }}</span>
+            <p style="font-size:15px;line-height:1.7;color:#5a5c60;text-wrap:pretty">{{ x.body }}</p>
+          </li>
+        </sc-for>
+      </ul>
+    </section>
+
+    <footer style="margin-top:72px;background:#17181a;color:#f4f4f2">
+      <div style="max-width:1280px;margin:0 auto;padding:56px 40px;display:grid;grid-template-columns:repeat(3,1fr);gap:48px">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <h3 style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90">Follows on X</h3>
+          <ul style="display:flex;flex-wrap:wrap;gap:8px">
+            <sc-for list="{{ follows }}" as="h" hint-placeholder-count="4">
+              <li><a href="{{ h.url }}" style="display:block;border:1px solid #3a3c40;color:#c6c6c1;padding:5px 10px;font-size:12px">{{ h.handle }}</a></li>
+            </sc-for>
+          </ul>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <h3 style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90">Other authors</h3>
+          <ul style="display:flex;flex-direction:column;gap:14px">
+            <sc-for list="{{ others }}" as="o" hint-placeholder-count="2">
+              <li style="display:flex;flex-direction:column;gap:3px"><a href="{{ o.url }}" style="font-size:14px;font-weight:600;color:#f4f4f2">{{ o.name }}</a><span style="font-size:12px;color:#8a8c90;line-height:1.4">{{ o.role }}</span></li>
+            </sc-for>
+          </ul>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <h3 style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90">{{ pitch.title }}</h3>
+          <p style="font-size:13px;line-height:1.6;color:#a8a8a3">{{ pitch.body }}</p>
+          <a href="{{ site.contactUrl }}" style="align-self:start;margin-top:4px;border:1px solid #6f7175;color:#f4f4f2;padding:9px 15px;font-size:13px" style-hover="background:#f4f4f2;color:#17181a;text-decoration:none">{{ pitch.cta }}</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ 7 · SPORTS DESK ═══════════ -->
+  <sc-if value="{{ isL7 }}" hint-placeholder-val="{{ false }}">
+  <div style="background:#f4f4f2">
+    <div style="background:#17181a;color:#f4f4f2">
+      <div style="max-width:1240px;margin:0 auto;padding:44px 40px;display:grid;grid-template-columns:180px minmax(0,1fr);gap:36px;align-items:center">
+        <div style="aspect-ratio:3/4;background-image:repeating-linear-gradient(45deg,#232427 0 7px,#2c2d31 7px 14px);border:1px solid #3a3c40;display:grid;place-items:center;color:#6f7175;font:11px ui-monospace,Menlo,monospace">{{ a.portrait }}</div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <span style="font:11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;text-transform:uppercase;color:#8a8c90">{{ a.kicker }} · {{ a.location }}</span>
+          <h1 style="font-size:72px;font-weight:700;line-height:.95;letter-spacing:-.035em;text-transform:uppercase">{{ a.name }}</h1>
+          <p style="font-size:18px;color:#c6c6c1;letter-spacing:.01em">{{ a.role }}</p>
+          <ul style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding-top:8px;border-top:1px solid #3a3c40">
+            <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+              <li style="display:flex;align-items:baseline;gap:9px;padding-top:12px">
+                <span style="font-size:34px;font-weight:700;line-height:1;letter-spacing:-.02em">{{ s.value }}</span>
+                <span style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90">{{ s.label }}</span>
+              </li>
+            </sc-for>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div style="max-width:1240px;margin:0 auto;padding:36px 40px 80px;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:36px;align-items:start">
+      <main style="display:flex;flex-direction:column;gap:24px;min-width:0">
+        <section style="background:#fff;border:1px solid #e2e2df;padding:32px;display:flex;flex-direction:column;gap:18px">
+          <h2 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.2em;text-transform:uppercase;color:#8a8c90">Scouting report</h2>
+          <p style="font-size:17px;line-height:1.7;color:#3a3c40;text-wrap:pretty">{{ a.bio }}</p>
+          <ul style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding-top:6px">
+            <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="3">
+              <li style="display:flex;flex-direction:column;gap:6px">
+                <span style="height:130px;background-image:repeating-linear-gradient(45deg,#ececea 0 6px,#f6f6f4 6px 12px);border:1px solid #e2e2df;display:grid;place-items:center;color:#a0a09b;font:10px ui-monospace,Menlo,monospace">{{ g.label }}</span>
+                <span style="font-size:11px;line-height:1.4;color:#8a8c90">{{ g.caption }}</span>
+              </li>
+            </sc-for>
+          </ul>
+        </section>
+
+        <section id="focus" style="background:#fff;border:1px solid #e2e2df;padding:32px;display:flex;flex-direction:column;gap:20px">
+          <h2 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.2em;text-transform:uppercase;color:#8a8c90">Beats covered</h2>
+          <ul style="display:grid;grid-template-columns:1fr 1fr;gap:22px 32px">
+            <sc-for list="{{ focus }}" as="f" hint-placeholder-count="4">
+              <li style="display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px">
+                <span style="font:11px ui-monospace,Menlo,monospace;color:#b0b0ab;padding-top:3px">{{ f.n }}</span>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <h3 style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.02em">{{ f.title }}</h3>
+                  <p style="font-size:14px;line-height:1.65;color:#5a5c60;text-wrap:pretty">{{ f.body }}</p>
+                </div>
+              </li>
+            </sc-for>
+          </ul>
+        </section>
+
+        <section id="edits" style="background:#fff;border:1px solid #e2e2df;padding:32px;display:flex;flex-direction:column;gap:16px">
+          <h2 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.2em;text-transform:uppercase;color:#8a8c90">Box score · recent bylines</h2>
+          <ul style="display:flex;flex-direction:column;border-top:1px solid #17181a">
+            <sc-for list="{{ edits }}" as="e" hint-placeholder-count="6">
+              <li style="display:grid;grid-template-columns:96px 120px minmax(0,1fr) 60px;gap:20px;align-items:baseline;padding:16px 2px;border-bottom:1px solid #ececea">
+                <span style="font:11px ui-monospace,Menlo,monospace;color:#8a8c90">{{ e.date }}</span>
+                <span style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:#8a8c90">{{ e.type }} · {{ e.status }}</span>
+                <a href="{{ e.url }}" style="font-size:15px;font-weight:600;line-height:1.4">{{ e.title }}</a>
+                <span style="font:11px ui-monospace,Menlo,monospace;color:#8a8c90;text-align:right">{{ e.readTime }}</span>
+              </li>
+            </sc-for>
+          </ul>
+        </section>
+
+        <section id="experience" style="background:#fff;border:1px solid #e2e2df;padding:32px;display:flex;flex-direction:column;gap:20px">
+          <h2 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.2em;text-transform:uppercase;color:#8a8c90">Career line</h2>
+          <ul style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+            <sc-for list="{{ experience }}" as="x" hint-placeholder-count="2">
+              <li style="display:flex;flex-direction:column;gap:6px;border-left:2px solid #17181a;padding-left:16px">
+                <span style="font:11px ui-monospace,Menlo,monospace;letter-spacing:.1em;color:#8a8c90">{{ x.years }}</span>
+                <h3 style="font-size:16px;font-weight:700">{{ x.title }}</h3>
+                <span style="font-size:13px;color:#8a8c90">{{ x.org }}</span>
+                <p style="font-size:14px;line-height:1.65;color:#5a5c60;text-wrap:pretty">{{ x.body }}</p>
+              </li>
+            </sc-for>
+          </ul>
+        </section>
+
+      </main>
+
+      <aside style="display:flex;flex-direction:column;gap:24px;position:sticky;top:80px">
+        <div style="background:#fff;border:1px solid #e2e2df;padding:24px;display:flex;flex-direction:column;gap:12px">
+          <h3 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">Credentials</h3>
+          <ul style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ credentials }}" as="c" hint-placeholder-count="3">
+              <li style="font-size:13px;line-height:1.55;color:#5a5c60">{{ c }}</li>
+            </sc-for>
+          </ul>
+        </div>
+        <div style="background:#fff;border:1px solid #e2e2df;padding:24px;display:flex;flex-direction:column;gap:12px">
+          <h3 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">Verified</h3>
+          <ul style="display:flex;flex-direction:column;gap:8px">
+            <sc-for list="{{ a.badges }}" as="badge" hint-placeholder-count="2">
+              <li style="font-size:13px;color:#4a4c50">{{ badge }}</li>
+            </sc-for>
+          </ul>
+        </div>
+        <div style="background:#fff;border:1px solid #e2e2df;padding:24px;display:flex;flex-direction:column;gap:12px">
+          <h3 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">Follows on X</h3>
+          <ul style="display:flex;flex-wrap:wrap;gap:8px">
+            <sc-for list="{{ follows }}" as="h" hint-placeholder-count="4">
+              <li><a href="{{ h.url }}" style="display:block;border:1px solid #e2e2df;padding:5px 10px;font:11px ui-monospace,Menlo,monospace">{{ h.handle }}</a></li>
+            </sc-for>
+          </ul>
+        </div>
+        <div style="background:#fff;border:1px solid #e2e2df;padding:24px;display:flex;flex-direction:column;gap:14px">
+          <h3 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">Other authors</h3>
+          <ul style="display:flex;flex-direction:column;gap:12px">
+            <sc-for list="{{ others }}" as="o" hint-placeholder-count="2">
+              <li style="display:flex;flex-direction:column;gap:3px"><a href="{{ o.url }}" style="font-size:13px;font-weight:600">{{ o.name }}</a><span style="font-size:12px;color:#8a8c90;line-height:1.4">{{ o.role }}</span></li>
+            </sc-for>
+          </ul>
+        </div>
+        <div style="background:#17181a;color:#f4f4f2;padding:24px;display:flex;flex-direction:column;gap:12px">
+          <h3 style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.02em">{{ pitch.title }}</h3>
+          <p style="font-size:13px;line-height:1.6;color:#a8a8a3">{{ pitch.body }}</p>
+          <a href="{{ site.contactUrl }}" style="align-self:start;margin-top:4px;border:1px solid #6f7175;color:#f4f4f2;padding:9px 15px;font-size:13px" style-hover="background:#f4f4f2;color:#17181a;text-decoration:none">{{ pitch.cta }}</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ 8 · FINTECH PRODUCT ═══════════ -->
+  <sc-if value="{{ isL8 }}" hint-placeholder-val="{{ false }}">
+  <div style="background:#f4f4f2;min-height:100vh">
+    <div style="background:#fff;border-bottom:1px solid #e2e2df">
+      <div style="max-width:1200px;margin:0 auto;padding:14px 32px;display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between">
+        <span style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.18em;text-transform:uppercase;color:#8a8c90">{{ site.name }} · Author profile</span>
+        <ul style="display:flex;flex-wrap:wrap;gap:18px">
+          <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+            <li style="display:flex;align-items:baseline;gap:7px"><span style="font:13px ui-monospace,Menlo,monospace;font-weight:600">{{ s.value }}</span><span style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#8a8c90">{{ s.label }}</span></li>
+          </sc-for>
+        </ul>
+      </div>
+    </div>
+
+    <div style="max-width:1200px;margin:0 auto;padding:32px 32px 80px;display:grid;grid-template-columns:340px minmax(0,1fr);gap:24px;align-items:start">
+      <aside style="display:flex;flex-direction:column;gap:16px;position:sticky;top:80px">
+        <div style="background:#fff;border:1px solid #e2e2df;border-radius:6px;padding:24px;display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;gap:16px;align-items:center">
+            <span style="width:72px;aspect-ratio:1;border-radius:6px;background-image:repeating-linear-gradient(45deg,#ececea 0 5px,#f6f6f4 5px 10px);border:1px solid #e2e2df;flex:none"></span>
+            <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
+              <h1 style="font-size:22px;font-weight:600;letter-spacing:-.01em;line-height:1.15">{{ a.name }}</h1>
+              <p style="font-size:13px;color:#6f7175;line-height:1.4">{{ a.role }}</p>
+            </div>
+          </div>
+          <p style="font-size:13px;line-height:1.65;color:#5a5c60;text-wrap:pretty">{{ a.short }}</p>
+          <ul style="display:flex;flex-direction:column;gap:8px;padding-top:14px;border-top:1px solid #ececea">
+            <li style="display:flex;justify-content:space-between;gap:12px;font-size:12px"><span style="color:#8a8c90">Location</span><span>{{ a.location }}</span></li>
+            <li style="display:flex;justify-content:space-between;gap:12px;font-size:12px"><span style="color:#8a8c90">Contributing since</span><span>{{ a.since }}</span></li>
+            <sc-for list="{{ a.badges }}" as="badge" hint-placeholder-count="2">
+              <li style="display:flex;gap:8px;font-size:12px;color:#4a4c50"><span style="color:#8a8c90">✓</span>{{ badge }}</li>
+            </sc-for>
+          </ul>
+          <a href="{{ site.contactUrl }}" style="border:1px solid #17181a;border-radius:4px;background:#17181a;color:#fbfbfa;padding:10px 14px;font-size:13px;text-align:center" style-hover="background:#fbfbfa;color:#17181a;text-decoration:none">{{ pitch.cta }}</a>
+        </div>
+
+        <div style="background:#fff;border:1px solid #e2e2df;border-radius:6px;padding:24px;display:flex;flex-direction:column;gap:12px">
+          <h3 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">Credentials</h3>
+          <ul style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ credentials }}" as="c" hint-placeholder-count="3">
+              <li style="font-size:13px;line-height:1.55;color:#5a5c60">{{ c }}</li>
+            </sc-for>
+          </ul>
+        </div>
+
+        <div style="background:#fff;border:1px solid #e2e2df;border-radius:6px;padding:24px;display:flex;flex-direction:column;gap:12px">
+          <h3 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">Follows on X</h3>
+          <ul style="display:flex;flex-wrap:wrap;gap:8px">
+            <sc-for list="{{ follows }}" as="h" hint-placeholder-count="4">
+              <li><a href="{{ h.url }}" style="display:block;border:1px solid #e2e2df;border-radius:4px;padding:5px 10px;font-size:12px">{{ h.handle }}</a></li>
+            </sc-for>
+          </ul>
+        </div>
+
+        <div style="background:#fff;border:1px solid #e2e2df;border-radius:6px;padding:24px;display:flex;flex-direction:column;gap:14px">
+          <h3 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">Other authors</h3>
+          <ul style="display:flex;flex-direction:column;gap:12px">
+            <sc-for list="{{ others }}" as="o" hint-placeholder-count="2">
+              <li style="display:flex;flex-direction:column;gap:3px"><a href="{{ o.url }}" style="font-size:13px;font-weight:600">{{ o.name }}</a><span style="font-size:12px;color:#8a8c90;line-height:1.4">{{ o.role }}</span></li>
+            </sc-for>
+          </ul>
+        </div>
+      </aside>
+
+      <main style="display:flex;flex-direction:column;gap:16px;min-width:0">
+        <section style="background:#fff;border:1px solid #e2e2df;border-radius:6px;padding:28px;display:flex;flex-direction:column;gap:16px">
+          <h2 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">About</h2>
+          <p style="font-size:16px;line-height:1.75;color:#3a3c40;text-wrap:pretty">{{ a.bio }}</p>
+          <ul style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+            <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="3">
+              <li style="display:flex;flex-direction:column;gap:6px">
+                <span style="height:140px;border-radius:4px;background-image:repeating-linear-gradient(45deg,#ececea 0 6px,#f6f6f4 6px 12px);border:1px solid #e2e2df;display:grid;place-items:center;color:#a0a09b;font:10px ui-monospace,Menlo,monospace">{{ g.label }}</span>
+                <span style="font-size:11px;line-height:1.4;color:#8a8c90">{{ g.caption }}</span>
+              </li>
+            </sc-for>
+          </ul>
+        </section>
+
+        <section id="focus" style="background:#fff;border:1px solid #e2e2df;border-radius:6px;padding:28px;display:flex;flex-direction:column;gap:18px">
+          <h2 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">Coverage</h2>
+          <ul style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <sc-for list="{{ focus }}" as="f" hint-placeholder-count="4">
+              <li style="background:#f4f4f2;border:1px solid #ececea;border-radius:4px;padding:18px;display:flex;flex-direction:column;gap:7px">
+                <h3 style="font-size:14px;font-weight:600">{{ f.title }}</h3>
+                <p style="font-size:13px;line-height:1.6;color:#5a5c60;text-wrap:pretty">{{ f.body }}</p>
+              </li>
+            </sc-for>
+          </ul>
+        </section>
+
+        <section id="edits" style="background:#fff;border:1px solid #e2e2df;border-radius:6px;padding:28px;display:flex;flex-direction:column;gap:16px">
+          <h2 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">Activity</h2>
+          <ul style="display:flex;flex-direction:column">
+            <sc-for list="{{ edits }}" as="e" hint-placeholder-count="6">
+              <li style="display:grid;grid-template-columns:90px minmax(0,1fr) 92px;gap:18px;align-items:start;padding:14px 0;border-top:1px solid #ececea">
+                <span style="font:11px ui-monospace,Menlo,monospace;color:#8a8c90">{{ e.date }}</span>
+                <div style="display:flex;flex-direction:column;gap:5px">
+                  <a href="{{ e.url }}" style="font-size:15px;font-weight:600;line-height:1.4">{{ e.title }}</a>
+                  <p style="font-size:13px;line-height:1.6;color:#6f7175;text-wrap:pretty">{{ e.summary }}</p>
+                </div>
+                <span style="justify-self:end;border:1px solid #e2e2df;border-radius:99px;padding:3px 10px;font:10px ui-monospace,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:#6f7175">{{ e.status }}</span>
+              </li>
+            </sc-for>
+          </ul>
+        </section>
+
+        <section id="experience" style="background:#fff;border:1px solid #e2e2df;border-radius:6px;padding:28px;display:flex;flex-direction:column;gap:18px">
+          <h2 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">Experience</h2>
+          <ul style="display:flex;flex-direction:column;gap:20px">
+            <sc-for list="{{ experience }}" as="x" hint-placeholder-count="2">
+              <li style="display:grid;grid-template-columns:150px minmax(0,1fr);gap:20px">
+                <span style="font:11px ui-monospace,Menlo,monospace;color:#8a8c90">{{ x.years }}</span>
+                <div style="display:flex;flex-direction:column;gap:5px">
+                  <h3 style="font-size:15px;font-weight:600">{{ x.title }}</h3>
+                  <span style="font-size:12px;color:#8a8c90">{{ x.org }}</span>
+                  <p style="font-size:13px;line-height:1.6;color:#5a5c60;text-wrap:pretty">{{ x.body }}</p>
+                </div>
+              </li>
+            </sc-for>
+          </ul>
+        </section>
+
+      </main>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ 9 · RESEARCH NOTE ═══════════ -->
+  <sc-if value="{{ isL9 }}" hint-placeholder-val="{{ false }}">
+  <div style="background:#f4f4f2;padding:32px 0 80px">
+    <article style="max-width:1000px;margin:0 auto;background:#fff;border:1px solid #d8d8d4;padding:56px 64px">
+      <header style="display:flex;flex-direction:column;gap:20px;padding-bottom:24px;border-bottom:2px solid #17181a">
+        <span style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">{{ site.name }} · Analyst profile</span>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) 132px;gap:32px;align-items:start">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <h1 style="font-size:42px;font-weight:600;line-height:1.05;letter-spacing:-.02em">{{ a.name }}</h1>
+            <p style="font-size:17px;color:#4a4c50">{{ a.role }}</p>
+            <p style="font-size:14px;color:#8a8c90">{{ a.location }} · Contributing since {{ a.since }}</p>
+          </div>
+          <div style="aspect-ratio:1;background-image:repeating-linear-gradient(45deg,#ececea 0 5px,#f6f6f4 5px 10px);border:1px solid #e2e2df;display:grid;place-items:center;color:#a0a09b;font:10px ui-monospace,Menlo,monospace">{{ a.portrait }}</div>
+        </div>
+      </header>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;padding:24px 0;border-bottom:1px solid #e2e2df">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <h2 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">Summary</h2>
+          <p style="font-size:14px;line-height:1.7;color:#3a3c40;text-wrap:pretty">{{ a.bio }}</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <h2 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">Key figures</h2>
+          <ul style="display:flex;flex-direction:column">
+            <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+              <li style="display:flex;justify-content:space-between;gap:16px;padding:7px 0;border-bottom:1px dotted #d8d8d4"><span style="font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#8a8c90">{{ s.label }}</span><span style="font:13px ui-monospace,Menlo,monospace;font-weight:600">{{ s.value }}</span></li>
+            </sc-for>
+          </ul>
+        </div>
+      </div>
+
+      <section id="focus" style="padding:32px 0;border-bottom:1px solid #e2e2df;display:grid;grid-template-columns:190px minmax(0,1fr);gap:32px">
+        <h2 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">1 · Coverage universe</h2>
+        <ol style="display:flex;flex-direction:column;gap:16px">
+          <sc-for list="{{ focus }}" as="f" hint-placeholder-count="4">
+            <li style="display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px">
+              <span style="font:11px ui-monospace,Menlo,monospace;color:#b0b0ab;padding-top:3px">{{ f.sub }}</span>
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <h3 style="font-size:14px;font-weight:600">{{ f.title }}</h3>
+                <p style="font-size:14px;line-height:1.7;color:#5a5c60;text-wrap:pretty">{{ f.body }}</p>
+              </div>
+            </li>
+          </sc-for>
+        </ol>
+      </section>
+
+      <section style="padding:32px 0;border-bottom:1px solid #e2e2df;display:grid;grid-template-columns:190px minmax(0,1fr);gap:32px">
+        <h2 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">2 · Exhibits</h2>
+        <ul style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+          <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="3">
+            <li style="display:flex;flex-direction:column;gap:7px">
+              <span style="height:120px;background-image:repeating-linear-gradient(45deg,#ececea 0 6px,#f6f6f4 6px 12px);border:1px solid #e2e2df;display:grid;place-items:center;color:#a0a09b;font:10px ui-monospace,Menlo,monospace">{{ g.label }}</span>
+              <span style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#b0b0ab">Exhibit {{ g.n }}</span>
+              <span style="font-size:12px;line-height:1.45;color:#8a8c90">{{ g.caption }}</span>
+            </li>
+          </sc-for>
+        </ul>
+      </section>
+
+      <section id="edits" style="padding:32px 0;border-bottom:1px solid #e2e2df;display:grid;grid-template-columns:190px minmax(0,1fr);gap:32px">
+        <h2 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">3 · Published notes</h2>
+        <ul style="display:flex;flex-direction:column;border-top:1px solid #17181a">
+          <sc-for list="{{ edits }}" as="e" hint-placeholder-count="6">
+            <li style="display:grid;grid-template-columns:92px minmax(0,1fr) 108px;gap:16px;align-items:baseline;padding:12px 0;border-bottom:1px solid #ececea">
+              <span style="font:11px ui-monospace,Menlo,monospace;color:#8a8c90">{{ e.date }}</span>
+              <a href="{{ e.url }}" style="font-size:14px;font-weight:600;line-height:1.45">{{ e.title }}</a>
+              <span style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#8a8c90;text-align:right">{{ e.type }} · {{ e.status }}</span>
+            </li>
+          </sc-for>
+        </ul>
+      </section>
+
+      <section id="experience" style="padding:32px 0;border-bottom:1px solid #e2e2df;display:grid;grid-template-columns:190px minmax(0,1fr);gap:32px">
+        <h2 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">4 · Track record</h2>
+        <ul style="display:flex;flex-direction:column;gap:20px">
+          <sc-for list="{{ experience }}" as="x" hint-placeholder-count="2">
+            <li style="display:flex;flex-direction:column;gap:5px">
+              <div style="display:flex;justify-content:space-between;gap:16px;align-items:baseline">
+                <h3 style="font-size:14px;font-weight:600">{{ x.title }} — {{ x.org }}</h3>
+                <span style="font:11px ui-monospace,Menlo,monospace;color:#8a8c90;white-space:nowrap">{{ x.years }}</span>
+              </div>
+              <p style="font-size:14px;line-height:1.7;color:#5a5c60;text-wrap:pretty">{{ x.body }}</p>
+            </li>
+          </sc-for>
+        </ul>
+      </section>
+
+      <section style="padding:32px 0;border-bottom:1px solid #e2e2df;display:grid;grid-template-columns:190px minmax(0,1fr);gap:32px">
+        <h2 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">5 · Qualifications</h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+          <ul style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ credentials }}" as="c" hint-placeholder-count="3">
+              <li style="font-size:13px;line-height:1.6;color:#5a5c60">{{ c }}</li>
+            </sc-for>
+          </ul>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <h3 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90">Follows on X</h3>
+              <ul style="display:flex;flex-wrap:wrap;gap:8px">
+                <sc-for list="{{ follows }}" as="h" hint-placeholder-count="4">
+                  <li><a href="{{ h.url }}" style="display:block;border:1px solid #e2e2df;padding:4px 9px;font-size:12px">{{ h.handle }}</a></li>
+                </sc-for>
+              </ul>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <h3 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;color:#8a8c90">Other authors</h3>
+              <ul style="display:flex;flex-direction:column;gap:10px">
+                <sc-for list="{{ others }}" as="o" hint-placeholder-count="2">
+                  <li style="display:flex;flex-direction:column;gap:2px"><a href="{{ o.url }}" style="font-size:13px;font-weight:600">{{ o.name }}</a><span style="font-size:12px;color:#8a8c90;line-height:1.4">{{ o.role }}</span></li>
+                </sc-for>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </article>
+  </div>
+  </sc-if>
+
+  <!-- ═══════════ 10 · BRAND FEATURE ═══════════ -->
+  <sc-if value="{{ isL10 }}" hint-placeholder-val="{{ false }}">
+  <div style="background:#fbfbfa">
+    <header style="max-width:1100px;margin:0 auto;padding:88px 40px 48px;display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center">
+      <span style="font:11px/1 ui-monospace,Menlo,monospace;letter-spacing:.24em;text-transform:uppercase;color:#8a8c90">{{ a.kicker }} · {{ site.name }}</span>
+      <h1 style="font-size:84px;font-weight:700;line-height:.98;letter-spacing:-.04em;max-width:16ch">{{ a.name }}</h1>
+      <p style="font-size:24px;line-height:1.4;color:#4a4c50;max-width:32ch">{{ a.role }}</p>
+      <a href="{{ site.contactUrl }}" style="margin-top:8px;background:#17181a;color:#fbfbfa;padding:14px 26px;font-size:14px;letter-spacing:.02em" style-hover="background:#3a3c40;color:#fbfbfa;text-decoration:none">{{ pitch.cta }}</a>
+    </header>
+
+    <div style="max-width:1280px;margin:0 auto;padding:0 40px">
+      <ul style="display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:12px;align-items:end">
+        <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="3">
+          <li style="display:flex;flex-direction:column;gap:8px">
+            <span style="height:300px;background-image:repeating-linear-gradient(45deg,#ececea 0 8px,#f6f6f4 8px 16px);border:1px solid #e2e2df;display:grid;place-items:center;color:#a0a09b;font:11px ui-monospace,Menlo,monospace">{{ g.label }}</span>
+            <span style="font-size:12px;line-height:1.45;color:#8a8c90">{{ g.caption }}</span>
+          </li>
+        </sc-for>
+      </ul>
+    </div>
+
+    <section style="background:#17181a;color:#f4f4f2;margin-top:56px;padding:56px 40px">
+      <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:56px;align-items:center">
+        <p style="font-size:26px;line-height:1.5;letter-spacing:-.01em;text-wrap:pretty">{{ a.bio }}</p>
+        <ul style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+          <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+            <li style="display:flex;flex-direction:column;gap:5px">
+              <span style="font-size:36px;font-weight:700;line-height:1;letter-spacing:-.02em">{{ s.value }}</span>
+              <span style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:#8a8c90">{{ s.label }}</span>
+            </li>
+          </sc-for>
+        </ul>
+      </div>
+    </section>
+
+    <section id="focus" style="max-width:1100px;margin:0 auto;padding:72px 40px 0;display:flex;flex-direction:column;gap:32px">
+      <div style="display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center">
+        <h2 style="font-size:36px;font-weight:600;letter-spacing:-.02em">What Jeff covers</h2>
+        <p style="font-size:16px;color:#6f7175;max-width:52ch">{{ a.short }}</p>
+      </div>
+      <ul style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#e2e2df;border:1px solid #e2e2df">
+        <sc-for list="{{ focus }}" as="f" hint-placeholder-count="4">
+          <li style="background:#fbfbfa;padding:32px;display:flex;flex-direction:column;gap:10px">
+            <span style="font:11px ui-monospace,Menlo,monospace;color:#b0b0ab">{{ f.n }}</span>
+            <h3 style="font-size:20px;font-weight:600;letter-spacing:-.01em">{{ f.title }}</h3>
+            <p style="font-size:15px;line-height:1.7;color:#5a5c60;text-wrap:pretty">{{ f.body }}</p>
+          </li>
+        </sc-for>
+      </ul>
+    </section>
+
+    <section id="edits" style="max-width:1100px;margin:0 auto;padding:72px 40px 0;display:flex;flex-direction:column;gap:24px">
+      <h2 style="font-size:36px;font-weight:600;letter-spacing:-.02em;text-align:center">Recent work</h2>
+      <ul style="display:flex;flex-direction:column">
+        <sc-for list="{{ edits }}" as="e" hint-placeholder-count="6">
+          <li style="display:grid;grid-template-columns:minmax(0,1fr) 130px;gap:32px;align-items:start;padding:24px 0;border-top:1px solid #e2e2df">
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <span style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:#8a8c90">{{ e.type }} · {{ e.status }}</span>
+              <h3 style="font-size:20px;font-weight:600;line-height:1.35;letter-spacing:-.01em"><a href="{{ e.url }}">{{ e.title }}</a></h3>
+              <p style="font-size:15px;line-height:1.7;color:#6f7175;text-wrap:pretty">{{ e.summary }}</p>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px;text-align:right;font:11px ui-monospace,Menlo,monospace;color:#8a8c90"><span>{{ e.date }}</span><span>{{ e.readTime }}</span></div>
+          </li>
+        </sc-for>
+      </ul>
+    </section>
+
+    <section id="experience" style="max-width:1100px;margin:0 auto;padding:72px 40px 0;display:flex;flex-direction:column;gap:24px">
+      <h2 style="font-size:36px;font-weight:600;letter-spacing:-.02em;text-align:center">Background</h2>
+      <ul style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+        <sc-for list="{{ experience }}" as="x" hint-placeholder-count="2">
+          <li style="background:#f4f4f2;padding:28px;display:flex;flex-direction:column;gap:8px">
+            <span style="font:11px ui-monospace,Menlo,monospace;letter-spacing:.1em;color:#8a8c90">{{ x.years }}</span>
+            <h3 style="font-size:19px;font-weight:600;letter-spacing:-.01em">{{ x.title }}</h3>
+            <span style="font-size:14px;color:#8a8c90">{{ x.org }}</span>
+            <p style="font-size:15px;line-height:1.7;color:#5a5c60;text-wrap:pretty">{{ x.body }}</p>
+          </li>
+        </sc-for>
+      </ul>
+    </section>
+
+    <section style="max-width:1100px;margin:0 auto;padding:72px 40px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:40px">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <h3 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">Credentials</h3>
+        <ul style="display:flex;flex-direction:column;gap:10px">
+          <sc-for list="{{ credentials }}" as="c" hint-placeholder-count="3">
+            <li style="font-size:14px;line-height:1.6;color:#5a5c60">{{ c }}</li>
+          </sc-for>
+        </ul>
+        <ul style="display:flex;flex-wrap:wrap;gap:8px;padding-top:6px">
+          <sc-for list="{{ a.badges }}" as="badge" hint-placeholder-count="2">
+            <li style="border:1px solid #e2e2df;padding:4px 10px;font-size:12px;color:#6f7175">{{ badge }}</li>
+          </sc-for>
+        </ul>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <h3 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">Follows on X</h3>
+        <ul style="display:flex;flex-wrap:wrap;gap:8px">
+          <sc-for list="{{ follows }}" as="h" hint-placeholder-count="4">
+            <li><a href="{{ h.url }}" style="display:block;border:1px solid #e2e2df;padding:5px 10px;font-size:12px">{{ h.handle }}</a></li>
+          </sc-for>
+        </ul>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <h3 style="font:10px ui-monospace,Menlo,monospace;letter-spacing:.16em;text-transform:uppercase;color:#8a8c90">Other authors</h3>
+        <ul style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ others }}" as="o" hint-placeholder-count="2">
+            <li style="display:flex;flex-direction:column;gap:3px"><a href="{{ o.url }}" style="font-size:14px;font-weight:600">{{ o.name }}</a><span style="font-size:12px;color:#8a8c90;line-height:1.4">{{ o.role }}</span></li>
+          </sc-for>
+        </ul>
+      </div>
+    </section>
+
+  </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;layout&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;, &quot;6&quot;, &quot;7&quot;, &quot;8&quot;, &quot;9&quot;, &quot;10&quot;], &quot;default&quot;: &quot;1&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Template&quot; },
+  &quot;editsShown&quot;: { &quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 6, &quot;min&quot;: 1, &quot;max&quot;: 8, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Content&quot; }
+}">
+class Component extends DCLogic {
+  state = { data: null, layout: null, tab: "focus" };
+
+  componentDidMount() {
+    fetch("author-data.json")
+      .then(r => r.json())
+      .then(data => this.setState({ data }))
+      .catch(e => console.error("author-data.json", e));
+  }
+
+  navBtn(active) {
+    return {
+      appearance: "none",
+      border: "1px solid " + (active ? "#f4f4f2" : "#3a3c40"),
+      background: active ? "#f4f4f2" : "transparent",
+      color: active ? "#17181a" : "#c6c6c1",
+      font: "12px/1 'Helvetica Neue', Helvetica, Arial, sans-serif",
+      letterSpacing: ".02em",
+      padding: "7px 12px",
+      cursor: "pointer"
+    };
+  }
+
+  tabBtn(active) {
+    return {
+      appearance: "none",
+      border: "none",
+      background: "transparent",
+      borderBottom: "2px solid " + (active ? "#17181a" : "transparent"),
+      color: active ? "#17181a" : "#8a8c90",
+      font: "14px/1 'Helvetica Neue', Helvetica, Arial, sans-serif",
+      fontWeight: active ? 600 : 400,
+      padding: "14px 16px",
+      marginBottom: "-1px",
+      cursor: "pointer"
+    };
+  }
+
+  renderVals() {
+    const d = this.state.data || {};
+    const a = d.author || {};
+    const L = this.state.layout || this.props.layout || "1";
+    const count = this.props.editsShown ?? 6;
+    const tab = this.state.tab;
+    const pick = n => () => this.setState({ layout: n });
+    const go = t => () => this.setState({ tab: t });
+    return {
+      a,
+      site: d.site || {},
+      stats: a.stats || [],
+      focus: (d.focus || []).map((f, i) => Object.assign({}, f, { n: "0" + (i + 1), sub: "1." + (i + 1) })),
+      gallery: ((d.gallery || {}).items || []).map((g, i) => Object.assign({}, g, { n: i + 1 })),
+      galleryMeta: d.gallery || {},
+      edits: (d.edits || []).slice(0, count),
+      experience: d.experience || [],
+      credentials: d.credentials || [],
+      follows: d.follows || [],
+      others: d.otherAuthors || [],
+      pitch: d.pitch || {},
+      nav: [
+        { num: "01", label: "Areas of focus", href: "#focus" },
+        { num: "02", label: "Latest edits", href: "#edits" },
+        { num: "03", label: "Experience", href: "#experience" }
+      ],
+      isL1: L === "1", isL2: L === "2", isL3: L === "3",
+      isL4: L === "4", isL5: L === "5", isL6: L === "6",
+      isL7: L === "7", isL8: L === "8", isL9: L === "9", isL10: L === "10",
+      go1: pick("1"), go2: pick("2"), go3: pick("3"),
+      go4: pick("4"), go5: pick("5"), go6: pick("6"),
+      go7: pick("7"), go8: pick("8"), go9: pick("9"), go10: pick("10"),
+      b1: this.navBtn(L === "1"), b2: this.navBtn(L === "2"), b3: this.navBtn(L === "3"),
+      b4: this.navBtn(L === "4"), b5: this.navBtn(L === "5"), b6: this.navBtn(L === "6"),
+      b7: this.navBtn(L === "7"), b8: this.navBtn(L === "8"),
+      b9: this.navBtn(L === "9"), b10: this.navBtn(L === "10"),
+      tabFocus: go("focus"), tabGallery: go("gallery"), tabEdits: go("edits"), tabExp: go("exp"), tabAbout: go("about"),
+      onFocus: tab === "focus", onGallery: tab === "gallery", onEdits: tab === "edits", onExp: tab === "exp", onAbout: tab === "about",
+      t1: this.tabBtn(tab === "focus"), t2: this.tabBtn(tab === "edits"),
+      t3: this.tabBtn(tab === "exp"), t4: this.tabBtn(tab === "about"), t5: this.tabBtn(tab === "gallery")
+    };
+  }
+}
+
+</script>
+</body>
+</html>
