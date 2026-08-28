@@ -662,6 +662,7 @@ img.abio-media { border: 1px solid var(--abio-line); }
 .abio-t6__footer-grid { max-width: 1280px; margin: 0 auto; }
 
 .abio-t6__header-inner { padding: 64px 40px; display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 64px; align-items: center; }
+.abio-t6__header-inner--single { grid-template-columns: minmax(0, 1fr); }
 .abio-t6__intro { display: flex; flex-direction: column; gap: 20px; }
 .abio-t6__kicker { letter-spacing: .22em; }
 .abio-t6__name { font-size: 64px; font-weight: 600; line-height: 1.02; letter-spacing: -.03em; }
@@ -671,6 +672,7 @@ img.abio-media { border: 1px solid var(--abio-line); }
 .abio-t6__badges li > span { padding: 5px 11px; }
 
 .abio-t6__photos { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; aspect-ratio: 1; }
+.abio-t6__photos--single { grid-template-columns: 1fr; grid-template-rows: 1fr; }
 .abio-t6__photo { position: relative; border: 1px solid var(--abio-onink-line); }
 .abio-t6__photo-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: 0; min-height: 0; }
 .abio-t6__photo-overlay { position: relative; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 12px; }

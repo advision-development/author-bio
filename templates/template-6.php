@@ -11,11 +11,17 @@
 defined( 'ABSPATH' ) || exit;
 
 $a = $d['author'];
+
+// A profile with no gallery items must not leave the fixed 2x2 photo grid
+// half-empty, and a profile with neither gallery nor portrait must not
+// render the grid frame at all (porting convention rule 5).
+$abio_t6_has_gallery = ! empty( $d['gallery']['items'] );
+$abio_t6_show_photos = $abio_t6_has_gallery || $a['portrait'];
 ?>
 <div class="abio-t6">
 
 	<header class="abio-t6__header abio-panel--dark">
-		<div class="abio-t6__header-inner">
+		<div class="<?php echo esc_attr( 'abio-t6__header-inner' . ( $abio_t6_show_photos ? '' : ' abio-t6__header-inner--single' ) ); ?>">
 			<div class="abio-t6__intro">
 				<?php if ( $a['kicker'] || $a['location'] || $a['since'] ) : ?>
 					<span class="abio-kicker abio-t6__kicker">
@@ -46,20 +52,22 @@ $a = $d['author'];
 				<?php endif; ?>
 			</div>
 
-			<ul class="abio-t6__photos">
-				<?php foreach ( $d['gallery']['items'] as $g ) : ?>
-					<li class="abio-t6__photo">
-						<?php echo ABIO_View::media( $g['image'], 'medium', '', 'abio-t6__photo-img' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-						<div class="abio-t6__photo-overlay">
-							<span class="abio-t6__photo-label"><?php echo esc_html( $g['label'] ); ?></span>
-							<span class="abio-t6__photo-caption"><?php echo esc_html( $g['caption'] ); ?></span>
-						</div>
+			<?php if ( $abio_t6_show_photos ) : ?>
+				<ul class="<?php echo esc_attr( 'abio-t6__photos' . ( $abio_t6_has_gallery ? '' : ' abio-t6__photos--single' ) ); ?>">
+					<?php foreach ( $d['gallery']['items'] as $g ) : ?>
+						<li class="abio-t6__photo">
+							<?php echo ABIO_View::media( $g['image'], 'medium', '', 'abio-t6__photo-img' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+							<div class="abio-t6__photo-overlay">
+								<span class="abio-t6__photo-label"><?php echo esc_html( $g['label'] ); ?></span>
+								<span class="abio-t6__photo-caption"><?php echo esc_html( $g['caption'] ); ?></span>
+							</div>
+						</li>
+					<?php endforeach; ?>
+					<li class="abio-t6__photo abio-t6__photo--portrait">
+						<?php echo ABIO_View::media( $a['portrait'], 'medium', 'portrait 1:1', 'abio-t6__photo-img' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 					</li>
-				<?php endforeach; ?>
-				<li class="abio-t6__photo abio-t6__photo--portrait">
-					<?php echo ABIO_View::media( $a['portrait'], 'medium', 'portrait 1:1', 'abio-t6__photo-img' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-				</li>
-			</ul>
+				</ul>
+			<?php endif; ?>
 		</div>
 	</header>
 
