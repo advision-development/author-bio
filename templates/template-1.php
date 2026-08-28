@@ -139,7 +139,7 @@ $a = $d['author'];
 						<?php foreach ( $d['nav'] as $n ) : ?>
 							<li>
 								<span class="abio-t1__toc-num"><?php echo esc_html( $n['num'] ); ?></span>
-								<a href="<?php echo esc_attr( $n['href'] ); ?>"><?php echo esc_html( $n['label'] ); ?></a>
+								<a href="<?php echo esc_url( $n['href'] ); ?>"><?php echo esc_html( $n['label'] ); ?></a>
 							</li>
 						<?php endforeach; ?>
 					</ol>
