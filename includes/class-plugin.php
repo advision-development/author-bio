@@ -12,6 +12,7 @@ class ABIO_Plugin {
 			'includes/class-fields.php',
 			'includes/class-post-type.php',
 			'includes/class-metaboxes.php',
+			'includes/class-palette.php',
 			'includes/class-settings.php',
 		);
 
@@ -25,6 +26,7 @@ class ABIO_Plugin {
 		add_action( 'admin_enqueue_scripts', array( 'ABIO_Metaboxes', 'admin_assets' ) );
 		add_action( 'admin_menu', array( 'ABIO_Settings', 'menu' ) );
 		add_action( 'admin_init', array( 'ABIO_Settings', 'register' ) );
+		add_action( 'admin_post_abio_redetect', array( 'ABIO_Palette', 'handle_redetect' ) );
 		register_activation_hook( ABIO_FILE, array( __CLASS__, 'activate' ) );
 	}
 
@@ -33,5 +35,6 @@ class ABIO_Plugin {
 	 */
 	public static function activate() {
 		ABIO_Post_Type::register();
+		ABIO_Palette::store_detection();
 	}
 }

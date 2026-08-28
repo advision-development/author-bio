@@ -225,8 +225,35 @@ class ABIO_Settings {
 	 * @param array $values
 	 */
 	private static function palette_section( $values ) {
+		$detected = ABIO_Palette::detected();
+
+		$sources = array(
+			'elementor' => __( 'Elementor global colors', 'author-bio' ),
+			'bricks'    => __( 'Bricks color palette', 'author-bio' ),
+			'default'   => __( 'plugin defaults (no page builder detected)', 'author-bio' ),
+		);
+
+		$source = isset( $sources[ $detected['source'] ] ) ? $sources[ $detected['source'] ] : $detected['source'];
+
 		echo '<h2>' . esc_html__( 'Palette', 'author-bio' ) . '</h2>';
-		echo '<p class="description">' . esc_html__( 'Leave blank to use the value detected from your page builder, or the plugin default when no builder is present.', 'author-bio' ) . '</p>';
+
+		printf(
+			'<p class="description">%s</p>',
+			sprintf(
+				/* translators: 1: detection source, 2: ink, 3: paper, 4: accent. */
+				esc_html__( 'Detected from %1$s — ink %2$s, paper %3$s, accent %4$s. Leave a field blank to use the detected value.', 'author-bio' ),
+				esc_html( $source ),
+				esc_html( $detected['ink'] ),
+				esc_html( $detected['paper'] ),
+				esc_html( $detected['accent'] )
+			)
+		);
+
+		printf(
+			'<p><a class="button" href="%s">%s</a></p>',
+			esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=abio_redetect' ), 'abio_redetect' ) ),
+			esc_html__( 'Re-detect from page builder', 'author-bio' )
+		);
 
 		self::section(
 			'',
