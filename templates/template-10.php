@@ -160,7 +160,7 @@ $abio_t10_footer_cols  = (int) $abio_t10_show_creds + (int) $abio_t10_show_follo
 
 			<?php if ( $abio_t10_show_creds ) : ?>
 				<div class="abio-t10__footer-col">
-					<h3 class="abio-eyebrow"><?php esc_html_e( 'Credentials', 'author-bio' ); ?></h3>
+					<h3 class="abio-t10__footer-heading"><?php esc_html_e( 'Credentials', 'author-bio' ); ?></h3>
 					<?php if ( ! empty( $d['credentials'] ) ) : ?>
 						<ul class="abio-t10__credentials">
 							<?php foreach ( $d['credentials'] as $c ) : ?>
@@ -180,7 +180,7 @@ $abio_t10_footer_cols  = (int) $abio_t10_show_creds + (int) $abio_t10_show_follo
 
 			<?php if ( $abio_t10_show_follows ) : ?>
 				<div class="abio-t10__footer-col">
-					<h3 class="abio-eyebrow"><?php esc_html_e( 'Follows', 'author-bio' ); ?></h3>
+					<h3 class="abio-t10__footer-heading"><?php esc_html_e( 'Follows', 'author-bio' ); ?></h3>
 					<ul class="abio-chips">
 						<?php foreach ( $d['follows'] as $h ) : ?>
 							<li><a href="<?php echo esc_url( $h['url'] ); ?>" rel="nofollow ugc noopener" target="_blank"><?php echo esc_html( $h['handle'] ); ?></a></li>
@@ -190,8 +190,8 @@ $abio_t10_footer_cols  = (int) $abio_t10_show_creds + (int) $abio_t10_show_follo
 			<?php endif; ?>
 
 			<?php if ( $abio_t10_show_others ) : ?>
-				<div class="abio-t10__footer-col">
-					<h3 class="abio-eyebrow"><?php esc_html_e( 'Other authors', 'author-bio' ); ?></h3>
+				<div class="abio-t10__footer-col abio-t10__footer-col--others">
+					<h3 class="abio-t10__footer-heading"><?php esc_html_e( 'Other authors', 'author-bio' ); ?></h3>
 					<ul class="abio-t10__others">
 						<?php foreach ( $d['others'] as $o ) : ?>
 							<li>

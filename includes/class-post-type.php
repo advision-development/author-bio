@@ -83,4 +83,55 @@ class ABIO_Post_Type {
 
 		return empty( $found ) ? 0 : (int) $found[0];
 	}
+
+	/**
+	 * Add a Linked user column to the profile list table.
+	 *
+	 * @param array $columns
+	 * @return array
+	 */
+	public static function columns( $columns ) {
+		$date = isset( $columns['date'] ) ? $columns['date'] : null;
+		unset( $columns['date'] );
+
+		$columns['abio_user'] = __( 'Linked user', 'author-bio' );
+
+		if ( $date ) {
+			$columns['date'] = $date;
+		}
+
+		return $columns;
+	}
+
+	/**
+	 * Render the Linked user column.
+	 *
+	 * @param string $column
+	 * @param int    $post_id
+	 */
+	public static function column( $column, $post_id ) {
+		if ( 'abio_user' !== $column ) {
+			return;
+		}
+
+		$user_id = (int) get_post_meta( $post_id, ABIO_Fields::meta_key( 'user' ), true );
+
+		if ( ! $user_id ) {
+			echo '<span aria-hidden="true">—</span><span class="screen-reader-text">' . esc_html__( 'No linked user', 'author-bio' ) . '</span>';
+			return;
+		}
+
+		$user = get_userdata( $user_id );
+
+		if ( ! $user ) {
+			esc_html_e( 'Missing user', 'author-bio' );
+			return;
+		}
+
+		printf(
+			'<a href="%s">%s</a>',
+			esc_url( get_author_posts_url( $user_id ) ),
+			esc_html( $user->display_name )
+		);
+	}
 }
