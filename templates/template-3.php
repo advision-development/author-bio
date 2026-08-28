@@ -54,7 +54,7 @@ $a = $d['author'];
 	<div class="abio-t3__body">
 
 		<?php if ( $a['bio'] ) : ?>
-			<p class="abio-t3__bio"><?php echo esc_html( $a['bio'] ); ?></p>
+			<div class="abio-t3__bio"><?php echo wp_kses_post( wpautop( $a['bio'] ) ); ?></div>
 		<?php endif; ?>
 
 		<?php if ( ! empty( $d['stats'] ) ) : ?>
@@ -135,7 +135,7 @@ $a = $d['author'];
 
 				<?php if ( ! empty( $d['follows'] ) ) : ?>
 					<div class="abio-t3__footer-cell">
-						<h3 class="abio-eyebrow"><?php esc_html_e( 'Follows on X', 'author-bio' ); ?></h3>
+						<h3 class="abio-eyebrow"><?php esc_html_e( 'Follows', 'author-bio' ); ?></h3>
 						<ul class="abio-chips">
 							<?php foreach ( $d['follows'] as $h ) : ?>
 								<li><a href="<?php echo esc_url( $h['url'] ); ?>" rel="nofollow ugc noopener" target="_blank"><?php echo esc_html( $h['handle'] ); ?></a></li>

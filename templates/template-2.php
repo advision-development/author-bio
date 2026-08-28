@@ -68,7 +68,7 @@ $a = $d['author'];
 
 			<?php if ( ! empty( $d['follows'] ) ) : ?>
 				<div class="abio-t2__block">
-					<h2 class="abio-eyebrow"><?php esc_html_e( 'Follows on X', 'author-bio' ); ?></h2>
+					<h2 class="abio-eyebrow"><?php esc_html_e( 'Follows', 'author-bio' ); ?></h2>
 					<ul class="abio-t2__follows">
 						<?php foreach ( $d['follows'] as $h ) : ?>
 							<li><a href="<?php echo esc_url( $h['url'] ); ?>" rel="nofollow ugc noopener" target="_blank"><?php echo esc_html( $h['handle'] ); ?></a></li>
@@ -97,7 +97,7 @@ $a = $d['author'];
 			<section class="abio-t2__lede">
 				<span class="abio-kicker"><?php echo esc_html( $a['kicker'] ); ?> <?php esc_html_e( 'profile', 'author-bio' ); ?></span>
 				<?php if ( $a['bio'] ) : ?>
-					<p class="abio-t2__bio"><?php echo esc_html( $a['bio'] ); ?></p>
+					<div class="abio-t2__bio"><?php echo wp_kses_post( wpautop( $a['bio'] ) ); ?></div>
 				<?php endif; ?>
 			</section>
 
