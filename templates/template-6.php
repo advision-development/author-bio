@@ -73,7 +73,7 @@ $abio_t6_show_photos = $abio_t6_has_gallery || $a['portrait'];
 
 	<?php if ( ! empty( $d['stats'] ) ) : ?>
 		<div class="abio-t6__stats-wrap">
-			<ul class="abio-t6__stats">
+			<ul class="<?php echo esc_attr( 'abio-t6__stats' . ( count( $d['stats'] ) < 4 ? ' abio-t6__stats--n' . count( $d['stats'] ) : '' ) ); ?>">
 				<?php foreach ( $d['stats'] as $s ) : ?>
 					<li>
 						<span class="abio-t6__stat-value"><?php echo esc_html( $s['value'] ); ?></span>

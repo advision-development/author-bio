@@ -41,7 +41,7 @@ $abio_t7_show_report = $a['bio'] || ! empty( $d['gallery']['items'] );
 				<?php endif; ?>
 
 				<?php if ( ! empty( $d['stats'] ) ) : ?>
-					<ul class="abio-t7__stats">
+					<ul class="<?php echo esc_attr( 'abio-t7__stats' . ( count( $d['stats'] ) < 4 ? ' abio-t7__stats--n' . count( $d['stats'] ) : '' ) ); ?>">
 						<?php foreach ( $d['stats'] as $s ) : ?>
 							<li>
 								<span class="abio-t7__stat-value"><?php echo esc_html( $s['value'] ); ?></span>

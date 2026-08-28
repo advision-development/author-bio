@@ -64,7 +64,7 @@ $a = $d['author'];
 			</header>
 
 			<?php if ( ! empty( $d['stats'] ) ) : ?>
-				<ul class="abio-t1__stats">
+				<ul class="<?php echo esc_attr( 'abio-t1__stats' . ( count( $d['stats'] ) < 4 ? ' abio-t1__stats--n' . count( $d['stats'] ) : '' ) ); ?>">
 					<?php foreach ( $d['stats'] as $s ) : ?>
 						<li>
 							<span class="abio-t1__stat-value"><?php echo esc_html( $s['value'] ); ?></span>
