@@ -14,6 +14,7 @@ class ABIO_Plugin {
 			'includes/class-metaboxes.php',
 			'includes/class-palette.php',
 			'includes/class-settings.php',
+			'includes/class-articles.php',
 		);
 
 		foreach ( $files as $file ) {
