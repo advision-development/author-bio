@@ -16,6 +16,7 @@
 	--abio-onink: #c6c6c1;
 	--abio-onink-dim: #a8a8a3;
 	--abio-onink-line: #3a3c40;
+	--abio-accent-soft: #6f7175;
 
 	--abio-font: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	--abio-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", monospace;
@@ -37,6 +38,11 @@
 		--abio-onink: color-mix(in srgb, var(--abio-paper) 77%, var(--abio-ink));
 		--abio-onink-dim: color-mix(in srgb, var(--abio-paper) 64%, var(--abio-ink));
 		--abio-onink-line: color-mix(in srgb, var(--abio-paper) 15%, var(--abio-ink));
+		/* Same formula as --abio-soft, sourced from accent instead of ink, so
+		   link hovers move with the accent color rather than the muted body
+		   text tone. Identical to --abio-soft while accent equals the default
+		   ink — the two only diverge once accent is overridden. */
+		--abio-accent-soft: color-mix(in srgb, var(--abio-accent) 61%, var(--abio-paper));
 	}
 }
 
@@ -61,7 +67,7 @@
 .abio ol { list-style: none; }
 
 .abio a { color: inherit; text-decoration: none; }
-.abio a:hover { color: var(--abio-soft); text-decoration: underline; text-underline-offset: 3px; }
+.abio a:hover { color: var(--abio-accent-soft); text-decoration: underline; text-underline-offset: 3px; }
 
 .abio img { max-width: 100%; height: auto; display: block; }
 
@@ -127,13 +133,13 @@ img.abio-media { border: 1px solid var(--abio-line); }
 .abio-cta {
 	align-self: start;
 	display: inline-block;
-	border: 1px solid var(--abio-ink);
+	border: 1px solid var(--abio-accent);
 	padding: 9px 15px;
 	font-size: 13px;
-	color: var(--abio-ink);
+	color: var(--abio-accent);
 }
 .abio-cta:hover {
-	background: var(--abio-ink);
+	background: var(--abio-accent);
 	color: var(--abio-paper);
 	text-decoration: none;
 }
@@ -261,7 +267,7 @@ img.abio-media { border: 1px solid var(--abio-line); }
 	border: 1px solid var(--abio-line);
 }
 .abio-t1__pitch h3 { font-size: 14px; font-weight: 600; }
-.abio-t1__pitch p { font-size: 13px; line-height: 1.55; color: var(--abio-soft); }
+.abio-t1__pitch-body { font-size: 13px; line-height: 1.55; color: var(--abio-soft); }
 
 @media (max-width: 1024px) {
 	.abio-t1__grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
@@ -530,7 +536,7 @@ img.abio-media { border: 1px solid var(--abio-line); }
 
 .abio-t4__pitch { grid-column: span 4; padding: 28px; display: flex; flex-direction: column; gap: 12px; }
 .abio-t4__pitch h2 { font-size: 15px; font-weight: 600; }
-.abio-t4__pitch p { font-size: 13px; line-height: 1.6; color: var(--abio-onink); }
+.abio-t4__pitch-body { font-size: 13px; line-height: 1.6; color: var(--abio-onink); }
 .abio-t4__pitch .abio-cta { margin-top: 6px; }
 
 @media (max-width: 1024px) {
@@ -671,9 +677,14 @@ img.abio-media { border: 1px solid var(--abio-line); }
 .abio-t6__badges { padding-top: 6px; }
 .abio-t6__badges li > span { padding: 5px 11px; }
 
-.abio-t6__photos { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; aspect-ratio: 1; }
-.abio-t6__photos--single { grid-template-columns: 1fr; grid-template-rows: 1fr; }
-.abio-t6__photo { position: relative; border: 1px solid var(--abio-onink-line); }
+/* Cell count varies with the gallery (portrait plus 0+ gallery items), so
+   the grid sizes itself from each cell's own aspect-ratio rather than a
+   fixed 2x2 with an explicit row count: 1 item fills the single column, 2
+   fill one row exactly, 4 form the classic 2x2, and 5+ simply add rows
+   instead of forcing a fixed-height square that would squash or overflow. */
+.abio-t6__photos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.abio-t6__photos--single { grid-template-columns: 1fr; }
+.abio-t6__photo { position: relative; aspect-ratio: 1; border: 1px solid var(--abio-onink-line); }
 .abio-t6__photo-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: 0; min-height: 0; }
 .abio-t6__photo-overlay { position: relative; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 12px; }
 .abio-t6__photo-label { font: 10px var(--abio-mono); color: var(--abio-soft); }
@@ -717,7 +728,7 @@ img.abio-media { border: 1px solid var(--abio-line); }
 .abio-t6__footer-grid { padding: 56px 40px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; }
 .abio-t6__footer-col { display: flex; flex-direction: column; gap: 14px; }
 .abio-t6__footer-col .abio-chips a { padding: 5px 10px; }
-.abio-t6__footer-col p { font-size: 13px; line-height: 1.6; color: var(--abio-onink-dim); }
+.abio-t6__pitch-body { font-size: 13px; line-height: 1.6; color: var(--abio-onink-dim); }
 .abio-t6__footer-col .abio-cta { margin-top: 4px; }
 .abio-t6__others { display: flex; flex-direction: column; gap: 14px; }
 .abio-t6__others li { display: flex; flex-direction: column; gap: 3px; }
@@ -825,7 +836,7 @@ img.abio-media { border: 1px solid var(--abio-line); }
 
 .abio-t7__pitch { padding: 24px; display: flex; flex-direction: column; gap: 12px; }
 .abio-t7__pitch h3 { font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: .02em; }
-.abio-t7__pitch p { font-size: 13px; line-height: 1.6; color: var(--abio-onink-dim); }
+.abio-t7__pitch-body { font-size: 13px; line-height: 1.6; color: var(--abio-onink-dim); }
 
 @media (max-width: 1024px) {
 	.abio-t7__body { grid-template-columns: minmax(0, 1fr); }
@@ -892,15 +903,15 @@ img.abio-media { border: 1px solid var(--abio-line); }
 
 .abio-t8__cta {
 	display: block;
-	border: 1px solid var(--abio-ink);
+	border: 1px solid var(--abio-accent);
 	border-radius: 4px;
-	background: var(--abio-ink);
+	background: var(--abio-accent);
 	color: var(--abio-paper);
 	padding: 10px 14px;
 	font-size: 13px;
 	text-align: center;
 }
-.abio-t8__cta:hover { background: var(--abio-paper); color: var(--abio-ink); text-decoration: none; }
+.abio-t8__cta:hover { background: var(--abio-paper); color: var(--abio-accent); text-decoration: none; }
 
 .abio-t8__list { display: flex; flex-direction: column; gap: 10px; }
 .abio-t8__list li { font-size: 13px; line-height: 1.55; color: var(--abio-dim); }
@@ -1071,7 +1082,7 @@ img.abio-media { border: 1px solid var(--abio-line); }
 .abio-t10__role { font-size: 24px; line-height: 1.4; color: var(--abio-dim); max-width: 32ch; }
 .abio-t10__cta {
 	margin-top: 8px;
-	background: var(--abio-ink);
+	background: var(--abio-accent);
 	color: var(--abio-paper);
 	padding: 14px 26px;
 	font-size: 14px;

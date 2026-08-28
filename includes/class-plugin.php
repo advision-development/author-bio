@@ -34,7 +34,7 @@ class ABIO_Plugin {
 		add_action( 'admin_init', array( 'ABIO_Settings', 'register' ) );
 		add_action( 'admin_post_abio_redetect', array( 'ABIO_Palette', 'handle_redetect' ) );
 		add_action( 'init', array( 'ABIO_Shortcode', 'register' ) );
-		add_action( 'wp_enqueue_scripts', array( 'ABIO_Assets', 'register' ) );
+		add_action( 'init', array( 'ABIO_Assets', 'register' ) );
 		add_filter( 'manage_' . ABIO_Post_Type::SLUG . '_posts_columns', array( 'ABIO_Post_Type', 'columns' ) );
 		add_action( 'manage_' . ABIO_Post_Type::SLUG . '_posts_custom_column', array( 'ABIO_Post_Type', 'column' ), 10, 2 );
 		register_activation_hook( ABIO_FILE, array( __CLASS__, 'activate' ) );
@@ -45,6 +45,7 @@ class ABIO_Plugin {
 	 */
 	public static function activate() {
 		ABIO_Post_Type::register();
+		ABIO_Post_Type::add_capabilities();
 		ABIO_Palette::store_detection();
 	}
 }

@@ -37,4 +37,22 @@ class ABIO_View {
 			esc_html( $label )
 		);
 	}
+
+	/**
+	 * A link when there is somewhere to send the visitor, plain escaped text
+	 * otherwise. Used for "Other authors" entries: a profile with no linked
+	 * user has no author archive to point to, and an anchor with an empty
+	 * href resolves to the current page rather than going nowhere.
+	 *
+	 * @param string $url
+	 * @param string $label
+	 * @return string
+	 */
+	public static function optional_link( $url, $label ) {
+		if ( ! $url ) {
+			return esc_html( $label );
+		}
+
+		return sprintf( '<a href="%s">%s</a>', esc_url( $url ), esc_html( $label ) );
+	}
 }

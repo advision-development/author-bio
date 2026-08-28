@@ -6,6 +6,10 @@ Stable tag: 1.0.0
 Renders a full author page from an [author_bio] shortcode, backed by a
 dedicated Author Profile admin screen linked to a WordPress user.
 
+Managing Author Profiles requires its own capabilities, granted to
+Administrators and Editors on activation; the Author role can publish posts
+as usual but cannot create, edit, or link an Author Profile.
+
 == Usage ==
 
 Put the shortcode in a page, or in your theme's author.php:

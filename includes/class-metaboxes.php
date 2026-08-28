@@ -91,16 +91,20 @@ class ABIO_Metaboxes {
 
 		switch ( $field['type'] ) {
 			case 'user':
-				wp_dropdown_users(
-					array(
-						'name'              => $name,
-						'id'                => $id,
-						'selected'          => (int) $value,
-						'show_option_none'  => __( '— none —', 'author-bio' ),
-						'option_none_value' => 0,
-						'capability'        => array( 'edit_posts' ),
-					)
-				);
+				if ( current_user_can( 'list_users' ) ) {
+					wp_dropdown_users(
+						array(
+							'name'              => $name,
+							'id'                => $id,
+							'selected'          => (int) $value,
+							'show_option_none'  => __( '— none —', 'author-bio' ),
+							'option_none_value' => 0,
+							'capability'        => array( 'edit_posts' ),
+						)
+					);
+				} else {
+					self::render_restricted_user_field( $name, $id, (int) $value );
+				}
 				break;
 
 			case 'media':
@@ -134,6 +138,49 @@ class ABIO_Metaboxes {
 		}
 
 		echo '</div>';
+	}
+
+	/**
+	 * A restricted stand-in for the linked-user dropdown, shown to anyone who
+	 * cannot list_users. Enumerating every account on the site is itself a
+	 * capability, independent of whether the CPT lets them save a profile, so
+	 * this offers only the current user plus whatever is already saved
+	 * (unchanged, so simply re-saving the form never silently clears a
+	 * validly-set link).
+	 *
+	 * @param string $name
+	 * @param string $id
+	 * @param int    $value
+	 */
+	private static function render_restricted_user_field( $name, $id, $value ) {
+		$current = wp_get_current_user();
+		$choices = array( 0 => __( '— none —', 'author-bio' ) );
+
+		if ( $current && $current->ID ) {
+			$choices[ $current->ID ] = $current->display_name;
+		}
+
+		if ( $value && ! isset( $choices[ $value ] ) ) {
+			$existing = get_userdata( $value );
+
+			if ( $existing ) {
+				$choices[ $value ] = $existing->display_name;
+			}
+		}
+
+		echo '<select name="' . esc_attr( $name ) . '" id="' . esc_attr( $id ) . '">';
+
+		foreach ( $choices as $choice_id => $label ) {
+			printf(
+				'<option value="%d"%s>%s</option>',
+				(int) $choice_id,
+				selected( $value, $choice_id, false ),
+				esc_html( $label )
+			);
+		}
+
+		echo '</select>';
+		echo '<p class="description">' . esc_html__( 'You do not have permission to browse every user on this site, so only your own account can be linked here.', 'author-bio' ) . '</p>';
 	}
 
 	/**
@@ -314,8 +361,39 @@ class ABIO_Metaboxes {
 			$raw   = isset( $submitted[ $key ] ) ? $submitted[ $key ] : '';
 			$clean = ABIO_Fields::sanitize( $field, $raw );
 
+			// Defense in depth: the dropdown already restricts *choices* for
+			// users who can't list_users, but the save path must not trust
+			// the form to have been rendered honestly — a crafted request
+			// could submit any user ID directly.
+			if ( 'user' === $field['type'] && ! self::may_assign_user( $clean ) ) {
+				continue;
+			}
+
 			update_post_meta( $post_id, ABIO_Fields::meta_key( $key ), $clean );
 		}
+	}
+
+	/**
+	 * Whether the current user is allowed to link a profile to $user_id.
+	 * Users who can list_users may assign anyone eligible for the dropdown
+	 * (matching its 'capability' filter); everyone else may only assign
+	 * themselves. Clearing the link (0) is always allowed.
+	 *
+	 * @param int $user_id
+	 * @return bool
+	 */
+	private static function may_assign_user( $user_id ) {
+		$user_id = absint( $user_id );
+
+		if ( ! $user_id ) {
+			return true;
+		}
+
+		if ( current_user_can( 'list_users' ) ) {
+			return user_can( $user_id, 'edit_posts' );
+		}
+
+		return get_current_user_id() === $user_id;
 	}
 
 	/**

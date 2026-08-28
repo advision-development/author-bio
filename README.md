@@ -50,6 +50,13 @@ Sections accepted by `hide`: `stats`, `gallery`, `focus`, `edits`,
 If no published profile is linked to the resolved author, the shortcode renders
 nothing. Users who can edit posts see a diagnostic line instead.
 
+## Permissions
+
+Managing Author Profiles requires its own capabilities, granted to
+Administrators and Editors on activation — publishing an ordinary post is not
+enough. The Author role can still write posts as usual but cannot create,
+edit, or link an Author Profile.
+
 ## Colors
 
 Templates are built from three CSS custom properties — `--abio-ink`,

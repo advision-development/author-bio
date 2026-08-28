@@ -274,10 +274,10 @@ class ABIO_Fields {
 				return absint( $value );
 
 			case 'textarea':
-				return wp_kses_post( wp_unslash( $value ) );
+				return wp_kses_post( self::scalar( wp_unslash( $value ) ) );
 
 			case 'url':
-				return esc_url_raw( wp_unslash( $value ) );
+				return esc_url_raw( self::scalar( wp_unslash( $value ) ) );
 
 			case 'repeater':
 				return self::sanitize_repeater( $field, $value );
@@ -287,8 +287,23 @@ class ABIO_Fields {
 
 			case 'text':
 			default:
-				return sanitize_text_field( wp_unslash( $value ) );
+				return sanitize_text_field( self::scalar( wp_unslash( $value ) ) );
 		}
+	}
+
+	/**
+	 * WordPress hands sanitizers whatever was posted, which may be an array
+	 * (e.g. a text input duplicated with `[]` in its name, or a tampered
+	 * request). Every string sanitizer above would misbehave or fatal on one
+	 * — esc_url_raw() throws, wp_kses_post() silently returns an array that
+	 * then gets serialized into post meta — so non-scalar input collapses to
+	 * an empty string first. Mirrors ABIO_Settings::scalar().
+	 *
+	 * @param mixed $value
+	 * @return string
+	 */
+	private static function scalar( $value ) {
+		return is_scalar( $value ) ? (string) $value : '';
 	}
 
 	/**
@@ -348,7 +363,7 @@ class ABIO_Fields {
 
 		for ( $i = 0; $i < 4; $i++ ) {
 			$row  = isset( $value[ $i ] ) && is_array( $value[ $i ] ) ? $value[ $i ] : array();
-			$mode = isset( $row['mode'] ) ? sanitize_key( $row['mode'] ) : 'off';
+			$mode = isset( $row['mode'] ) ? sanitize_key( self::scalar( $row['mode'] ) ) : 'off';
 
 			if ( ! in_array( $mode, $modes, true ) ) {
 				$mode = 'off';
@@ -356,9 +371,9 @@ class ABIO_Fields {
 
 			$tiles[] = array(
 				'mode'      => $mode,
-				'post_type' => isset( $row['post_type'] ) ? sanitize_key( $row['post_type'] ) : '',
-				'value'     => isset( $row['value'] ) ? sanitize_text_field( wp_unslash( $row['value'] ) ) : '',
-				'label'     => isset( $row['label'] ) ? sanitize_text_field( wp_unslash( $row['label'] ) ) : '',
+				'post_type' => isset( $row['post_type'] ) ? sanitize_key( self::scalar( $row['post_type'] ) ) : '',
+				'value'     => isset( $row['value'] ) ? sanitize_text_field( self::scalar( wp_unslash( $row['value'] ) ) ) : '',
+				'label'     => isset( $row['label'] ) ? sanitize_text_field( self::scalar( wp_unslash( $row['label'] ) ) ) : '',
 			);
 		}
 

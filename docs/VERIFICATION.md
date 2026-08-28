@@ -99,8 +99,12 @@ URLs for the resolution checks.
 - [ ] **7. No linked profile.** Visit the archive (or a page with
       `[author_bio user=<user with no profile>]`) for the fourth test user.
       Expected: renders nothing when logged out; when logged in as an editor
-      (or higher), shows the diagnostic line "Author Bio: no published
-      author profile is linked to this author."
+      (or higher), shows a diagnostic line naming the resolved user by ID and
+      display name, e.g. "Author Bio: no published author profile is linked
+      to user #7 (Jane Doe)." When no author can be resolved at all (e.g. an
+      `[author_bio]` with no attributes on a page that is not an author
+      archive or singular view), the line says plainly that no author could
+      be resolved.
 
 ## Data
 
@@ -176,6 +180,18 @@ URLs for the resolution checks.
       shows a duplicate warning, and on the front end
       (`[author_bio user=<that user>]` or their archive), the **lower
       post ID** profile keeps rendering — not the newly created one.
+- [ ] **19. Author Profile capability separation.** Create a plain Author
+      user (no Editor/Administrator role) and log in as them. Expected: the
+      **Authors** menu does not offer "Add New", any existing Author Profile
+      opens read-only or not at all, and this is true even though the same
+      user can freely publish an ordinary post. Confirm the reverse too: an
+      Editor and an Administrator can both create, edit, and publish Author
+      Profiles normally (deactivate and reactivate the plugin first if it was
+      already active before this check was added, so the new capabilities
+      get granted to those roles). Editors and Administrators without
+      `list_users` (test with a role-editor plugin if needed to remove it
+      from Editor) see only themselves — not a full user list — in the
+      "Linked user" field.
 
 ---
 

@@ -42,9 +42,64 @@ class ABIO_Post_Type {
 				'menu_position'       => 26,
 				'menu_icon'           => 'dashicons-id-alt',
 				'supports'            => array( 'title' ),
-				'capability_type'     => 'post',
+				'capability_type'     => array( 'author_profile', 'author_profiles' ),
+				'map_meta_cap'        => true,
+				'capabilities'        => self::capabilities(),
 			)
 		);
+	}
+
+	/**
+	 * A dedicated capability set, distinct from the generic 'post' caps the
+	 * Author role already has. Publishing a blog post must not be enough to
+	 * publish an author profile that can point at another user.
+	 *
+	 * @return array
+	 */
+	public static function capabilities() {
+		return array(
+			'edit_post'              => 'edit_author_profile',
+			'read_post'              => 'read_author_profile',
+			'delete_post'            => 'delete_author_profile',
+			'edit_posts'             => 'edit_author_profiles',
+			'edit_others_posts'      => 'edit_others_author_profiles',
+			'publish_posts'          => 'publish_author_profiles',
+			'read_private_posts'     => 'read_private_author_profiles',
+			'delete_posts'           => 'delete_author_profiles',
+			'delete_private_posts'   => 'delete_private_author_profiles',
+			'delete_published_posts' => 'delete_published_author_profiles',
+			'delete_others_posts'    => 'delete_others_author_profiles',
+			'edit_private_posts'     => 'edit_private_author_profiles',
+			'edit_published_posts'   => 'edit_published_author_profiles',
+			'create_posts'           => 'edit_author_profiles',
+		);
+	}
+
+	/**
+	 * Grant the profile capabilities to the roles allowed to manage profiles.
+	 * A custom capability_type is not inherited from anywhere, so without
+	 * this, map_meta_cap => true would leave every role — including
+	 * Administrator — unable to touch the post type. Authors are deliberately
+	 * left out: they can publish posts, but not author profiles, which can
+	 * link to and speak for another user.
+	 *
+	 * Safe to call repeatedly — add_cap() on a role that already has the
+	 * capability is a no-op.
+	 */
+	public static function add_capabilities() {
+		$caps = array_unique( array_values( self::capabilities() ) );
+
+		foreach ( array( 'administrator', 'editor' ) as $role_name ) {
+			$role = get_role( $role_name );
+
+			if ( ! $role ) {
+				continue;
+			}
+
+			foreach ( $caps as $cap ) {
+				$role->add_cap( $cap );
+			}
+		}
 	}
 
 	/**

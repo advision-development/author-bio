@@ -49,7 +49,7 @@ class ABIO_Shortcode {
 		$profile = self::resolve_profile( $atts );
 
 		if ( ! $profile ) {
-			return self::missing_notice();
+			return self::missing_notice( $atts );
 		}
 
 		$number = self::template_number( $atts['template'] );
@@ -61,9 +61,13 @@ class ABIO_Shortcode {
 
 		$hide = array_filter( array_map( 'sanitize_key', explode( ',', (string) $atts['hide'] ) ) );
 
+		$count = '' === $atts['count'] ? (int) ABIO_Settings::get( 'default_count', 6 ) : absint( $atts['count'] );
+
 		$d = $profile->to_array(
 			array(
-				'count'     => '' === $atts['count'] ? (int) ABIO_Settings::get( 'default_count', 6 ) : absint( $atts['count'] ),
+				// Mirrors the cap ABIO_Settings::sanitize() applies to the site-wide
+				// default, so a shortcode attribute can't force an unbounded query.
+				'count'     => min( 50, max( 1, $count ) ),
 				'post_type' => ABIO_Articles::post_types( (string) $atts['post_type'] ),
 				'others'    => absint( $atts['others'] ),
 				'hide'      => $hide,
@@ -162,15 +166,32 @@ class ABIO_Shortcode {
 	}
 
 	/**
-	 * Editors get a diagnosable blank; everyone else gets nothing.
+	 * Editors get a diagnosable blank, naming whichever author was resolved
+	 * (or saying plainly that none was) so the blank is diagnosable; everyone
+	 * else gets nothing.
 	 *
+	 * @param array $atts
 	 * @return string
 	 */
-	private static function missing_notice() {
+	private static function missing_notice( $atts ) {
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			return '';
 		}
 
-		return '<p class="abio-missing">' . esc_html__( 'Author Bio: no published author profile is linked to this author.', 'author-bio' ) . '</p>';
+		$user_id = self::resolve_user( $atts );
+		$user    = $user_id ? get_userdata( $user_id ) : false;
+
+		if ( $user ) {
+			$message = sprintf(
+				/* translators: 1: user ID, 2: user display name. */
+				__( 'Author Bio: no published author profile is linked to user #%1$d (%2$s).', 'author-bio' ),
+				$user_id,
+				$user->display_name
+			);
+		} else {
+			$message = __( 'Author Bio: no author could be resolved for this page.', 'author-bio' );
+		}
+
+		return '<p class="abio-missing">' . esc_html( $message ) . '</p>';
 	}
 }

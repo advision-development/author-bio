@@ -238,7 +238,11 @@ class ABIO_Profile {
 	}
 
 	/**
-	 * Other published profiles, excluding this one.
+	 * Other published profiles, excluding this one, ordered by the resolved
+	 * author name — not the profile's post title, which the CPT documents as
+	 * an internal label only. That name can fall back to the linked user's
+	 * display name, so sorting has to happen after resolving each profile
+	 * rather than in the query.
 	 *
 	 * @param int $limit
 	 * @return array
@@ -254,9 +258,9 @@ class ABIO_Profile {
 			array(
 				'post_type'        => ABIO_Post_Type::SLUG,
 				'post_status'      => 'publish',
-				'numberposts'      => $limit,
+				'numberposts'      => -1,
 				'exclude'          => array( $this->post_id ),
-				'orderby'          => 'title',
+				'orderby'          => 'ID',
 				'order'            => 'ASC',
 				'fields'           => 'ids',
 				'suppress_filters' => false,
@@ -281,7 +285,14 @@ class ABIO_Profile {
 			);
 		}
 
-		return $out;
+		usort(
+			$out,
+			static function ( $a, $b ) {
+				return strcasecmp( $a['name'], $b['name'] );
+			}
+		);
+
+		return array_slice( $out, 0, $limit );
 	}
 
 	/**

@@ -11,6 +11,11 @@
 defined( 'ABSPATH' ) || exit;
 
 $a = $d['author'];
+
+// The "Scouting report" card frame must not render with only its heading
+// when there is neither a bio nor gallery items to show (porting convention
+// rule 5).
+$abio_t7_show_report = $a['bio'] || ! empty( $d['gallery']['items'] );
 ?>
 <div class="abio-t7">
 
@@ -52,24 +57,26 @@ $a = $d['author'];
 	<div class="abio-t7__body">
 		<main class="abio-t7__main">
 
-			<section class="abio-t7__card">
-				<h2 class="abio-t7__card-heading"><?php esc_html_e( 'Scouting report', 'author-bio' ); ?></h2>
+			<?php if ( $abio_t7_show_report ) : ?>
+				<section class="abio-t7__card">
+					<h2 class="abio-t7__card-heading"><?php esc_html_e( 'Scouting report', 'author-bio' ); ?></h2>
 
-				<?php if ( $a['bio'] ) : ?>
-					<div class="abio-t7__bio"><?php echo wp_kses_post( wpautop( $a['bio'] ) ); ?></div>
-				<?php endif; ?>
+					<?php if ( $a['bio'] ) : ?>
+						<div class="abio-t7__bio"><?php echo wp_kses_post( wpautop( $a['bio'] ) ); ?></div>
+					<?php endif; ?>
 
-				<?php if ( ! empty( $d['gallery']['items'] ) ) : ?>
-					<ul class="abio-t7__gallery">
-						<?php foreach ( $d['gallery']['items'] as $g ) : ?>
-							<li>
-								<?php echo ABIO_View::media( $g['image'], 'thumbnail', $g['label'], 'abio-t7__gallery-img' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-								<span><?php echo esc_html( $g['caption'] ); ?></span>
-							</li>
-						<?php endforeach; ?>
-					</ul>
-				<?php endif; ?>
-			</section>
+					<?php if ( ! empty( $d['gallery']['items'] ) ) : ?>
+						<ul class="abio-t7__gallery">
+							<?php foreach ( $d['gallery']['items'] as $g ) : ?>
+								<li>
+									<?php echo ABIO_View::media( $g['image'], 'thumbnail', $g['label'], 'abio-t7__gallery-img' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+									<span><?php echo esc_html( $g['caption'] ); ?></span>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					<?php endif; ?>
+				</section>
+			<?php endif; ?>
 
 			<?php if ( ! empty( $d['focus'] ) ) : ?>
 				<section id="abio-focus" class="abio-t7__card">
@@ -163,7 +170,7 @@ $a = $d['author'];
 					<ul class="abio-t7__others">
 						<?php foreach ( $d['others'] as $o ) : ?>
 							<li>
-								<a href="<?php echo esc_url( $o['url'] ); ?>"><?php echo esc_html( $o['name'] ); ?></a>
+								<?php echo ABIO_View::optional_link( $o['url'], $o['name'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 								<span><?php echo esc_html( $o['role'] ); ?></span>
 							</li>
 						<?php endforeach; ?>
@@ -174,7 +181,7 @@ $a = $d['author'];
 			<?php if ( $d['pitch']['title'] ) : ?>
 				<div class="abio-t7__pitch abio-panel--dark">
 					<h3><?php echo esc_html( $d['pitch']['title'] ); ?></h3>
-					<p><?php echo esc_html( $d['pitch']['body'] ); ?></p>
+					<div class="abio-t7__pitch-body"><?php echo wp_kses_post( $d['pitch']['body'] ); ?></div>
 					<?php if ( $d['site']['contactUrl'] && $d['pitch']['cta'] ) : ?>
 						<a class="abio-cta" href="<?php echo esc_url( $d['site']['contactUrl'] ); ?>"><?php echo esc_html( $d['pitch']['cta'] ); ?></a>
 					<?php endif; ?>

@@ -155,7 +155,7 @@ $abio_t6_show_photos = $abio_t6_has_gallery || $a['portrait'];
 						<ul class="abio-t6__others">
 							<?php foreach ( $d['others'] as $o ) : ?>
 								<li>
-									<a href="<?php echo esc_url( $o['url'] ); ?>"><?php echo esc_html( $o['name'] ); ?></a>
+									<?php echo ABIO_View::optional_link( $o['url'], $o['name'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 									<span><?php echo esc_html( $o['role'] ); ?></span>
 								</li>
 							<?php endforeach; ?>
@@ -166,7 +166,7 @@ $abio_t6_show_photos = $abio_t6_has_gallery || $a['portrait'];
 				<?php if ( $d['pitch']['title'] ) : ?>
 					<div class="abio-t6__footer-col">
 						<h3 class="abio-eyebrow"><?php echo esc_html( $d['pitch']['title'] ); ?></h3>
-						<p><?php echo esc_html( $d['pitch']['body'] ); ?></p>
+						<div class="abio-t6__pitch-body"><?php echo wp_kses_post( $d['pitch']['body'] ); ?></div>
 						<?php if ( $d['site']['contactUrl'] && $d['pitch']['cta'] ) : ?>
 							<a class="abio-cta" href="<?php echo esc_url( $d['site']['contactUrl'] ); ?>"><?php echo esc_html( $d['pitch']['cta'] ); ?></a>
 						<?php endif; ?>

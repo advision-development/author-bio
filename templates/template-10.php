@@ -195,7 +195,7 @@ $abio_t10_footer_cols  = (int) $abio_t10_show_creds + (int) $abio_t10_show_follo
 					<ul class="abio-t10__others">
 						<?php foreach ( $d['others'] as $o ) : ?>
 							<li>
-								<a href="<?php echo esc_url( $o['url'] ); ?>"><?php echo esc_html( $o['name'] ); ?></a>
+								<?php echo ABIO_View::optional_link( $o['url'], $o['name'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 								<span><?php echo esc_html( $o['role'] ); ?></span>
 							</li>
 						<?php endforeach; ?>

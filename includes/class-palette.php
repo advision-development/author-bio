@@ -18,6 +18,14 @@ class ABIO_Palette {
 	const DEFAULT_ACCENT = '#17181a';
 
 	/**
+	 * Minimum contrast ratio a detected ink must clear against the resolved
+	 * paper. Ink doubles as body text and the fill of the dark panels, so the
+	 * bar is the stricter WCAG AAA threshold rather than the AA 4.5:1 used for
+	 * normal text.
+	 */
+	const MIN_INK_CONTRAST = 7.0;
+
+	/**
 	 * Detect seed colors from the active page builder.
 	 *
 	 * @return array
@@ -69,19 +77,41 @@ class ABIO_Palette {
 			}
 		}
 
-		$ink    = isset( $by_id['text'] ) ? $by_id['text'] : '';
-		$accent = isset( $by_id['primary'] ) ? $by_id['primary'] : '';
+		$ink_raw    = isset( $by_id['text'] ) ? $by_id['text'] : '';
+		$accent_raw = isset( $by_id['primary'] ) ? $by_id['primary'] : '';
+		$paper_raw  = self::elementor_background( $settings );
 
-		if ( ! $ink && ! $accent ) {
+		if ( ! $ink_raw && ! $accent_raw && ! $paper_raw ) {
 			return false;
 		}
 
+		$paper = self::hex( $paper_raw, self::DEFAULT_PAPER );
+
 		return array(
 			'source' => 'elementor',
-			'ink'    => self::hex( $ink, self::DEFAULT_INK ),
-			'paper'  => self::DEFAULT_PAPER,
-			'accent' => self::hex( $accent, self::DEFAULT_ACCENT ),
+			'ink'    => self::guarded_ink( $ink_raw, $paper, self::DEFAULT_INK ),
+			'paper'  => $paper,
+			'accent' => self::hex( $accent_raw, self::DEFAULT_ACCENT ),
 		);
+	}
+
+	/**
+	 * Elementor's kit background color lives outside system_colors, under the
+	 * kit's own background settings rather than the named color swatches.
+	 *
+	 * @param array $settings
+	 * @return string Raw value, possibly invalid or empty.
+	 */
+	private static function elementor_background( $settings ) {
+		if ( isset( $settings['background_color'] ) && is_string( $settings['background_color'] ) ) {
+			return $settings['background_color'];
+		}
+
+		if ( isset( $settings['background']['color'] ) && is_string( $settings['background']['color'] ) ) {
+			return $settings['background']['color'];
+		}
+
+		return '';
 	}
 
 	/**
@@ -102,10 +132,12 @@ class ABIO_Palette {
 			return false;
 		}
 
+		$colors = array();
 		$values = array();
 
 		foreach ( $first['colors'] as $color ) {
 			if ( isset( $color['hex'] ) && $color['hex'] ) {
+				$colors[] = $color;
 				$values[] = $color['hex'];
 			}
 		}
@@ -114,12 +146,49 @@ class ABIO_Palette {
 			return false;
 		}
 
+		$paper      = self::DEFAULT_PAPER;
+		$ink_raw    = self::bricks_named( $colors, array( 'text', 'dark', 'black', 'ink', 'body', 'foreground' ) );
+		$accent_raw = isset( $values[1] ) ? $values[1] : ( isset( $values[0] ) ? $values[0] : '' );
+
 		return array(
 			'source' => 'bricks',
-			'ink'    => self::hex( isset( $values[0] ) ? $values[0] : '', self::DEFAULT_INK ),
-			'paper'  => self::DEFAULT_PAPER,
-			'accent' => self::hex( isset( $values[1] ) ? $values[1] : '', self::DEFAULT_ACCENT ),
+			'ink'    => self::guarded_ink( $ink_raw, $paper, self::DEFAULT_INK ),
+			'paper'  => $paper,
+			'accent' => self::hex( $accent_raw, self::DEFAULT_ACCENT ),
 		);
+	}
+
+	/**
+	 * Find a Bricks palette color identified by name or id, rather than
+	 * indexing positionally into an arbitrary list.
+	 *
+	 * Matches on whole words, not raw substrings — a plain strpos() for
+	 * "ink" would false-positive inside an unrelated name like "Brand Pink".
+	 *
+	 * @param array $colors   Bricks color entries, each with a 'hex' and
+	 *                        usually a 'name' and/or 'id'.
+	 * @param array $keywords Lower-case words to match against.
+	 * @return string Hex value, or '' when nothing matched.
+	 */
+	private static function bricks_named( $colors, $keywords ) {
+		foreach ( $colors as $color ) {
+			$haystack = strtolower(
+				( isset( $color['name'] ) && is_string( $color['name'] ) ? $color['name'] : '' ) . ' ' .
+				( isset( $color['id'] ) && is_string( $color['id'] ) ? $color['id'] : '' )
+			);
+
+			if ( '' === trim( $haystack ) ) {
+				continue;
+			}
+
+			foreach ( $keywords as $keyword ) {
+				if ( preg_match( '/\b' . preg_quote( $keyword, '/' ) . '\b/', $haystack ) ) {
+					return isset( $color['hex'] ) ? $color['hex'] : '';
+				}
+			}
+		}
+
+		return '';
 	}
 
 	/**
@@ -133,6 +202,71 @@ class ABIO_Palette {
 		$hex = sanitize_hex_color( is_string( $value ) ? trim( $value ) : '' );
 
 		return $hex ? $hex : $fallback;
+	}
+
+	/**
+	 * Accept a detected ink only when it is a valid color that contrasts
+	 * enough against the resolved paper to work as both body text and the
+	 * fill of the dark panels. Falls back to the default ink rather than
+	 * discarding the whole detection: a site can legitimately yield a good
+	 * paper and a bad ink.
+	 *
+	 * @param string $raw    Raw detected value, possibly invalid or empty.
+	 * @param string $paper  Resolved paper color, already validated.
+	 * @param string $fallback
+	 * @return string
+	 */
+	private static function guarded_ink( $raw, $paper, $fallback ) {
+		$candidate = self::hex( $raw, '' );
+
+		if ( '' === $candidate ) {
+			return $fallback;
+		}
+
+		return self::contrast_ratio( $candidate, $paper ) >= self::MIN_INK_CONTRAST ? $candidate : $fallback;
+	}
+
+	/**
+	 * WCAG relative luminance of a validated hex color.
+	 *
+	 * @param string $hex
+	 * @return float
+	 */
+	private static function luminance( $hex ) {
+		$hex = ltrim( $hex, '#' );
+
+		if ( 3 === strlen( $hex ) ) {
+			$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+		}
+
+		if ( 6 !== strlen( $hex ) ) {
+			return 0.0;
+		}
+
+		$channels = array_map(
+			static function ( $channel ) {
+				$value = hexdec( $channel ) / 255;
+
+				return $value <= 0.03928 ? $value / 12.92 : pow( ( $value + 0.055 ) / 1.055, 2.4 );
+			},
+			str_split( $hex, 2 )
+		);
+
+		return 0.2126 * $channels[0] + 0.7152 * $channels[1] + 0.0722 * $channels[2];
+	}
+
+	/**
+	 * WCAG contrast ratio between two hex colors.
+	 *
+	 * @param string $hex_a
+	 * @param string $hex_b
+	 * @return float
+	 */
+	private static function contrast_ratio( $hex_a, $hex_b ) {
+		$l1 = self::luminance( $hex_a );
+		$l2 = self::luminance( $hex_b );
+
+		return ( max( $l1, $l2 ) + 0.05 ) / ( min( $l1, $l2 ) + 0.05 );
 	}
 
 	/**

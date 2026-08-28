@@ -82,7 +82,10 @@ class ABIO_Articles {
 		foreach ( $requested as $slug ) {
 			$slug = sanitize_key( $slug );
 
-			if ( $slug && post_type_exists( $slug ) ) {
+			// Publicly viewable, not merely registered — otherwise
+			// [author_bio post_type="..."] can be pointed at a private or
+			// internal-use CPT to list titles and permalinks from it.
+			if ( $slug && is_post_type_viewable( $slug ) ) {
 				$valid[] = $slug;
 			}
 		}
