@@ -1,0 +1,21 @@
+<?php
+/**
+ * Plugin Name: Author Bio
+ * Description: Renders a full author page from an [author_bio] shortcode, backed by a dedicated Author Profile admin.
+ * Version:     1.0.0
+ * Author:      Advision Development
+ * Text Domain: author-bio
+ * Requires PHP: 7.4
+ * Requires at least: 6.0
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+define( 'ABIO_VERSION', '1.0.0' );
+define( 'ABIO_FILE', __FILE__ );
+define( 'ABIO_PATH', plugin_dir_path( __FILE__ ) );
+define( 'ABIO_URL', plugin_dir_url( __FILE__ ) );
+
+require_once ABIO_PATH . 'includes/class-plugin.php';
+
+ABIO_Plugin::init();
