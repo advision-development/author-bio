@@ -17,6 +17,9 @@ class ABIO_Plugin {
 			'includes/class-articles.php',
 			'includes/class-stats.php',
 			'includes/class-profile.php',
+			'includes/class-view.php',
+			'includes/class-assets.php',
+			'includes/class-shortcode.php',
 		);
 
 		foreach ( $files as $file ) {
@@ -30,6 +33,8 @@ class ABIO_Plugin {
 		add_action( 'admin_menu', array( 'ABIO_Settings', 'menu' ) );
 		add_action( 'admin_init', array( 'ABIO_Settings', 'register' ) );
 		add_action( 'admin_post_abio_redetect', array( 'ABIO_Palette', 'handle_redetect' ) );
+		add_action( 'init', array( 'ABIO_Shortcode', 'register' ) );
+		add_action( 'wp_enqueue_scripts', array( 'ABIO_Assets', 'register' ) );
 		register_activation_hook( ABIO_FILE, array( __CLASS__, 'activate' ) );
 	}
 
