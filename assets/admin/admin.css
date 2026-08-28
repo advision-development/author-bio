@@ -1,0 +1,35 @@
+.abio-admin .abio-field { margin: 0 0 18px; }
+.abio-admin .abio-field__label { display: block; font-weight: 600; margin: 0 0 5px; }
+.abio-admin .description { margin: 4px 0 0; }
+
+.abio-media { display: flex; align-items: center; gap: 10px; }
+.abio-media__preview img { display: block; max-width: 80px; height: auto; border: 1px solid #dcdcde; }
+.abio-media__remove { color: #b32d2e; }
+
+.abio-repeater__rows { display: flex; flex-direction: column; gap: 10px; margin: 0 0 10px; }
+.abio-row {
+	display: grid;
+	grid-template-columns: 24px minmax(0, 1fr) 70px;
+	gap: 10px;
+	align-items: start;
+	padding: 12px;
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+}
+.abio-row__handle { color: #a7aaad; padding-top: 4px; cursor: default; }
+.abio-row__fields { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.abio-row__label { display: block; font-size: 12px; color: #646970; margin: 0 0 2px; }
+.abio-row__remove { color: #b32d2e; justify-self: end; }
+
+.abio-stats { display: flex; flex-direction: column; gap: 10px; }
+.abio-stat {
+	display: grid;
+	grid-template-columns: 24px 220px 160px 120px minmax(0, 1fr);
+	gap: 10px;
+	align-items: center;
+	padding: 10px 12px;
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+}
+.abio-stat__num { color: #a7aaad; font-family: ui-monospace, Menlo, monospace; }
+.abio-stat [hidden] { display: none; }
