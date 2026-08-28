@@ -97,14 +97,14 @@ class ABIO_Settings {
 		$clean = array();
 
 		foreach ( array( 'site_name', 'pitch_title', 'pitch_cta', 'default_post_types' ) as $key ) {
-			$clean[ $key ] = isset( $input[ $key ] ) ? sanitize_text_field( $input[ $key ] ) : '';
+			$clean[ $key ] = isset( $input[ $key ] ) ? sanitize_text_field( self::scalar( $input[ $key ] ) ) : '';
 		}
 
 		foreach ( array( 'editorial_url', 'contact_url', 'authors_url' ) as $key ) {
-			$clean[ $key ] = isset( $input[ $key ] ) ? esc_url_raw( $input[ $key ] ) : '';
+			$clean[ $key ] = isset( $input[ $key ] ) ? esc_url_raw( self::scalar( $input[ $key ] ) ) : '';
 		}
 
-		$clean['pitch_body'] = isset( $input['pitch_body'] ) ? wp_kses_post( $input['pitch_body'] ) : '';
+		$clean['pitch_body'] = isset( $input['pitch_body'] ) ? wp_kses_post( self::scalar( $input['pitch_body'] ) ) : '';
 
 		$template                    = isset( $input['default_template'] ) ? absint( $input['default_template'] ) : 1;
 		$clean['default_template']   = (string) min( 10, max( 1, $template ) );
@@ -113,11 +113,23 @@ class ABIO_Settings {
 		$clean['default_count'] = min( 50, max( 1, $count ) );
 
 		foreach ( array( 'palette_ink', 'palette_paper', 'palette_accent' ) as $key ) {
-			$raw           = isset( $input[ $key ] ) ? trim( $input[ $key ] ) : '';
+			$raw           = isset( $input[ $key ] ) ? trim( self::scalar( $input[ $key ] ) ) : '';
 			$clean[ $key ] = self::sanitize_hex( $raw );
 		}
 
 		return $clean;
+	}
+
+	/**
+	 * WordPress hands sanitize_callback whatever was posted, which may be an
+	 * array. Every string sanitizer below would fatal on one, so non-scalar
+	 * input collapses to an empty string first.
+	 *
+	 * @param mixed $value
+	 * @return string
+	 */
+	private static function scalar( $value ) {
+		return is_scalar( $value ) ? (string) $value : '';
 	}
 
 	/**
