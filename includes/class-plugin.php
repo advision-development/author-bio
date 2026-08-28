@@ -12,6 +12,7 @@ class ABIO_Plugin {
 			'includes/class-fields.php',
 			'includes/class-post-type.php',
 			'includes/class-metaboxes.php',
+			'includes/class-settings.php',
 		);
 
 		foreach ( $files as $file ) {
@@ -22,6 +23,8 @@ class ABIO_Plugin {
 		add_action( 'add_meta_boxes', array( 'ABIO_Metaboxes', 'register' ) );
 		add_action( 'save_post', array( 'ABIO_Metaboxes', 'save' ) );
 		add_action( 'admin_enqueue_scripts', array( 'ABIO_Metaboxes', 'admin_assets' ) );
+		add_action( 'admin_menu', array( 'ABIO_Settings', 'menu' ) );
+		add_action( 'admin_init', array( 'ABIO_Settings', 'register' ) );
 		register_activation_hook( ABIO_FILE, array( __CLASS__, 'activate' ) );
 	}
 
