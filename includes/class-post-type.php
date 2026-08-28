@@ -74,7 +74,7 @@ class ABIO_Post_Type {
 				'suppress_filters' => false,
 				'meta_query'       => array(
 					array(
-						'key'   => '_abio_user',
+						'key'   => ABIO_Fields::meta_key( 'user' ),
 						'value' => $user_id,
 					),
 				),

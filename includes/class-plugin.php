@@ -9,6 +9,7 @@ class ABIO_Plugin {
 	 */
 	public static function init() {
 		$files = array(
+			'includes/class-fields.php',
 			'includes/class-post-type.php',
 		);
 
