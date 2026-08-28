@@ -16,6 +16,7 @@ class ABIO_Plugin {
 			'includes/class-settings.php',
 			'includes/class-articles.php',
 			'includes/class-stats.php',
+			'includes/class-profile.php',
 		);
 
 		foreach ( $files as $file ) {
