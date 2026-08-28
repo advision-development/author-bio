@@ -65,6 +65,18 @@ Templates are built from three CSS custom properties — `--abio-ink`,
 Bricks palette and seeds those three. **Authors → Settings** shows what was
 detected and lets you override any of them.
 
+## Layout
+
+The templates size themselves to **the container they are placed in**, not to
+the browser window. The stylesheet makes the shortcode's root element a CSS
+container (`container-type: inline-size`) and all breakpoints are `@container`
+queries, so `[author_bio]` lays out correctly whether it sits in a full-width
+section or a narrow themed content column. Placing it inside a constrained
+column no longer produces a desktop layout crushed into a narrow space.
+
+Container queries are supported in Chrome/Edge 105+, Safari 16+ and Firefox
+110+. On older browsers every template falls back to its widest layout.
+
 ## Requirements
 
 WordPress 6.0+, PHP 7.4+. No Composer, no npm, no build step, no ACF.

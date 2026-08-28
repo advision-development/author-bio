@@ -198,3 +198,18 @@ URLs for the resolution checks.
 Record any failing line here (or in your own notes) with enough detail to
 reproduce it, fix the underlying issue, and re-run just that line before
 considering Task 13 complete.
+
+## Layout in context (added after the first local run)
+
+- [ ] Place `[author_bio template=1]` inside a **narrow** container — a default
+      constrained theme content column, or a page-builder column of roughly
+      600px — at a wide desktop viewport. The template must collapse to its
+      narrow layout (portrait above the header, single-column focus), not
+      render a wide layout crushed into the column. This is what container
+      queries fix; before them the breakpoints read the viewport and never
+      fired here.
+- [ ] Configure a profile so that fewer than four stat tiles resolve (set one
+      tile to "not shown", or to an automatic count the author has none of).
+      The stat strip must show only the tiles that resolved, evenly
+      distributed, with no empty or grey trailing cell — check at full width,
+      at roughly 700px, and on mobile.
