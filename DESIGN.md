@@ -421,6 +421,9 @@ the system, so it never reads as content.
   empty frame stays the single fallback.
 - **Do** let a section disappear entirely when its content is empty.
 - **Do** keep separation to one pixel of Line.
+- **Do** write base element styles with `:where()` so they carry no
+  specificity. `.abio a { color: inherit }` outranks `.abio-cta` and silently
+  strips every button of its own colour; `:where(.abio) a` does not.
 - **Do** give every interactive element a visible `:focus-visible` treatment
   that survives on both the light ground and an inverted panel.
 

@@ -301,7 +301,8 @@
       "Do render every image through the shared image helper so the hatched empty frame stays the single fallback.",
       "Do let a section disappear entirely when its content is empty.",
       "Do keep separation to one pixel of Line.",
-      "Do give every interactive element a visible :focus-visible treatment that survives on both the light ground and an inverted panel."
+      "Do give every interactive element a visible :focus-visible treatment that survives on both the light ground and an inverted panel.",
+      "Do write base element styles with :where() so they carry no specificity. `.abio a { color: inherit }` outranks `.abio-cta` and silently strips every button of its own colour; `:where(.abio) a` does not."
     ],
     "donts": [
       "Don't introduce a fourth color seed, or hardcode a hex outside the seed declarations and their @supports fallback.",

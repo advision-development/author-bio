@@ -46,6 +46,7 @@ foreach ( $d['nav'] as $n ) {
 
 		<?php if ( ! empty( $d['follows'] ) ) : ?>
 			<div class="abio-t5__follows">
+				<h3 class="abio-eyebrow"><?php esc_html_e( 'Follows', 'author-bio' ); ?></h3>
 				<?php foreach ( $d['follows'] as $h ) : ?>
 					<?php echo ABIO_View::follow_link( $h['handle'], $h['url'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				<?php endforeach; ?>
