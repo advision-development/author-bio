@@ -172,8 +172,10 @@ document and the stylesheet.
   from.
 - **Paper** — page and card ground. Off-white rather than pure white, which is
   what keeps the system warm rather than clinical.
-- **Wash** — the recessed ground: inset panels, hairline gaps in tiled grids,
-  and the text color on inverted panels.
+- **Wash** — the recessed *page* ground and the text colour on inverted
+  panels. It is never the fill behind body text: a box that holds copy sits
+  on Paper and separates with a hairline, so the tonal step is reserved for
+  telling a card apart from the page beneath it.
 - **Line** — every border and rule in the system. One pixel, always.
 - **Muted** — labels, captions, and metadata. The quietest readable tone.
 - **Dim** — secondary prose, the biography, chip text. Softer than Ink without
@@ -311,6 +313,11 @@ likely to collide with the theme than a flat one.
 
 ### Named Rules
 
+**The White-Copy Rule.** Body text is never set on the recessed grey. Any
+box that holds copy — a pitch panel, a sidebar, a coverage tile, a career
+card — is filled Paper and bounded by a hairline. Wash tells a card from
+the page behind it; it never sits behind a paragraph.
+
 **The Hairline Rule.** Separation is one pixel of Line. Not two, not a
 double rule, not a shadow standing in for a border.
 
@@ -370,8 +377,10 @@ declares its own equally visible treatment.
 ### Cards / Containers
 
 - **Corner Style:** square, except in the product-UI template (6px)
-- **Background:** Paper, on a Wash page ground; the tonal step is what makes a
-  card read as raised without a shadow
+- **Background:** Paper, always — including nested tiles and sidebars that
+  once used Wash. On the templates whose page ground is Wash, that step is
+  what makes a card read as raised without a shadow; where the page is
+  already Paper, the hairline does the work alone
 - **Border:** one pixel of Line
 - **Internal Padding:** 24–32px, 18px for small nested tiles
 - **Shadow Strategy:** none — see Elevation & Depth
