@@ -299,10 +299,28 @@ class ABIO_Profile {
 	 * @return array
 	 */
 	private function pitch() {
+		$title = ABIO_Settings::get( 'pitch_title', '' );
+		$body  = ABIO_Settings::get( 'pitch_body', '' );
+		$cta   = ABIO_Settings::get( 'pitch_cta', '' );
+		$url   = ABIO_Settings::get( 'contact_url', '' );
+
+		// A heading on its own is not content. Both pitch_title and pitch_cta
+		// ship with defaults, so a site that never filled the pitch in would
+		// otherwise render an empty bordered box on every template carrying
+		// one. Templates guard on the title, so blanking the whole group here
+		// suppresses the block everywhere without touching them.
+		if ( '' === $body && ! ( $cta && $url ) ) {
+			return array(
+				'title' => '',
+				'body'  => '',
+				'cta'   => '',
+			);
+		}
+
 		return array(
-			'title' => ABIO_Settings::get( 'pitch_title', '' ),
-			'body'  => ABIO_Settings::get( 'pitch_body', '' ),
-			'cta'   => ABIO_Settings::get( 'pitch_cta', '' ),
+			'title' => $title,
+			'body'  => $body,
+			'cta'   => $cta,
 		);
 	}
 
