@@ -77,6 +77,17 @@ column no longer produces a desktop layout crushed into a narrow space.
 Container queries are supported in Chrome/Edge 105+, Safari 16+ and Firefox
 110+. On older browsers every template falls back to its widest layout.
 
+## Typography
+
+The author page uses **your theme's typeface** by default, the same way it uses
+your palette. **Authors → Settings → Typeface** can override that with one of
+four system stacks (System UI, Grotesque, Humanist, Serif) when a theme's font
+does not suit a dense profile page.
+
+No webfont is ever loaded. Metadata — dates, statuses, ordinals, stat units —
+is set uppercase and tracked rather than in a monospace, with `tabular-nums`
+so figures still align in a column.
+
 ## Requirements
 
 WordPress 6.0+, PHP 7.4+. No Composer, no npm, no build step, no ACF.

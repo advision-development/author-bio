@@ -116,23 +116,23 @@
     "typographyMeta": {
       "display": {
         "displayName": "Display",
-        "purpose": "The author's name, once per page. The only place negative tracking appears. Size is a per-template decision spanning 34–84px; the frontmatter value is representative, not a cap."
+        "purpose": "The author's name, once per page. The only place negative tracking appears. Size is a per-template decision spanning 34–84px; the frontmatter value is representative, not a cap. Set in the inherited family."
       },
       "headline": {
         "displayName": "Headline",
-        "purpose": "Section headings such as 'Areas of focus' and 'Latest edits', often over a hairline rule. 24–36px across templates."
+        "purpose": "Section headings such as 'Areas of focus' and 'Latest edits', often over a hairline rule. 24–36px across templates. Set in the inherited family."
       },
       "title": {
         "displayName": "Title",
-        "purpose": "Item headings — a focus area, a role in the career history, an article title. 14–20px."
+        "purpose": "Item headings — a focus area, a role in the career history, an article title. 14–20px. Set in the inherited family."
       },
       "body": {
         "displayName": "Body",
-        "purpose": "Running prose and summaries, 13–15px at 1.6–1.7 line-height. Measure capped at 58–70 characters."
+        "purpose": "Running prose and summaries, 13–15px at 1.6–1.7 line-height. Measure capped at 58–70 characters. Set in the inherited family."
       },
       "label": {
-        "displayName": "Mono Label",
-        "purpose": "All metadata — kickers, eyebrows, dates, statuses, read times, ordinals, stat units. Uppercase, tracked 0.08–0.2em, in Muted. This convention carries the system's archival voice."
+        "displayName": "Label",
+        "purpose": "All metadata — kickers, eyebrows, dates, statuses, read times, ordinals, stat units. Uppercase, tracked 0.08-0.2em, one weight step above body, in Muted, with tabular-nums. Separates from content by case, tracking and weight rather than by switching family."
       }
     },
     "shadows": [],
@@ -157,7 +157,8 @@
     "notes": [
       "shadows and motion are intentionally empty: the stylesheet contains zero box-shadows, gradients, transitions and animations. This is provisional rather than doctrinal — the system is open to gaining depth later.",
       "All breakpoints are @container queries against the shortcode root, which declares container-type: inline-size. The system never queries the viewport, because the same shortcode lands in a full-bleed builder section on one site and a ~620px themed content column on the next.",
-      "Focus is implemented as a 2px Accent outline at 2px offset, switching to Wash inside an inverted panel. The component snippets' :focus-visible rules match the shipped stylesheet."
+      "Focus is implemented as a 2px Accent outline at 2px offset, switching to Wash inside an inverted panel. The component snippets' :focus-visible rules match the shipped stylesheet.",
+      "Typography is inherited from the host theme by default (--abio-font: inherit); a Typeface setting can override it with one of four system stacks. No monospace and no webfont: the label voice comes from case, tracking and weight, and tabular-nums keeps figures aligned. Component snippets below name a concrete family only because the preview canvas has no theme to inherit from."
     ]
   },
   "components": [
@@ -186,12 +187,12 @@
       "css": ".ds-chips { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; } .ds-chips a, .ds-chips li > span { display: block; border: 1px solid #e2e2df; background: #fbfbfa; padding: 4px 10px; font: 12px \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #5a5c60; text-decoration: none; } .ds-chips a:hover { color: #6f7175; text-decoration: underline; text-underline-offset: 3px; } .ds-chips a:focus-visible { outline: 2px solid #17181a; outline-offset: 2px; }"
     },
     {
-      "name": "Mono Label",
+      "name": "Metadata Label",
       "kind": "custom",
       "refersTo": "label",
-      "description": "The system's signature convention: all metadata set in mono, uppercase, widely tracked, in Muted.",
+      "description": "The system's signature convention: metadata set uppercase and widely tracked, one weight above body, with tabular figures — no second family.",
       "html": "<span class=\"ds-label\">Author · Oregon, US</span>",
-      "css": ".ds-label { font: 11px/1 ui-monospace, Menlo, Monaco, \"Cascadia Mono\", monospace; letter-spacing: .16em; text-transform: uppercase; color: #8a8c90; }"
+      "css": ".ds-label { font: 500 11px/1 \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-variant-numeric: tabular-nums; letter-spacing: .18em; text-transform: uppercase; color: #8a8c90; }"
     },
     {
       "name": "Stat Tile Row",
@@ -207,7 +208,7 @@
       "refersTo": "media-empty",
       "description": "The system's most recognizable mark. Stands in for any image that has not been supplied, captioned in mono with the expected crop. There is no broken-image state.",
       "html": "<span class=\"ds-media-empty\">portrait 1:1</span>",
-      "css": ".ds-media-empty { display: grid; place-items: center; aspect-ratio: 1; min-height: 60px; background-image: repeating-linear-gradient(45deg, #e2e2df 0 6px, #f4f4f2 6px 12px); border: 1px solid #e2e2df; font: 11px ui-monospace, Menlo, Monaco, \"Cascadia Mono\", monospace; color: #b0b0ab; }"
+      "css": ".ds-media-empty { display: grid; place-items: center; aspect-ratio: 1; min-height: 60px; background-image: repeating-linear-gradient(45deg, #e2e2df 0 6px, #f4f4f2 6px 12px); border: 1px solid #e2e2df; font: 11px \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #b0b0ab; }"
     },
     {
       "name": "Inverted Panel",
@@ -215,7 +216,7 @@
       "refersTo": "panel-dark",
       "description": "The one dramatic move: a full-bleed Ink band carrying a masthead, a stat band, or a closing ask. Inside it the palette narrows to On-Ink, On-Ink Dim and On-Ink Line. Use is unrestricted, but several on one page starts to read as banding.",
       "html": "<div class=\"ds-panel\"><span class=\"ds-panel-kicker\">Author · Oregon, US</span><h1 class=\"ds-panel-name\">Jefferson Hayes</h1><p class=\"ds-panel-role\">Crypto &amp; Commodities Analyst</p></div>",
-      "css": ".ds-panel { background: #17181a; color: #f4f4f2; padding: 44px 40px; } .ds-panel-kicker { display: block; font: 11px/1 ui-monospace, Menlo, Monaco, \"Cascadia Mono\", monospace; letter-spacing: .22em; text-transform: uppercase; color: #8a8c90; margin-bottom: 18px; } .ds-panel-name { margin: 0 0 10px; font: 600 48px/1.02 \"Helvetica Neue\", Helvetica, Arial, sans-serif; letter-spacing: -.03em; } .ds-panel-role { margin: 0; font: 18px \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #c6c6c1; }"
+      "css": ".ds-panel { background: #17181a; color: #f4f4f2; padding: 44px 40px; } .ds-panel-kicker { display: block; font: 11px/1 \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-variant-numeric: tabular-nums; letter-spacing: .22em; text-transform: uppercase; color: #8a8c90; margin-bottom: 18px; } .ds-panel-name { margin: 0 0 10px; font: 600 48px/1.02 \"Helvetica Neue\", Helvetica, Arial, sans-serif; letter-spacing: -.03em; } .ds-panel-role { margin: 0; font: 18px \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #c6c6c1; }"
     },
     {
       "name": "Byline Row",
@@ -223,7 +224,7 @@
       "refersTo": "body",
       "description": "One published article in the author's record: mono date and status in a fixed left column, then title, summary and read time. The system's densest recurring pattern.",
       "html": "<ul class=\"ds-edits\"><li><div class=\"ds-edit-meta\"><span>August 24, 2026</span><span class=\"ds-edit-status\">Updated</span></div><div class=\"ds-edit-body\"><span class=\"ds-edit-type\">Market recap</span><h3><a href=\"#\">Prediction markets by state</a></h3><p>Where you can trade event contracts in the US, state by state.</p><span class=\"ds-edit-time\">6 min</span></div></li></ul>",
-      "css": ".ds-edits { list-style: none; margin: 0; padding: 0; } .ds-edits li { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 24px; padding: 20px 0; border-bottom: 1px solid #f4f4f2; } .ds-edit-meta { display: flex; flex-direction: column; gap: 6px; font: 12px \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #8a8c90; } .ds-edit-status { font: 10px/1 ui-monospace, Menlo, Monaco, \"Cascadia Mono\", monospace; letter-spacing: .1em; text-transform: uppercase; } .ds-edit-body { display: flex; flex-direction: column; gap: 7px; } .ds-edit-type { font: 11px \"Helvetica Neue\", Helvetica, Arial, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #8a8c90; } .ds-edit-body h3 { margin: 0; font: 600 16px/1.35 \"Helvetica Neue\", Helvetica, Arial, sans-serif; } .ds-edit-body h3 a { color: #17181a; text-decoration: none; } .ds-edit-body h3 a:hover { color: #6f7175; text-decoration: underline; text-underline-offset: 3px; } .ds-edit-body h3 a:focus-visible { outline: 2px solid #17181a; outline-offset: 2px; } .ds-edit-body p { margin: 0; font: 14px/1.6 \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #6f7175; } .ds-edit-time { font: 12px \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #8a8c90; }"
+      "css": ".ds-edits { list-style: none; margin: 0; padding: 0; } .ds-edits li { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 24px; padding: 20px 0; border-bottom: 1px solid #f4f4f2; } .ds-edit-meta { display: flex; flex-direction: column; gap: 6px; font: 12px \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #8a8c90; } .ds-edit-status { font: 10px/1 \"Helvetica Neue\", Helvetica, Arial, sans-serif; font-variant-numeric: tabular-nums; letter-spacing: .1em; text-transform: uppercase; } .ds-edit-body { display: flex; flex-direction: column; gap: 7px; } .ds-edit-type { font: 11px \"Helvetica Neue\", Helvetica, Arial, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #8a8c90; } .ds-edit-body h3 { margin: 0; font: 600 16px/1.35 \"Helvetica Neue\", Helvetica, Arial, sans-serif; } .ds-edit-body h3 a { color: #17181a; text-decoration: none; } .ds-edit-body h3 a:hover { color: #6f7175; text-decoration: underline; text-underline-offset: 3px; } .ds-edit-body h3 a:focus-visible { outline: 2px solid #17181a; outline-offset: 2px; } .ds-edit-body p { margin: 0; font: 14px/1.6 \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #6f7175; } .ds-edit-time { font: 12px \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #8a8c90; }"
     },
     {
       "name": "Missing Notice",
@@ -241,7 +242,7 @@
       "Near-monochrome, derived from two seeds plus an accent that adapt to the host site",
       "Flat by construction — no shadows, no gradients, no motion of any kind",
       "Hairline rules and tonal fills carry every separation",
-      "Mono, uppercase, wide-tracked labels against a neutral grotesque for everything else",
+      "One inherited typeface throughout; labels separate by case, tracking and weight alone",
       "Sizes itself to its container, never to the viewport",
       "Absence renders as less page, never as a placeholder or an empty frame"
     ],
@@ -262,8 +263,8 @@
         "section": "colors"
       },
       {
-        "name": "The Mono-Label Rule",
-        "body": "If a piece of text is metadata rather than content — a date, a status, an ordinal, a unit, a field name — it is set in the mono stack, uppercase, tracked at 0.1em or wider, in Muted. That single convention is doing most of the work of making the system look like a record.",
+        "name": "The Label Rule",
+        "body": "If a piece of text is metadata rather than content — a date, a status, an ordinal, a unit, a field name — it is set uppercase, tracked at 0.1em or wider, one weight step above body, in Muted, with tabular-nums. Case and tracking carry the archival register; a second family is not needed.",
         "section": "typography"
       },
       {
@@ -290,11 +291,16 @@
         "name": "The Hairline Rule",
         "body": "Separation is one pixel of Line. Not two, not a double rule, not a shadow standing in for a border.",
         "section": "elevation"
+      },
+      {
+        "name": "The Inherited Voice Rule",
+        "body": "Never declare a font family outside the --abio-font token. The page belongs to its host, and a hardcoded family is the fastest way to make it look pasted on.",
+        "section": "typography"
       }
     ],
     "dos": [
       "Do derive every color from Ink, Paper, and Accent. If a value can be mixed, mix it.",
-      "Do set all metadata — dates, statuses, ordinals, units, field names — in the mono stack, uppercase, tracked at 0.1em or wider, in Muted.",
+      "Do set all metadata — dates, statuses, ordinals, units, field names — uppercase, tracked at 0.1em or wider, one weight above body, in Muted, with tabular-nums.",
       "Do cap running prose at 58–70 characters using ch.",
       "Do write breakpoints as @container queries against the shortcode root, at 1024px, 768px, and 560px.",
       "Do collapse any fixed-track grid to the number of items that actually rendered.",
@@ -307,12 +313,13 @@
     "donts": [
       "Don't introduce a fourth color seed, or hardcode a hex outside the seed declarations and their @supports fallback.",
       "Don't write a viewport media query. The system cannot see the viewport and must not act as though it can.",
-      "Don't load a webfont. The system ships zero font requests and that is a feature of installing into sites you do not control.",
+      "Don't load a webfont, and don't declare a font family outside the --abio-font token. The system ships zero font requests and inherits its typeface from the host.",
       "Don't render an empty frame, a blank cell, or a placeholder value where content is missing — show less page instead.",
       "Don't let Accent carry structure. It is interactive affordance only, and on most installs it is identical to Ink.",
       "Don't use a dashed border for anything but the editor-only missing notice.",
       "Don't mix radii within a single template. Commit to square or to a rounded dialect and hold it across every surface that template owns.",
-      "Don't rely on hover as the only signal that something is interactive, and never remove a focus outline without replacing it with a visible one."
+      "Don't rely on hover as the only signal that something is interactive, and never remove a focus outline without replacing it with a visible one.",
+      "Don't reach for monospace to signal technical intent. Column alignment is what tabular-nums is for."
     ]
   }
 }

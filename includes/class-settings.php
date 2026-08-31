@@ -26,10 +26,58 @@ class ABIO_Settings {
 			'default_template'   => '1',
 			'default_count'      => 6,
 			'default_post_types' => 'post',
+			'typeface'           => 'theme',
 			'palette_ink'        => '',
 			'palette_paper'      => '',
 			'palette_accent'     => '',
 		);
+	}
+
+	/**
+	 * Typeface choices offered on the settings page.
+	 *
+	 * System stacks only, deliberately: the plugin ships zero font requests so
+	 * it never adds a third-party connection, a layout shift, or a consent
+	 * surface to a site it does not control. "theme" is not a stack — it means
+	 * inherit whatever the host already uses, which is the default.
+	 *
+	 * @return array slug => array( label, stack )
+	 */
+	public static function typefaces() {
+		return array(
+			'theme'     => array(
+				'label' => __( "Match the site's theme", 'author-bio' ),
+				'stack' => '',
+			),
+			'system'    => array(
+				'label' => __( 'System UI', 'author-bio' ),
+				'stack' => '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+			),
+			'grotesque' => array(
+				'label' => __( 'Grotesque (Helvetica Neue)', 'author-bio' ),
+				'stack' => '"Helvetica Neue", Helvetica, Arial, sans-serif',
+			),
+			'humanist'  => array(
+				'label' => __( 'Humanist (Segoe UI, Roboto)', 'author-bio' ),
+				'stack' => '"Segoe UI", Roboto, "Noto Sans", Ubuntu, Cantarell, sans-serif',
+			),
+			'serif'     => array(
+				'label' => __( 'Serif (Georgia, Charter)', 'author-bio' ),
+				'stack' => 'Charter, Georgia, "Iowan Old Style", "Times New Roman", serif',
+			),
+		);
+	}
+
+	/**
+	 * The font stack to inline on the shortcode root, or '' to inherit.
+	 *
+	 * @return string
+	 */
+	public static function font_stack() {
+		$faces = self::typefaces();
+		$key   = (string) self::get( 'typeface', 'theme' );
+
+		return isset( $faces[ $key ] ) ? $faces[ $key ]['stack'] : '';
 	}
 
 	/**
@@ -105,6 +153,9 @@ class ABIO_Settings {
 		}
 
 		$clean['pitch_body'] = isset( $input['pitch_body'] ) ? wp_kses_post( self::scalar( $input['pitch_body'] ) ) : '';
+
+		$face                = isset( $input['typeface'] ) ? sanitize_key( self::scalar( $input['typeface'] ) ) : 'theme';
+		$clean['typeface']   = array_key_exists( $face, self::typefaces() ) ? $face : 'theme';
 
 		$template                    = isset( $input['default_template'] ) ? absint( $input['default_template'] ) : 1;
 		$clean['default_template']   = (string) min( 10, max( 1, $template ) );
@@ -194,6 +245,8 @@ class ABIO_Settings {
 			$values
 		);
 
+		self::typeface_field( $values );
+
 		self::palette_section( $values );
 
 		submit_button();
@@ -229,6 +282,35 @@ class ABIO_Settings {
 		}
 
 		echo '</tbody></table>';
+	}
+
+	/**
+	 * The typeface picker.
+	 *
+	 * @param array $values
+	 */
+	private static function typeface_field( $values ) {
+		$current = isset( $values['typeface'] ) ? $values['typeface'] : 'theme';
+
+		echo '<table class="form-table" role="presentation"><tbody><tr><th scope="row"><label for="abio-typeface">'
+			. esc_html__( 'Typeface', 'author-bio' ) . '</label></th><td>';
+
+		echo '<select id="abio-typeface" name="' . esc_attr( self::OPTION . '[typeface]' ) . '">';
+		foreach ( self::typefaces() as $key => $face ) {
+			printf(
+				'<option value="%s"%s>%s</option>',
+				esc_attr( $key ),
+				selected( $current, $key, false ),
+				esc_html( $face['label'] )
+			);
+		}
+		echo '</select>';
+
+		echo '<p class="description">'
+			. esc_html__( 'The author page inherits your theme\'s typeface by default, the same way it inherits your colours. Choose a stack here only when the theme\'s font does not suit a dense profile page. No webfont is ever loaded.', 'author-bio' )
+			. '</p>';
+
+		echo '</td></tr></tbody></table>';
 	}
 
 	/**

@@ -17,35 +17,35 @@ colors:
   onink-line: "#3a3c40"
 typography:
   display:
-    fontFamily: "\"Helvetica Neue\", Helvetica, Arial, sans-serif"
+    fontFamily: "inherit"
     fontSize: "64px"
     fontWeight: 500
     lineHeight: 1.02
     letterSpacing: "-0.02em"
   headline:
-    fontFamily: "\"Helvetica Neue\", Helvetica, Arial, sans-serif"
+    fontFamily: "inherit"
     fontSize: "28px"
     fontWeight: 500
     lineHeight: 1.2
     letterSpacing: "normal"
   title:
-    fontFamily: "\"Helvetica Neue\", Helvetica, Arial, sans-serif"
+    fontFamily: "inherit"
     fontSize: "15px"
     fontWeight: 600
     lineHeight: 1.35
     letterSpacing: "normal"
   body:
-    fontFamily: "\"Helvetica Neue\", Helvetica, Arial, sans-serif"
+    fontFamily: "inherit"
     fontSize: "14px"
     fontWeight: 400
     lineHeight: 1.65
     letterSpacing: "normal"
   label:
-    fontFamily: "ui-monospace, Menlo, Monaco, \"Cascadia Mono\", monospace"
+    fontFamily: "inherit"
     fontSize: "11px"
-    fontWeight: 400
+    fontWeight: 500
     lineHeight: 1
-    letterSpacing: "0.16em"
+    letterSpacing: "0.18em"
 rounded:
   none: "0"
   sm: "4px"
@@ -125,22 +125,23 @@ a case file, so the system stays warm rather than clinical. That warmth is
 carried in the paper (a slightly off-white `#fbfbfa`, never pure white), in
 generous line-height on running prose, in real portraits at scale, and in a
 measure held to 58–70 characters so a biography reads like writing rather than
-a form field. The mono labels and tracked uppercase supply the archival
-precision; the prose supplies the human.
+a form field. The tracked uppercase labels supply the archival precision; the
+prose supplies the human.
 
 Color is not decoration here — it is inheritance. Only three seed values exist,
 and on a configured site all three come from the host's own palette, with the
 remaining ten derived from them by mixing. The system therefore has no fixed
 brand of its own by design, and its identity lives entirely in structure:
-hairline rules, tracked mono labels, sharp corners, honest empty states, and a
-rigorously flat surface.
+hairline rules, tracked uppercase labels, sharp corners, honest empty states,
+and a rigorously flat surface. Type is inherited too: the page speaks in the
+host's own voice.
 
 **Key Characteristics:**
 
 - Near-monochrome, derived from two seeds plus an accent that adapt to the host site
 - Flat by construction — no shadows, no gradients, no motion of any kind
 - Hairline rules and tonal fills carry every separation
-- Mono, uppercase, wide-tracked labels against a neutral grotesque for everything else
+- One inherited typeface throughout; labels separate by case, tracking and weight alone
 - Sizes itself to its container, never to the viewport
 - Absence renders as less page, never as a placeholder or an empty frame
 
@@ -203,19 +204,22 @@ be allowed to drift below a readable floor.
 
 ## Typography
 
-**Display / Body Font:** Helvetica Neue → Helvetica → Arial → sans-serif
-**Label / Mono Font:** ui-monospace → Menlo → Monaco → Cascadia Mono → monospace
+**Family:** inherited from the host theme. A Typeface setting can override it
+with one of four system stacks — System UI, Grotesque, Humanist, or Serif —
+but the default is to take whatever the site already uses.
 
 No webfont is loaded and none should be. The system ships zero font requests,
 which is a deliberate property of something that installs into sites it does
 not control — no layout shift, no third-party request, no consent surface.
 
-**Character:** A neutral grotesque doing the reading, and a monospace doing the
-filing. The grotesque is unfussy to the point of transparency — it is not
-trying to have a personality, because the person on the page is supposed to
-have it instead. The monospace is where the system's voice actually lives:
-every label, ordinal, date, and stat unit is set in it, uppercase and widely
-tracked, which is what gives the page its archival register.
+**Character:** the system has no typographic voice of its own, by choice. It
+inherits colour from its host and it inherits type the same way, so an author
+page reads as part of the site rather than a panel transplanted into it. What
+the system does own is how type is used: one family, five roles, and a label
+treatment that separates metadata from content through case, tracking and
+weight instead of by switching family. Figures in labels and data columns are
+set `tabular-nums`, so dates, years and counts still align in a column without
+a monospace doing it.
 
 ### Hierarchy
 
@@ -229,16 +233,19 @@ tracked, which is what gives the page its archival register.
   role in the career history, an article title in the byline list.
 - **Body** (400, 13–15px, line-height 1.6–1.7): running prose and summaries.
   Biography and long-form measure is capped at 58–70 characters.
-- **Label** (400, mono, 10–11px, tracking 0.08–0.2em, uppercase): everything
-  metadata — kickers, section eyebrows, dates, statuses, read times, ordinals,
-  stat units, gallery captions.
+- **Label** (500, 10–11px, tracking 0.08–0.2em, uppercase, tabular figures):
+  everything metadata — kickers, section eyebrows, dates, statuses, read
+  times, ordinals, stat units, gallery captions. One weight step above body
+  compensates for the lost family contrast.
 
 ### Named Rules
 
-**The Mono-Label Rule.** If a piece of text is metadata rather than content —
-a date, a status, an ordinal, a unit, a field name — it is set in the mono
-stack, uppercase, tracked at 0.1em or wider, in Muted. That single convention
-is doing most of the work of making the system look like a record.
+**The Label Rule.** If a piece of text is metadata rather than content — a
+date, a status, an ordinal, a unit, a field name — it is set uppercase,
+tracked at 0.1em or wider, one weight step above body, in Muted, with
+`tabular-nums`. Case and tracking carry the archival register; a second
+family is not needed to say this is a record, and reaching for monospace to
+mean technical is costume rather than function.
 
 **The Measure Rule.** Running prose is capped in `ch`, never in pixels, at
 58–70 characters. A biography that runs the full width of a wide container
@@ -246,6 +253,10 @@ stops reading like prose.
 
 **The One Name Rule.** Display type appears once per page, on the author's
 name. Nothing else competes at that scale.
+
+**The Inherited Voice Rule.** Never declare a font family outside the
+`--abio-font` token. The page belongs to its host, and a hardcoded family is
+the fastest way to make it look pasted on.
 
 ## Layout
 
@@ -321,7 +332,7 @@ Borders are uniformly one pixel of Line. Image frames carry the same border as
 cards, so a photograph sits in the page with the same weight as a panel.
 
 The recurring silhouette is the **hatched frame**: a 45° repeating linear
-gradient in Line over Wash, at 6px stripes, with a mono caption centered in it.
+gradient in Line over Wash, at 6px stripes, with a small uppercase caption centered in it.
 It stands in for any image that has not been supplied and is the system's most
 recognizable single mark.
 
@@ -378,7 +389,8 @@ several, watch that it does not read as banding.
 
 ### Stat Tile
 
-A value in large plain type over a mono uppercase unit label in Muted. Tiles
+A value in large plain type over a small uppercase unit label in Muted, both
+set `tabular-nums` so a row of tiles aligns. Tiles
 tile edge to edge over a Line ground so the one-pixel gaps read as rules.
 
 The tile count is **variable, not fixed** — a tile whose value cannot be
@@ -388,8 +400,8 @@ number that actually resolved.
 ### Image Frame
 
 Every image renders through one helper that returns either a real bordered
-photograph or the hatched empty frame with a mono caption naming the expected
-crop. There is no third state and no broken-image case.
+photograph or the hatched empty frame with a small uppercase caption naming
+the expected crop. There is no third state and no broken-image case.
 
 ### Visually Hidden Text
 
@@ -410,8 +422,9 @@ the system, so it never reads as content.
 
 - **Do** derive every color from Ink, Paper, and Accent. If a value can be
   mixed, mix it.
-- **Do** set all metadata — dates, statuses, ordinals, units, field names — in
-  the mono stack, uppercase, tracked at 0.1em or wider, in Muted.
+- **Do** set all metadata — dates, statuses, ordinals, units, field names —
+  uppercase, tracked at 0.1em or wider, one weight above body, in Muted,
+  with `tabular-nums`.
 - **Do** cap running prose at 58–70 characters using `ch`.
 - **Do** write breakpoints as `@container` queries against the shortcode root,
   at 1024px, 768px, and 560px.
@@ -433,8 +446,11 @@ the system, so it never reads as content.
   declarations and their `@supports` fallback.
 - **Don't** write a viewport media query. The system cannot see the viewport
   and must not act as though it can.
-- **Don't** load a webfont. The system ships zero font requests and that is a
-  feature of installing into sites you do not control.
+- **Don't** load a webfont, and don't declare a font family outside the
+  `--abio-font` token. The system ships zero font requests and inherits its
+  typeface from the host.
+- **Don't** reach for monospace to signal technical intent. Column alignment
+  is what `tabular-nums` is for.
 - **Don't** render an empty frame, a blank cell, or a placeholder value where
   content is missing — show less page instead.
 - **Don't** let Accent carry structure. It is interactive affordance only, and

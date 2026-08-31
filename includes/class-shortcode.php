@@ -78,10 +78,20 @@ class ABIO_Shortcode {
 
 		ob_start();
 
+		// The palette, plus the typeface when the site chose one. An empty stack
+		// means "inherit the theme", which is the default, so nothing is emitted
+		// and the CSS falls through to inherit.
+		$vars  = ABIO_Palette::css_vars();
+		$stack = ABIO_Settings::font_stack();
+
+		if ( '' !== $stack ) {
+			$vars .= ';--abio-font:' . $stack;
+		}
+
 		printf(
 			'<div class="abio abio--t%d" style="%s">',
 			$number,
-			esc_attr( ABIO_Palette::css_vars() )
+			esc_attr( $vars )
 		);
 
 		include $file;
