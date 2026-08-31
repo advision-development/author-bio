@@ -1,0 +1,242 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-31T00:00:00Z",
+  "title": "Design System: Author Bio",
+  "extensions": {
+    "colorMeta": {
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#17181a",
+        "note": "Seed 1 of 2. Body text, headings, and the fill of every inverted panel. Detected from the host site's palette when a page builder is present, subject to a 7:1 contrast floor against Paper.",
+        "tonalRamp": ["#17181a", "#3a3c40", "#5a5c60", "#6f7175", "#8a8c90", "#b0b0ab", "#e2e2df", "#fbfbfa"]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#fbfbfa",
+        "note": "Seed 2 of 2. Page and card ground. Off-white rather than pure white; the warmth of the system comes from here.",
+        "tonalRamp": ["#17181a", "#3a3c40", "#5a5c60", "#6f7175", "#8a8c90", "#b0b0ab", "#e2e2df", "#fbfbfa"]
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Accent",
+        "canonical": "#17181a",
+        "note": "The only hue-bearing token. Interactive affordance only: link hover, CTA border and fill. Defaults to the same value as Ink, so an unconfigured install is genuinely monochrome.",
+        "tonalRamp": ["#17181a", "#3a3c40", "#5a5c60", "#6f7175", "#8a8c90", "#b0b0ab", "#e2e2df", "#fbfbfa"]
+      },
+      "accent-soft": {
+        "role": "primary",
+        "displayName": "Accent Soft",
+        "canonical": "#6f7175",
+        "note": "Accent mixed 61% toward Paper, for link hover. Identical to Soft until the accent is overridden."
+      },
+      "wash": {
+        "role": "neutral",
+        "displayName": "Wash",
+        "canonical": "#f4f4f2",
+        "note": "Derived: Paper 97% + Ink. Recessed ground, hairline grid gaps, and text color on inverted panels."
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Line",
+        "canonical": "#e2e2df",
+        "note": "Derived: Paper 89% + Ink. Every border and rule in the system. One pixel, always."
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "canonical": "#8a8c90",
+        "note": "Derived: Ink 50% + Paper. All mono labels, captions, and metadata."
+      },
+      "dim": {
+        "role": "neutral",
+        "displayName": "Dim",
+        "canonical": "#5a5c60",
+        "note": "Derived: Ink 71% + Paper. Secondary prose, biography body, chip text."
+      },
+      "soft": {
+        "role": "neutral",
+        "displayName": "Soft",
+        "canonical": "#6f7175",
+        "note": "Derived: Ink 61% + Paper. Tertiary prose and item summaries."
+      },
+      "faint": {
+        "role": "neutral",
+        "displayName": "Faint",
+        "canonical": "#b0b0ab",
+        "note": "Derived: Ink 33% + Paper. Ordinals and placeholder captions — present without competing."
+      },
+      "onink": {
+        "role": "neutral",
+        "displayName": "On-Ink",
+        "canonical": "#c6c6c1",
+        "note": "Derived: Paper 77% + Ink. Primary text inside an inverted panel."
+      },
+      "onink-dim": {
+        "role": "neutral",
+        "displayName": "On-Ink Dim",
+        "canonical": "#a8a8a3",
+        "note": "Derived: Paper 64% + Ink. Secondary text inside an inverted panel."
+      },
+      "onink-line": {
+        "role": "neutral",
+        "displayName": "On-Ink Line",
+        "canonical": "#3a3c40",
+        "note": "Derived: Paper 15% + Ink. Borders inside an inverted panel."
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The author's name, once per page. The only place negative tracking appears. Size is a per-template decision spanning 34–84px; the frontmatter value is representative, not a cap."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section headings such as 'Areas of focus' and 'Latest edits', often over a hairline rule. 24–36px across templates."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Item headings — a focus area, a role in the career history, an article title. 14–20px."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running prose and summaries, 13–15px at 1.6–1.7 line-height. Measure capped at 58–70 characters."
+      },
+      "label": {
+        "displayName": "Mono Label",
+        "purpose": "All metadata — kickers, eyebrows, dates, statuses, read times, ordinals, stat units. Uppercase, tracked 0.08–0.2em, in Muted. This convention carries the system's archival voice."
+      }
+    },
+    "shadows": [],
+    "motion": [],
+    "breakpoints": [
+      { "name": "cq-lg", "value": "1024px", "note": "Container query, not viewport. Multi-column bodies collapse; sticky rails go static; four-up stat rows go two-up." },
+      { "name": "cq-md", "value": "768px", "note": "Container query. Side padding drops to 20px; display type roughly halves; table-style rows stack." },
+      { "name": "cq-sm", "value": "560px", "note": "Container query. Everything single column." }
+    ],
+    "notes": [
+      "shadows and motion are intentionally empty: the stylesheet contains zero box-shadows, gradients, transitions and animations. This is provisional rather than doctrinal — the system is open to gaining depth later.",
+      "All breakpoints are @container queries against the shortcode root, which declares container-type: inline-size. The system never queries the viewport, because the same shortcode lands in a full-bleed builder section on one site and a ~620px themed content column on the next.",
+      "No focus styles exist in the current implementation — six hover rules, zero focus rules. The :focus-visible treatments in the component snippets below are the prescribed target, not the shipped state."
+    ]
+  },
+  "components": [
+    {
+      "name": "Call to Action",
+      "kind": "button",
+      "refersTo": "cta",
+      "description": "The system's only button. Bordered text at rest, inverting to a solid fill on hover.",
+      "html": "<a class=\"ds-cta\" href=\"#\">Contact the desk</a>",
+      "css": ".ds-cta { display: inline-block; border: 1px solid #17181a; padding: 9px 15px; font: 13px \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #17181a; text-decoration: none; } .ds-cta:hover { background: #17181a; color: #fbfbfa; text-decoration: none; } .ds-cta:focus-visible { outline: 2px solid #17181a; outline-offset: 2px; }"
+    },
+    {
+      "name": "Call to Action — on inverted panel",
+      "kind": "button",
+      "refersTo": "cta-on-dark",
+      "description": "The same button inside an Ink panel: border drops to Soft, hover inverts to a Wash fill.",
+      "html": "<div class=\"ds-panel-dark\"><a class=\"ds-cta-dark\" href=\"#\">Contact the desk</a></div>",
+      "css": ".ds-panel-dark { background: #17181a; padding: 28px; } .ds-cta-dark { display: inline-block; border: 1px solid #6f7175; padding: 9px 15px; font: 13px \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #f4f4f2; text-decoration: none; } .ds-cta-dark:hover { background: #f4f4f2; color: #17181a; text-decoration: none; } .ds-cta-dark:focus-visible { outline: 2px solid #f4f4f2; outline-offset: 2px; }"
+    },
+    {
+      "name": "Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Verification badges and social handles. Square, hairline-bordered, wrapping at an 8px gap.",
+      "html": "<ul class=\"ds-chips\"><li><span>Credentials verified</span></li><li><a href=\"#\">@CoinDesk</a></li></ul>",
+      "css": ".ds-chips { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; } .ds-chips a, .ds-chips li > span { display: block; border: 1px solid #e2e2df; background: #fbfbfa; padding: 4px 10px; font: 12px \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #5a5c60; text-decoration: none; } .ds-chips a:hover { color: #6f7175; text-decoration: underline; text-underline-offset: 3px; } .ds-chips a:focus-visible { outline: 2px solid #17181a; outline-offset: 2px; }"
+    },
+    {
+      "name": "Mono Label",
+      "kind": "custom",
+      "refersTo": "label",
+      "description": "The system's signature convention: all metadata set in mono, uppercase, widely tracked, in Muted.",
+      "html": "<span class=\"ds-label\">Author · Oregon, US</span>",
+      "css": ".ds-label { font: 11px/1 ui-monospace, Menlo, Monaco, \"Cascadia Mono\", monospace; letter-spacing: .16em; text-transform: uppercase; color: #8a8c90; }"
+    },
+    {
+      "name": "Stat Tile Row",
+      "kind": "card",
+      "refersTo": "stat-tile",
+      "description": "Values in large plain type over mono uppercase units. Tiles sit on a Line ground so the one-pixel gaps read as rules. The tile count is variable — a value that cannot be computed is dropped, and the grid collapses to what rendered.",
+      "html": "<ul class=\"ds-stats\"><li><span class=\"ds-stat-value\">8</span><span class=\"ds-stat-label\">Pieces bylined</span></li><li><span class=\"ds-stat-value\">1</span><span class=\"ds-stat-label\">Tools built</span></li><li><span class=\"ds-stat-value\">2026</span><span class=\"ds-stat-label\">Contributing since</span></li></ul>",
+      "css": ".ds-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: #e2e2df; border: 1px solid #e2e2df; list-style: none; margin: 0; padding: 0; } .ds-stats li { background: #fbfbfa; padding: 26px 24px; display: flex; flex-direction: column; gap: 10px; } .ds-stat-value { font: 30px/1 \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #17181a; } .ds-stat-label { font: 11px \"Helvetica Neue\", Helvetica, Arial, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #8a8c90; }"
+    },
+    {
+      "name": "Hatched Image Frame",
+      "kind": "custom",
+      "refersTo": "media-empty",
+      "description": "The system's most recognizable mark. Stands in for any image that has not been supplied, captioned in mono with the expected crop. There is no broken-image state.",
+      "html": "<span class=\"ds-media-empty\">portrait 1:1</span>",
+      "css": ".ds-media-empty { display: grid; place-items: center; aspect-ratio: 1; min-height: 60px; background-image: repeating-linear-gradient(45deg, #e2e2df 0 6px, #f4f4f2 6px 12px); border: 1px solid #e2e2df; font: 11px ui-monospace, Menlo, Monaco, \"Cascadia Mono\", monospace; color: #b0b0ab; }"
+    },
+    {
+      "name": "Inverted Panel",
+      "kind": "custom",
+      "refersTo": "panel-dark",
+      "description": "The one dramatic move: a full-bleed Ink band carrying a masthead, a stat band, or a closing ask. Inside it the palette narrows to On-Ink, On-Ink Dim and On-Ink Line. Use is unrestricted, but several on one page starts to read as banding.",
+      "html": "<div class=\"ds-panel\"><span class=\"ds-panel-kicker\">Author · Oregon, US</span><h1 class=\"ds-panel-name\">Jefferson Hayes</h1><p class=\"ds-panel-role\">Crypto &amp; Commodities Analyst</p></div>",
+      "css": ".ds-panel { background: #17181a; color: #f4f4f2; padding: 44px 40px; } .ds-panel-kicker { display: block; font: 11px/1 ui-monospace, Menlo, Monaco, \"Cascadia Mono\", monospace; letter-spacing: .22em; text-transform: uppercase; color: #8a8c90; margin-bottom: 18px; } .ds-panel-name { margin: 0 0 10px; font: 600 48px/1.02 \"Helvetica Neue\", Helvetica, Arial, sans-serif; letter-spacing: -.03em; } .ds-panel-role { margin: 0; font: 18px \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #c6c6c1; }"
+    },
+    {
+      "name": "Byline Row",
+      "kind": "custom",
+      "refersTo": "body",
+      "description": "One published article in the author's record: mono date and status in a fixed left column, then title, summary and read time. The system's densest recurring pattern.",
+      "html": "<ul class=\"ds-edits\"><li><div class=\"ds-edit-meta\"><span>August 24, 2026</span><span class=\"ds-edit-status\">Updated</span></div><div class=\"ds-edit-body\"><span class=\"ds-edit-type\">Market recap</span><h3><a href=\"#\">Prediction markets by state</a></h3><p>Where you can trade event contracts in the US, state by state.</p><span class=\"ds-edit-time\">6 min</span></div></li></ul>",
+      "css": ".ds-edits { list-style: none; margin: 0; padding: 0; } .ds-edits li { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 24px; padding: 20px 0; border-bottom: 1px solid #f4f4f2; } .ds-edit-meta { display: flex; flex-direction: column; gap: 6px; font: 12px \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #8a8c90; } .ds-edit-status { font: 10px/1 ui-monospace, Menlo, Monaco, \"Cascadia Mono\", monospace; letter-spacing: .1em; text-transform: uppercase; } .ds-edit-body { display: flex; flex-direction: column; gap: 7px; } .ds-edit-type { font: 11px \"Helvetica Neue\", Helvetica, Arial, sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #8a8c90; } .ds-edit-body h3 { margin: 0; font: 600 16px/1.35 \"Helvetica Neue\", Helvetica, Arial, sans-serif; } .ds-edit-body h3 a { color: #17181a; text-decoration: none; } .ds-edit-body h3 a:hover { color: #6f7175; text-decoration: underline; text-underline-offset: 3px; } .ds-edit-body h3 a:focus-visible { outline: 2px solid #17181a; outline-offset: 2px; } .ds-edit-body p { margin: 0; font: 14px/1.6 \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #6f7175; } .ds-edit-time { font: 12px \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #8a8c90; }"
+    },
+    {
+      "name": "Missing Notice",
+      "kind": "custom",
+      "refersTo": "missing-notice",
+      "description": "The one diagnostic surface, shown only to users who can edit posts. Deliberately the system's only dashed border, so it never reads as content.",
+      "html": "<p class=\"ds-missing\">Author Bio: no published author profile is linked to user #7 (Jane Doe).</p>",
+      "css": ".ds-missing { margin: 0; padding: 12px 16px; border: 1px dashed #e2e2df; font: 13px/1.5 \"Helvetica Neue\", Helvetica, Arial, sans-serif; color: #8a8c90; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Dossier",
+    "overview": "A dossier is a record assembled about a person: an identifying photograph, filed credentials, a track record, source material with dates attached. This system renders exactly that, and its visual restraint is the argument. Nothing floats, nothing animates, nothing is styled to persuade — because the page's job is to be believed, and decoration reads as salesmanship on a page whose entire purpose is establishing that a named human knows what they are talking about. The evidence is the design.\n\nThe register is editorial and factual, but the subject is a person rather than a case file, so the system stays warm rather than clinical. That warmth is carried in the paper (a slightly off-white #fbfbfa, never pure white), in generous line-height on running prose, in real portraits at scale, and in a measure held to 58–70 characters so a biography reads like writing rather than a form field. The mono labels and tracked uppercase supply the archival precision; the prose supplies the human.\n\nColor is not decoration here — it is inheritance. Only three seed values exist, and on a configured site all three come from the host's own palette, with the remaining ten derived from them by mixing. The system therefore has no fixed brand of its own by design, and its identity lives entirely in structure: hairline rules, tracked mono labels, sharp corners, honest empty states, and a rigorously flat surface.",
+    "keyCharacteristics": [
+      "Near-monochrome, derived from two seeds plus an accent that adapt to the host site",
+      "Flat by construction — no shadows, no gradients, no motion of any kind",
+      "Hairline rules and tonal fills carry every separation",
+      "Mono, uppercase, wide-tracked labels against a neutral grotesque for everything else",
+      "Sizes itself to its container, never to the viewport",
+      "Absence renders as less page, never as a placeholder or an empty frame"
+    ],
+    "rules": [
+      { "name": "The Two-Seed Rule", "body": "Only Ink, Paper, and Accent are ever set directly. Every other color is derived from them by color-mix() at a fixed percentage, which is why the whole system re-tones coherently when a host site's palette is detected. Never hardcode a color that could be derived, and never introduce a fourth seed.", "section": "colors" },
+      { "name": "The Inheritance Rule", "body": "This system has no brand color of its own and must never acquire one. A literal hex belongs only in the seed declarations and in the @supports fallback beneath them. Everywhere else, use a token.", "section": "colors" },
+      { "name": "The Contrast Floor Rule", "body": "A detected Ink is only accepted if it clears 7:1 against the resolved Paper; below that it falls back to the default per channel, keeping a good detected Paper even when the Ink is rejected. Body text and inverted panels both depend on that value, so an adaptive palette may never be allowed to drift below a readable floor.", "section": "colors" },
+      { "name": "The Mono-Label Rule", "body": "If a piece of text is metadata rather than content — a date, a status, an ordinal, a unit, a field name — it is set in the mono stack, uppercase, tracked at 0.1em or wider, in Muted. That single convention is doing most of the work of making the system look like a record.", "section": "typography" },
+      { "name": "The Measure Rule", "body": "Running prose is capped in ch, never in pixels, at 58–70 characters. A biography that runs the full width of a wide container stops reading like prose.", "section": "typography" },
+      { "name": "The One Name Rule", "body": "Display type appears once per page, on the author's name. Nothing else competes at that scale.", "section": "typography" },
+      { "name": "The Container Rule", "body": "Never write a viewport media query in this system. The page does not know how wide the window is and must not care.", "section": "layout" },
+      { "name": "The No-Dead-Track Rule", "body": "Any grid whose children come from a variable-length list adapts its track count to what actually rendered. Empty cells are visible in this system because grids paint their gaps.", "section": "layout" },
+      { "name": "The Hairline Rule", "body": "Separation is one pixel of Line. Not two, not a double rule, not a shadow standing in for a border.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do derive every color from Ink, Paper, and Accent. If a value can be mixed, mix it.",
+      "Do set all metadata — dates, statuses, ordinals, units, field names — in the mono stack, uppercase, tracked at 0.1em or wider, in Muted.",
+      "Do cap running prose at 58–70 characters using ch.",
+      "Do write breakpoints as @container queries against the shortcode root, at 1024px, 768px, and 560px.",
+      "Do collapse any fixed-track grid to the number of items that actually rendered.",
+      "Do render every image through the shared image helper so the hatched empty frame stays the single fallback.",
+      "Do let a section disappear entirely when its content is empty.",
+      "Do keep separation to one pixel of Line.",
+      "Do give every interactive element a visible :focus-visible treatment that survives on both the light ground and an inverted panel. The system does not have one yet."
+    ],
+    "donts": [
+      "Don't introduce a fourth color seed, or hardcode a hex outside the seed declarations and their @supports fallback.",
+      "Don't write a viewport media query. The system cannot see the viewport and must not act as though it can.",
+      "Don't load a webfont. The system ships zero font requests and that is a feature of installing into sites you do not control.",
+      "Don't render an empty frame, a blank cell, or a placeholder value where content is missing — show less page instead.",
+      "Don't let Accent carry structure. It is interactive affordance only, and on most installs it is identical to Ink.",
+      "Don't use a dashed border for anything but the editor-only missing notice.",
+      "Don't mix radii within a single template. Commit to square or to a rounded dialect and hold it across every surface that template owns.",
+      "Don't rely on hover as the only signal that something is interactive, and never remove a focus outline without replacing it with a visible one."
+    ]
+  }
+}

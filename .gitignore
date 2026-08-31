@@ -2,3 +2,7 @@
 *.zip
 node_modules/
 vendor/
+
+# Impeccable working state; DESIGN.md and the design.json sidecar are tracked.
+.impeccable/config.local.json
+.superpowers/
