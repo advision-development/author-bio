@@ -183,7 +183,7 @@ $abio_t10_footer_cols  = (int) $abio_t10_show_creds + (int) $abio_t10_show_follo
 					<h3 class="abio-t10__footer-heading"><?php esc_html_e( 'Follows', 'author-bio' ); ?></h3>
 					<ul class="abio-chips">
 						<?php foreach ( $d['follows'] as $h ) : ?>
-							<li><a href="<?php echo esc_url( $h['url'] ); ?>" rel="nofollow ugc noopener" target="_blank"><?php echo esc_html( $h['handle'] ); ?></a></li>
+							<li><?php echo ABIO_View::follow_link( $h['handle'], $h['url'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></li>
 						<?php endforeach; ?>
 					</ul>
 				</div>

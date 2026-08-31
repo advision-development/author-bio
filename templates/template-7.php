@@ -22,7 +22,7 @@ $abio_t7_show_report = $a['bio'] || ! empty( $d['gallery']['items'] );
 	<div class="abio-t7__top abio-panel--dark">
 		<div class="abio-t7__top-inner">
 			<div class="abio-t7__portrait">
-				<?php echo ABIO_View::media( $a['portrait'], 'medium', 'portrait 3:4', 'abio-t7__portrait-img' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo ABIO_View::media( $a['portrait'], 'medium', 'portrait 3:4', 'abio-t7__portrait-img', $a['name'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 			</div>
 
 			<div class="abio-t7__intro">
@@ -158,7 +158,7 @@ $abio_t7_show_report = $a['bio'] || ! empty( $d['gallery']['items'] );
 					<h3 class="abio-t7__card-heading"><?php esc_html_e( 'Follows', 'author-bio' ); ?></h3>
 					<ul class="abio-chips abio-t7__follows">
 						<?php foreach ( $d['follows'] as $h ) : ?>
-							<li><a href="<?php echo esc_url( $h['url'] ); ?>" rel="nofollow ugc noopener" target="_blank"><?php echo esc_html( $h['handle'] ); ?></a></li>
+							<li><?php echo ABIO_View::follow_link( $h['handle'], $h['url'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></li>
 						<?php endforeach; ?>
 					</ul>
 				</div>

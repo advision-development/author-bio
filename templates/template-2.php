@@ -17,7 +17,7 @@ $a = $d['author'];
 
 		<aside class="abio-t2__aside">
 			<div class="abio-t2__portrait">
-				<?php echo ABIO_View::media( $a['portrait'], 'medium', 'portrait 1:1', 'abio-t2__portrait-img' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo ABIO_View::media( $a['portrait'], 'medium', 'portrait 1:1', 'abio-t2__portrait-img', $a['name'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 
 				<?php if ( ! empty( $d['gallery']['items'] ) ) : ?>
 					<ul class="abio-t2__thumbs">
@@ -71,7 +71,7 @@ $a = $d['author'];
 					<h2 class="abio-eyebrow"><?php esc_html_e( 'Follows', 'author-bio' ); ?></h2>
 					<ul class="abio-t2__follows">
 						<?php foreach ( $d['follows'] as $h ) : ?>
-							<li><a href="<?php echo esc_url( $h['url'] ); ?>" rel="nofollow ugc noopener" target="_blank"><?php echo esc_html( $h['handle'] ); ?></a></li>
+							<li><?php echo ABIO_View::follow_link( $h['handle'], $h['url'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></li>
 						<?php endforeach; ?>
 					</ul>
 				</div>

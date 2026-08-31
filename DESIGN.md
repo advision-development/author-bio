@@ -342,14 +342,11 @@ never a solid fill at rest.
   button at 4px radius; the brand-feature template uses a larger filled button
   at 14px/26px. Both are deliberate.
 
-**Focus is currently unstyled and should not stay that way.** The stylesheet
-defines six hover rules and no focus rules, so every interactive element falls
-back to the user agent's default ring — which is close to invisible against an
-inverted Ink panel, where most of the system's calls to action live. Any work
-touching interactive elements should add a `:focus-visible` treatment that
-resolves from the tokens and remains visible on both grounds: a two-pixel
-Accent outline with a two-pixel offset on light, switching to Wash inside an
-inverted panel. Hover alone is not an accessible affordance.
+**Focus:** a two-pixel Accent outline at a two-pixel offset, switching to Wash
+inside an inverted panel — where the Accent can be as dark as the ground it
+sits on. Applied to links, buttons, and anything carrying `tabindex`. Hover
+alone is never an accessible affordance, so any new control inherits this or
+declares its own equally visible treatment.
 
 ### Chips
 
@@ -394,6 +391,13 @@ Every image renders through one helper that returns either a real bordered
 photograph or the hatched empty frame with a mono caption naming the expected
 crop. There is no third state and no broken-image case.
 
+### Visually Hidden Text
+
+`.abio-sr-only` clips text to a one-pixel box while leaving it in the
+accessibility tree. It carries the "(opens in a new tab)" cue on outbound
+links, a fact sighted users infer from context and screen reader users would
+otherwise only discover after the tab had already switched.
+
 ### Missing Notice
 
 The one diagnostic surface: a dashed Line border, Muted text at 13px, shown
@@ -418,8 +422,7 @@ the system, so it never reads as content.
 - **Do** let a section disappear entirely when its content is empty.
 - **Do** keep separation to one pixel of Line.
 - **Do** give every interactive element a visible `:focus-visible` treatment
-  that survives on both the light ground and an inverted panel. The system does
-  not have one yet.
+  that survives on both the light ground and an inverted panel.
 
 ### Don't:
 

@@ -9,21 +9,48 @@
         "displayName": "Ink",
         "canonical": "#17181a",
         "note": "Seed 1 of 2. Body text, headings, and the fill of every inverted panel. Detected from the host site's palette when a page builder is present, subject to a 7:1 contrast floor against Paper.",
-        "tonalRamp": ["#17181a", "#3a3c40", "#5a5c60", "#6f7175", "#8a8c90", "#b0b0ab", "#e2e2df", "#fbfbfa"]
+        "tonalRamp": [
+          "#17181a",
+          "#3a3c40",
+          "#5a5c60",
+          "#6f7175",
+          "#8a8c90",
+          "#b0b0ab",
+          "#e2e2df",
+          "#fbfbfa"
+        ]
       },
       "paper": {
         "role": "neutral",
         "displayName": "Paper",
         "canonical": "#fbfbfa",
         "note": "Seed 2 of 2. Page and card ground. Off-white rather than pure white; the warmth of the system comes from here.",
-        "tonalRamp": ["#17181a", "#3a3c40", "#5a5c60", "#6f7175", "#8a8c90", "#b0b0ab", "#e2e2df", "#fbfbfa"]
+        "tonalRamp": [
+          "#17181a",
+          "#3a3c40",
+          "#5a5c60",
+          "#6f7175",
+          "#8a8c90",
+          "#b0b0ab",
+          "#e2e2df",
+          "#fbfbfa"
+        ]
       },
       "accent": {
         "role": "primary",
         "displayName": "Accent",
         "canonical": "#17181a",
         "note": "The only hue-bearing token. Interactive affordance only: link hover, CTA border and fill. Defaults to the same value as Ink, so an unconfigured install is genuinely monochrome.",
-        "tonalRamp": ["#17181a", "#3a3c40", "#5a5c60", "#6f7175", "#8a8c90", "#b0b0ab", "#e2e2df", "#fbfbfa"]
+        "tonalRamp": [
+          "#17181a",
+          "#3a3c40",
+          "#5a5c60",
+          "#6f7175",
+          "#8a8c90",
+          "#b0b0ab",
+          "#e2e2df",
+          "#fbfbfa"
+        ]
       },
       "accent-soft": {
         "role": "primary",
@@ -111,14 +138,26 @@
     "shadows": [],
     "motion": [],
     "breakpoints": [
-      { "name": "cq-lg", "value": "1024px", "note": "Container query, not viewport. Multi-column bodies collapse; sticky rails go static; four-up stat rows go two-up." },
-      { "name": "cq-md", "value": "768px", "note": "Container query. Side padding drops to 20px; display type roughly halves; table-style rows stack." },
-      { "name": "cq-sm", "value": "560px", "note": "Container query. Everything single column." }
+      {
+        "name": "cq-lg",
+        "value": "1024px",
+        "note": "Container query, not viewport. Multi-column bodies collapse; sticky rails go static; four-up stat rows go two-up."
+      },
+      {
+        "name": "cq-md",
+        "value": "768px",
+        "note": "Container query. Side padding drops to 20px; display type roughly halves; table-style rows stack."
+      },
+      {
+        "name": "cq-sm",
+        "value": "560px",
+        "note": "Container query. Everything single column."
+      }
     ],
     "notes": [
       "shadows and motion are intentionally empty: the stylesheet contains zero box-shadows, gradients, transitions and animations. This is provisional rather than doctrinal — the system is open to gaining depth later.",
       "All breakpoints are @container queries against the shortcode root, which declares container-type: inline-size. The system never queries the viewport, because the same shortcode lands in a full-bleed builder section on one site and a ~620px themed content column on the next.",
-      "No focus styles exist in the current implementation — six hover rules, zero focus rules. The :focus-visible treatments in the component snippets below are the prescribed target, not the shipped state."
+      "Focus is implemented as a 2px Accent outline at 2px offset, switching to Wash inside an inverted panel. The component snippets' :focus-visible rules match the shipped stylesheet."
     ]
   },
   "components": [
@@ -207,15 +246,51 @@
       "Absence renders as less page, never as a placeholder or an empty frame"
     ],
     "rules": [
-      { "name": "The Two-Seed Rule", "body": "Only Ink, Paper, and Accent are ever set directly. Every other color is derived from them by color-mix() at a fixed percentage, which is why the whole system re-tones coherently when a host site's palette is detected. Never hardcode a color that could be derived, and never introduce a fourth seed.", "section": "colors" },
-      { "name": "The Inheritance Rule", "body": "This system has no brand color of its own and must never acquire one. A literal hex belongs only in the seed declarations and in the @supports fallback beneath them. Everywhere else, use a token.", "section": "colors" },
-      { "name": "The Contrast Floor Rule", "body": "A detected Ink is only accepted if it clears 7:1 against the resolved Paper; below that it falls back to the default per channel, keeping a good detected Paper even when the Ink is rejected. Body text and inverted panels both depend on that value, so an adaptive palette may never be allowed to drift below a readable floor.", "section": "colors" },
-      { "name": "The Mono-Label Rule", "body": "If a piece of text is metadata rather than content — a date, a status, an ordinal, a unit, a field name — it is set in the mono stack, uppercase, tracked at 0.1em or wider, in Muted. That single convention is doing most of the work of making the system look like a record.", "section": "typography" },
-      { "name": "The Measure Rule", "body": "Running prose is capped in ch, never in pixels, at 58–70 characters. A biography that runs the full width of a wide container stops reading like prose.", "section": "typography" },
-      { "name": "The One Name Rule", "body": "Display type appears once per page, on the author's name. Nothing else competes at that scale.", "section": "typography" },
-      { "name": "The Container Rule", "body": "Never write a viewport media query in this system. The page does not know how wide the window is and must not care.", "section": "layout" },
-      { "name": "The No-Dead-Track Rule", "body": "Any grid whose children come from a variable-length list adapts its track count to what actually rendered. Empty cells are visible in this system because grids paint their gaps.", "section": "layout" },
-      { "name": "The Hairline Rule", "body": "Separation is one pixel of Line. Not two, not a double rule, not a shadow standing in for a border.", "section": "elevation" }
+      {
+        "name": "The Two-Seed Rule",
+        "body": "Only Ink, Paper, and Accent are ever set directly. Every other color is derived from them by color-mix() at a fixed percentage, which is why the whole system re-tones coherently when a host site's palette is detected. Never hardcode a color that could be derived, and never introduce a fourth seed.",
+        "section": "colors"
+      },
+      {
+        "name": "The Inheritance Rule",
+        "body": "This system has no brand color of its own and must never acquire one. A literal hex belongs only in the seed declarations and in the @supports fallback beneath them. Everywhere else, use a token.",
+        "section": "colors"
+      },
+      {
+        "name": "The Contrast Floor Rule",
+        "body": "A detected Ink is only accepted if it clears 7:1 against the resolved Paper; below that it falls back to the default per channel, keeping a good detected Paper even when the Ink is rejected. Body text and inverted panels both depend on that value, so an adaptive palette may never be allowed to drift below a readable floor.",
+        "section": "colors"
+      },
+      {
+        "name": "The Mono-Label Rule",
+        "body": "If a piece of text is metadata rather than content — a date, a status, an ordinal, a unit, a field name — it is set in the mono stack, uppercase, tracked at 0.1em or wider, in Muted. That single convention is doing most of the work of making the system look like a record.",
+        "section": "typography"
+      },
+      {
+        "name": "The Measure Rule",
+        "body": "Running prose is capped in ch, never in pixels, at 58–70 characters. A biography that runs the full width of a wide container stops reading like prose.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Name Rule",
+        "body": "Display type appears once per page, on the author's name. Nothing else competes at that scale.",
+        "section": "typography"
+      },
+      {
+        "name": "The Container Rule",
+        "body": "Never write a viewport media query in this system. The page does not know how wide the window is and must not care.",
+        "section": "layout"
+      },
+      {
+        "name": "The No-Dead-Track Rule",
+        "body": "Any grid whose children come from a variable-length list adapts its track count to what actually rendered. Empty cells are visible in this system because grids paint their gaps.",
+        "section": "layout"
+      },
+      {
+        "name": "The Hairline Rule",
+        "body": "Separation is one pixel of Line. Not two, not a double rule, not a shadow standing in for a border.",
+        "section": "elevation"
+      }
     ],
     "dos": [
       "Do derive every color from Ink, Paper, and Accent. If a value can be mixed, mix it.",
@@ -226,7 +301,7 @@
       "Do render every image through the shared image helper so the hatched empty frame stays the single fallback.",
       "Do let a section disappear entirely when its content is empty.",
       "Do keep separation to one pixel of Line.",
-      "Do give every interactive element a visible :focus-visible treatment that survives on both the light ground and an inverted panel. The system does not have one yet."
+      "Do give every interactive element a visible :focus-visible treatment that survives on both the light ground and an inverted panel."
     ],
     "donts": [
       "Don't introduce a fourth color seed, or hardcode a hex outside the seed declarations and their @supports fallback.",

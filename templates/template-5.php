@@ -24,7 +24,7 @@ foreach ( $d['nav'] as $n ) {
 
 	<nav class="abio-t5__rail">
 		<div class="abio-t5__id">
-			<?php echo ABIO_View::media( $a['portrait'], 'thumbnail', '', 'abio-t5__avatar' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php echo ABIO_View::media( $a['portrait'], 'thumbnail', '', 'abio-t5__avatar', $a['name'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 			<span class="abio-t5__id-text">
 				<span class="abio-t5__id-name"><?php echo esc_html( $a['name'] ); ?></span>
 				<span class="abio-t5__id-kicker"><?php echo esc_html( $a['kicker'] ); ?></span>
@@ -47,7 +47,7 @@ foreach ( $d['nav'] as $n ) {
 		<?php if ( ! empty( $d['follows'] ) ) : ?>
 			<div class="abio-t5__follows">
 				<?php foreach ( $d['follows'] as $h ) : ?>
-					<a href="<?php echo esc_url( $h['url'] ); ?>" rel="nofollow ugc noopener" target="_blank"><?php echo esc_html( $h['handle'] ); ?></a>
+					<?php echo ABIO_View::follow_link( $h['handle'], $h['url'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				<?php endforeach; ?>
 			</div>
 		<?php endif; ?>

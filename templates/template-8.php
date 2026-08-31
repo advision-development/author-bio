@@ -57,7 +57,7 @@ $abio_t8_show_about = $a['bio'] || ! empty( $d['gallery']['items'] );
 			<?php if ( $abio_t8_show_identity ) : ?>
 				<div class="abio-t8__card abio-t8__identity">
 					<div class="abio-t8__identity-head">
-						<?php echo ABIO_View::media( $a['portrait'], 'thumbnail', 'portrait 1:1', 'abio-t8__identity-portrait' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+						<?php echo ABIO_View::media( $a['portrait'], 'thumbnail', 'portrait 1:1', 'abio-t8__identity-portrait', $a['name'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 						<div class="abio-t8__identity-name">
 							<h1 class="abio-t8__name"><?php echo esc_html( $a['name'] ); ?></h1>
 							<?php if ( $a['role'] ) : ?>
@@ -115,7 +115,7 @@ $abio_t8_show_about = $a['bio'] || ! empty( $d['gallery']['items'] );
 					<h3 class="abio-t8__card-heading"><?php esc_html_e( 'Follows', 'author-bio' ); ?></h3>
 					<ul class="abio-chips abio-t8__follows">
 						<?php foreach ( $d['follows'] as $h ) : ?>
-							<li><a href="<?php echo esc_url( $h['url'] ); ?>" rel="nofollow ugc noopener" target="_blank"><?php echo esc_html( $h['handle'] ); ?></a></li>
+							<li><?php echo ABIO_View::follow_link( $h['handle'], $h['url'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></li>
 						<?php endforeach; ?>
 					</ul>
 				</div>

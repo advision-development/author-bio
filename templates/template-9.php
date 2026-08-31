@@ -53,7 +53,7 @@ $abio_t9_n = 0;
 					<?php endif; ?>
 				</div>
 
-				<?php echo ABIO_View::media( $a['portrait'], 'medium', 'portrait 1:1', 'abio-t9__portrait' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo ABIO_View::media( $a['portrait'], 'medium', 'portrait 1:1', 'abio-t9__portrait', $a['name'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 			</div>
 		</header>
 
@@ -218,7 +218,7 @@ $abio_t9_n = 0;
 									<h3 class="abio-t9__heading"><?php esc_html_e( 'Follows', 'author-bio' ); ?></h3>
 									<ul class="abio-chips abio-t9__follows">
 										<?php foreach ( $d['follows'] as $h ) : ?>
-											<li><a href="<?php echo esc_url( $h['url'] ); ?>" rel="nofollow ugc noopener" target="_blank"><?php echo esc_html( $h['handle'] ); ?></a></li>
+											<li><?php echo ABIO_View::follow_link( $h['handle'], $h['url'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></li>
 										<?php endforeach; ?>
 									</ul>
 								</div>

@@ -138,7 +138,7 @@ $a = $d['author'];
 						<h3 class="abio-eyebrow"><?php esc_html_e( 'Follows', 'author-bio' ); ?></h3>
 						<ul class="abio-chips">
 							<?php foreach ( $d['follows'] as $h ) : ?>
-								<li><a href="<?php echo esc_url( $h['url'] ); ?>" rel="nofollow ugc noopener" target="_blank"><?php echo esc_html( $h['handle'] ); ?></a></li>
+								<li><?php echo ABIO_View::follow_link( $h['handle'], $h['url'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></li>
 							<?php endforeach; ?>
 						</ul>
 					</div>

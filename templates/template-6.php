@@ -64,7 +64,7 @@ $abio_t6_show_photos = $abio_t6_has_gallery || $a['portrait'];
 						</li>
 					<?php endforeach; ?>
 					<li class="abio-t6__photo abio-t6__photo--portrait">
-						<?php echo ABIO_View::media( $a['portrait'], 'medium', 'portrait 1:1', 'abio-t6__photo-img' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+						<?php echo ABIO_View::media( $a['portrait'], 'medium', 'portrait 1:1', 'abio-t6__photo-img', $a['name'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 					</li>
 				</ul>
 			<?php endif; ?>
@@ -143,7 +143,7 @@ $abio_t6_show_photos = $abio_t6_has_gallery || $a['portrait'];
 						<h3 class="abio-eyebrow"><?php esc_html_e( 'Follows', 'author-bio' ); ?></h3>
 						<ul class="abio-chips">
 							<?php foreach ( $d['follows'] as $h ) : ?>
-								<li><a href="<?php echo esc_url( $h['url'] ); ?>" rel="nofollow ugc noopener" target="_blank"><?php echo esc_html( $h['handle'] ); ?></a></li>
+								<li><?php echo ABIO_View::follow_link( $h['handle'], $h['url'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></li>
 							<?php endforeach; ?>
 						</ul>
 					</div>
