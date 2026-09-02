@@ -113,7 +113,24 @@ class ABIO_Shortcode {
 
 		$user_id = self::resolve_user( $atts );
 
-		return $user_id ? ABIO_Profile::for_user( $user_id ) : null;
+		if ( ! $user_id ) {
+			return null;
+		}
+
+		$profile = ABIO_Profile::for_user( $user_id );
+
+		if ( $profile ) {
+			return $profile;
+		}
+
+		// No Author Profile for this user. Rather than leave an author archive
+		// blank, build the page from what WordPress already knows, unless the
+		// site has asked us not to.
+		if ( ABIO_Settings::get( 'fallback_profiles', 1 ) ) {
+			return ABIO_Profile::fallback_for_user( $user_id );
+		}
+
+		return null;
 	}
 
 	/**
@@ -194,7 +211,7 @@ class ABIO_Shortcode {
 		if ( $user ) {
 			$message = sprintf(
 				/* translators: 1: user ID, 2: user display name. */
-				__( 'Author Bio: no published author profile is linked to user #%1$d (%2$s).', 'author-bio' ),
+				__( 'Author Bio: no published author profile is linked to user #%1$d (%2$s), and the fallback for unconfigured authors is switched off.', 'author-bio' ),
 				$user_id,
 				$user->display_name
 			);

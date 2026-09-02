@@ -15,6 +15,14 @@ class ABIO_Profile {
 	private $user_id;
 
 	/**
+	 * True when there is no Author Profile post and the page is being built
+	 * from the WordPress user alone.
+	 *
+	 * @var bool
+	 */
+	private $fallback = false;
+
+	/**
 	 * @param int $post_id
 	 */
 	private function __construct( $post_id ) {
@@ -49,6 +57,45 @@ class ABIO_Profile {
 	}
 
 	/**
+	 * A profile backed by nothing but the WordPress user.
+	 *
+	 * Every group in to_array() that comes from post meta resolves to empty on
+	 * post 0, and the parts that matter most on an author page — the name, the
+	 * article list, the automatic stat tiles, the first-published year — are
+	 * derived from the user anyway. So an unconfigured author still gets a real
+	 * page: their name, their picture, and what they have actually published.
+	 *
+	 * Nothing is invented here. Only fields WordPress already holds are used,
+	 * and a field WordPress does not know is left empty so the section
+	 * disappears rather than filling with a guess.
+	 *
+	 * @param int $user_id
+	 * @return ABIO_Profile|null
+	 */
+	public static function fallback_for_user( $user_id ) {
+		$user_id = absint( $user_id );
+
+		if ( ! $user_id || ! get_userdata( $user_id ) ) {
+			return null;
+		}
+
+		$profile           = new self( 0 );
+		$profile->user_id  = $user_id;
+		$profile->fallback = true;
+
+		return $profile;
+	}
+
+	/**
+	 * Whether this page is being built from the user alone.
+	 *
+	 * @return bool
+	 */
+	public function is_fallback() {
+		return $this->fallback;
+	}
+
+	/**
 	 * @return int
 	 */
 	public function user_id() {
@@ -60,6 +107,13 @@ class ABIO_Profile {
 	 * @return mixed
 	 */
 	private function meta( $key ) {
+		// A virtual profile has no post behind it, and get_post_meta( 0, … )
+		// returns false rather than an empty string — which would defeat every
+		// "'' === $value" fallback in author().
+		if ( ! $this->post_id ) {
+			return '';
+		}
+
 		return get_post_meta( $this->post_id, ABIO_Fields::meta_key( $key ), true );
 	}
 
@@ -123,7 +177,7 @@ class ABIO_Profile {
 		$data = array(
 			'site'        => $this->site(),
 			'author'      => $this->author(),
-			'stats'       => in_array( 'stats', $hide, true ) ? array() : ABIO_Stats::resolve( $this->rows( 'stats' ), $this->user_id ),
+			'stats'       => in_array( 'stats', $hide, true ) ? array() : ABIO_Stats::resolve( $this->stat_config(), $this->user_id ),
 			'gallery'     => in_array( 'gallery', $hide, true ) ? $this->empty_gallery() : $this->gallery(),
 			'focus'       => in_array( 'focus', $hide, true ) ? array() : $this->focus(),
 			'edits'       => $edits,
@@ -138,6 +192,40 @@ class ABIO_Profile {
 		$data['nav']         = $this->nav( $data );
 
 		return $data;
+	}
+
+	/**
+	 * The stat tiles to resolve.
+	 *
+	 * A configured profile uses whatever the editor set. A virtual one has no
+	 * configuration, so it falls back to the two figures WordPress can derive
+	 * on its own: how much this person has published, and since when. Both
+	 * values are counted from real posts — only the labels are ours — and both
+	 * drop out on their own if the author has nothing published.
+	 *
+	 * @return array
+	 */
+	private function stat_config() {
+		$configured = $this->rows( 'stats' );
+
+		if ( ! $this->fallback || $configured ) {
+			return $configured;
+		}
+
+		return array(
+			array(
+				'mode'      => 'auto_bylines',
+				'post_type' => '',
+				'value'     => '',
+				'label'     => __( 'Articles published', 'author-bio' ),
+			),
+			array(
+				'mode'      => 'auto_since',
+				'post_type' => '',
+				'value'     => '',
+				'label'     => __( 'Writing since', 'author-bio' ),
+			),
+		);
 	}
 
 	/**
@@ -170,6 +258,27 @@ class ABIO_Profile {
 
 		$kicker = $this->meta( 'kicker' );
 
+		$bio      = $this->meta( 'bio' );
+		$portrait = (int) $this->meta( 'portrait' );
+
+		if ( $this->fallback ) {
+			// WordPress's own Biographical Info field, when the user filled it in.
+			if ( '' === $bio ) {
+				$bio = (string) get_the_author_meta( 'description', $this->user_id );
+			}
+
+			// And their avatar, but only where the site has avatars switched on:
+			// a site that turned them off has said it does not want a stand-in,
+			// and Gravatar's default silhouette is exactly that.
+			if ( ! $portrait && get_option( 'show_avatars' ) ) {
+				$avatar = get_avatar_url( $this->user_id, array( 'size' => 600 ) );
+
+				if ( $avatar ) {
+					$portrait = $avatar;
+				}
+			}
+		}
+
 		return array(
 			'kicker'   => '' === $kicker ? __( 'Author', 'author-bio' ) : $kicker,
 			'name'     => $name,
@@ -177,9 +286,9 @@ class ABIO_Profile {
 			'location' => $this->meta( 'location' ),
 			'since'    => $since,
 			'badges'   => $this->strings( 'badges' ),
-			'bio'      => $this->meta( 'bio' ),
+			'bio'      => $bio,
 			'short'    => $this->meta( 'short' ),
-			'portrait' => (int) $this->meta( 'portrait' ),
+			'portrait' => $portrait,
 			'url'      => $this->user_id ? get_author_posts_url( $this->user_id ) : '',
 		);
 	}

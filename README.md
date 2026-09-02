@@ -92,6 +92,26 @@ No webfont is ever loaded. Metadata — dates, statuses, ordinals, stat units �
 is set uppercase and tracked rather than in a monospace, with `tabular-nums`
 so figures still align in a column.
 
+## Unconfigured authors
+
+By default an author with no Author Profile still gets a page. The shortcode
+falls back to what WordPress already holds about the user — display name,
+Biographical Info, avatar — and pairs it with their real published articles and
+two derived figures: how much they have published, and since when.
+
+That means one `[author_bio]` in an author archive template covers every author
+on the site. Authors who have been written up properly get the full page;
+everyone else gets an honest one rather than a blank.
+
+Nothing is invented. A field WordPress does not hold — role, location,
+credentials, areas of focus, career history — is left out, so the section does
+not appear at all. The avatar is used only where the site has avatars enabled
+under **Settings → Discussion**.
+
+Switch it off under **Authors → Settings → Sections → Unconfigured authors** to
+leave those archives empty instead; users who can edit posts then see a line
+explaining what was missing.
+
 ## Updates
 
 The plugin checks its own GitHub releases and reports updates in the WordPress

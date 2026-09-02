@@ -29,6 +29,7 @@ class ABIO_Settings {
 			'typeface'           => 'theme',
 			'show_pitch'         => 1,
 			'show_breadcrumbs'   => 1,
+			'fallback_profiles'  => 1,
 			'palette_ink'        => '',
 			'palette_paper'      => '',
 			'palette_accent'     => '',
@@ -159,7 +160,7 @@ class ABIO_Settings {
 		// An unchecked checkbox is absent from the POST body entirely, so a
 		// missing key means off. Falling back to the default here would make a
 		// toggle impossible to switch off.
-		foreach ( array( 'show_pitch', 'show_breadcrumbs' ) as $flag ) {
+		foreach ( array( 'show_pitch', 'show_breadcrumbs', 'fallback_profiles' ) as $flag ) {
 			$clean[ $flag ] = empty( $input[ $flag ] ) ? 0 : 1;
 		}
 
@@ -259,12 +260,22 @@ class ABIO_Settings {
 					'checkbox',
 					__( 'Show the breadcrumb trail above the profile', 'author-bio' ),
 				),
+				array(
+					'fallback_profiles',
+					__( 'Unconfigured authors', 'author-bio' ),
+					'checkbox',
+					__( 'Build a page from the WordPress user when no Author Profile exists', 'author-bio' ),
+				),
 			),
 			$values
 		);
 
 		echo '<p class="description">'
 			. esc_html__( 'The pitch appears as a bordered box in most templates and as the hero button in templates 8 and 10; switching it off removes both. Breadcrumbs are shown by template 1. Individual shortcodes can still suppress either with hide="pitch" or hide="breadcrumbs".', 'author-bio' )
+			. '</p>';
+
+		echo '<p class="description">'
+			. esc_html__( 'With unconfigured authors enabled, an author who has no Author Profile still gets a page in the selected template: their name, their picture, their WordPress biography and their published articles. Nothing is invented — a field WordPress does not hold is left out, so the section simply does not appear. Switch it off to leave those archives empty instead.', 'author-bio' )
 			. '</p>';
 
 		self::section(

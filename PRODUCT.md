@@ -107,6 +107,10 @@ Confirmed and implemented:
   offering four system stacks. No webfont is ever loaded.
 - Self-updating from GitHub releases via the WordPress `Update URI`
   mechanism, including unattended updates where a site enables them.
+- A catch-all path: an author with no Author Profile still renders, from the
+  WordPress user's name, Biographical Info and avatar plus their real articles
+  and derived counts. One shortcode therefore covers every author on a site,
+  and fields WordPress does not hold are omitted rather than guessed.
 
 Technical constraints:
 

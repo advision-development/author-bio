@@ -12,7 +12,7 @@ class ABIO_View {
 	 * no attachment. Templates always call this rather than reaching for
 	 * wp_get_attachment_image() directly, so the empty state stays consistent.
 	 *
-	 * @param int    $id    Attachment ID.
+	 * @param int|string $source Attachment ID, or an absolute image URL.
 	 * @param string $size  Registered image size.
 	 * @param string $label Placeholder caption, e.g. "portrait 1:1".
 	 * @param string $class Extra class on the returned element.
@@ -23,9 +23,23 @@ class ABIO_View {
 	 *                      editors routinely upload without filling alt in.
 	 * @return string
 	 */
-	public static function media( $id, $size, $label, $class = '', $alt = '' ) {
-		$id      = absint( $id );
+	public static function media( $source, $size, $label, $class = '', $alt = '' ) {
 		$classes = trim( 'abio-media ' . $class );
+
+		// A remote URL rather than an attachment: the fallback page's avatar,
+		// where no attachment exists to take srcset from. Checked before
+		// absint(), which would flatten a URL to 0 and fall through to the
+		// placeholder.
+		if ( is_string( $source ) && preg_match( '#^https?://#i', $source ) ) {
+			return sprintf(
+				'<img class="%s" src="%s" alt="%s" loading="lazy" decoding="async" />',
+				esc_attr( $classes ),
+				esc_url( $source ),
+				esc_attr( $alt )
+			);
+		}
+
+		$id = absint( $source );
 
 		if ( $id && wp_attachment_is_image( $id ) ) {
 			$attr = array( 'class' => $classes );

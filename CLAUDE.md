@@ -107,6 +107,12 @@ this is the short list of things that look harmless and are not.
   bylines are claims the site stands behind. Where material is missing the
   correct behaviour is to show less. Do not attach demo data to a real person.
 
+- **`get_post_meta( 0, … )` returns `false`, not `''`.** A virtual profile —
+  the catch-all built from a WordPress user with no Author Profile post — has
+  no post behind it, so every `'' === $value` fallback in `author()` silently
+  failed and the page rendered with no name. `ABIO_Profile::meta()` normalises
+  this. Watch for it anywhere a profile might not be post-backed.
+
 ## Architecture in one paragraph
 
 `ABIO_Fields` is the field schema and the single source of truth; the admin UI
@@ -114,7 +120,9 @@ and the save path are both generated from it, so adding a field is one entry.
 `ABIO_Profile` is the only thing templates talk to — it returns a finished array
 and the ten templates are dumb views over it, containing no queries and no
 option reads. `ABIO_Shortcode` resolves the author (explicit attribute → author
-archive's queried object → current post's author) and includes one template.
+archive's queried object → current post's author) and includes one template; if
+that author has no profile it falls back to `ABIO_Profile::fallback_for_user()`,
+a virtual profile backed by the WordPress user alone.
 Colour comes from `ABIO_Palette`, articles and stats from `ABIO_Articles` and
 `ABIO_Stats`.
 

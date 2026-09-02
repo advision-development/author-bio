@@ -416,7 +416,8 @@ number that actually resolved.
 
 Every image renders through one helper that returns either a real bordered
 photograph or the hatched empty frame with a small uppercase caption naming
-the expected crop. There is no third state and no broken-image case.
+the expected crop. The source may be an attachment or a URL — the catch-all
+page passes a WordPress avatar — but the two states are the only two states. There is no third state and no broken-image case.
 
 ### Visually Hidden Text
 
