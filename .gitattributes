@@ -6,5 +6,6 @@
 /.superpowers     export-ignore
 /.impeccable      export-ignore
 /docs             export-ignore
+/CLAUDE.md        export-ignore
 /PRODUCT.md       export-ignore
 /DESIGN.md        export-ignore
