@@ -23,9 +23,15 @@ not a file copied into a site repo.
 header is the step that cannot be skipped.
 
 ```bash
-# 1. Bump BOTH, in the same commit.
-#    author-bio.php   ->  * Version: 1.1.0
+# 1. Bump all THREE, in the same commit. Missing the constant is easy: the
+#    header drives the update check, the constant drives asset cache-busting.
+#    author-bio.php   ->  * Version:     1.1.0
+#    author-bio.php   ->  define( 'ABIO_VERSION', '1.1.0' );
 #    readme.txt       ->  Stable tag: 1.1.0
+#
+#    Verify they agree before committing — this must print one distinct value:
+grep -ho "1\.[0-9]*\.[0-9]*" author-bio.php readme.txt | sort -u
+
 git commit -am "release: 1.1.0"
 git push origin main
 
