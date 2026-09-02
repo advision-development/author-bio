@@ -89,6 +89,15 @@ class ABIO_Metaboxes {
 		echo '<div class="abio-field abio-field--' . esc_attr( $field['type'] ) . '">';
 		echo '<label class="abio-field__label" for="' . esc_attr( $id ) . '">' . esc_html( $field['label'] ) . '</label>';
 
+		// Repeaters and the stat grid put their control first and their rows
+		// after it, so trailing help would sit below an Add button and be read
+		// only after the field had been filled. Guidance belongs before it.
+		$help_first = isset( $field['help'] ) && in_array( $field['type'], array( 'repeater', 'stats' ), true );
+
+		if ( $help_first ) {
+			echo '<p class="description abio-field__help">' . esc_html( $field['help'] ) . '</p>';
+		}
+
 		switch ( $field['type'] ) {
 			case 'user':
 				if ( current_user_can( 'list_users' ) ) {
@@ -133,7 +142,7 @@ class ABIO_Metaboxes {
 				break;
 		}
 
-		if ( isset( $field['help'] ) ) {
+		if ( isset( $field['help'] ) && ! $help_first ) {
 			echo '<p class="description">' . esc_html( $field['help'] ) . '</p>';
 		}
 

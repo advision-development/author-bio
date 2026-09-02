@@ -1,6 +1,7 @@
 === Author Bio ===
 Requires at least: 6.0
 Requires PHP: 7.4
+Tested up to: 6.9
 Stable tag: 1.0.0
 
 Renders a full author page from an [author_bio] shortcode, backed by a

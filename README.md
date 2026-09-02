@@ -88,6 +88,43 @@ No webfont is ever loaded. Metadata — dates, statuses, ordinals, stat units �
 is set uppercase and tracked rather than in a monospace, with `tabular-nums`
 so figures still align in a column.
 
+## Updates
+
+The plugin checks its own GitHub releases and reports updates in the WordPress
+dashboard like any other plugin. It uses the `Update URI` mechanism built into
+WordPress 5.8+, so there is no update library and no scheduled task of its own —
+WordPress asks during its normal update check, at most once every six hours.
+
+**Automatic updates** work the moment a site enables them for this plugin under
+**Plugins → Enable auto-updates**. Nothing extra is required. A site that
+filters `auto_update_plugin` to false, as some managed hosts do, will still
+show the update but not apply it unattended.
+
+**Plugins → Author Bio → Check for updates** forces a check immediately rather
+than waiting for the cache to expire.
+
+### Cutting a release
+
+1. Bump `Version:` in `author-bio.php` and `Stable tag:` in `readme.txt`, and
+   commit.
+2. Tag and publish a GitHub release. `v1.2.3` and `1.2.3` are both accepted.
+3. Attach a zip built with the plugin in a top-level `author-bio/` folder.
+
+The tag has to compare higher than the installed `Version:` header for anything
+to appear — that comparison is the whole trigger.
+
+Step 3 is optional but preferred: the attached zip installs exactly what you
+built, without the repo's `docs/`, `PRODUCT.md` or `DESIGN.md`. If no zip is
+attached the plugin falls back to GitHub's generated source archive and renames
+its folder on the way in, so the update still lands in the right place; it just
+carries the development files with it.
+
+```bash
+zip -r author-bio.zip author-bio \
+  -x 'author-bio/.git/*' 'author-bio/docs/*' 'author-bio/.superpowers/*' \
+     'author-bio/.impeccable/*' 'author-bio/PRODUCT.md' 'author-bio/DESIGN.md'
+```
+
 ## Requirements
 
 WordPress 6.0+, PHP 7.4+. No Composer, no npm, no build step, no ACF.

@@ -7,6 +7,8 @@
  * Text Domain: author-bio
  * Requires PHP: 7.4
  * Requires at least: 6.0
+ * Tested up to: 6.9
+ * Update URI: https://github.com/advision-development/author-bio
  */
 
 defined( 'ABSPATH' ) || exit;

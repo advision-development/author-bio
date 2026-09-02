@@ -23,6 +23,13 @@ Deployment is currently limited to sites Advision operates. Wider distribution
 (client sites, wp.org, commercial) is **not decided** and must not be assumed by
 future work.
 
+The plugin is distributed from its own GitHub repository
+(`advision-development/author-bio`, public) and reports updates into the
+WordPress dashboard from published releases, including unattended updates on
+sites that enable them. That means an installed copy is expected to keep
+itself current, and a release is the unit of delivery — not a file copied into
+a site repository.
+
 ## Product Purpose
 
 Turn a byline into a credible, documented person, using one installable plugin
@@ -95,6 +102,10 @@ Confirmed and implemented:
   kit or the Bricks palette, with the rest derived, plus manual override.
 - Layout responds to the width of its container rather than the viewport, so
   the shortcode survives a narrow themed content column.
+- Typography is inherited from the host theme, with a settings override
+  offering four system stacks. No webfont is ever loaded.
+- Self-updating from GitHub releases via the WordPress `Update URI`
+  mechanism, including unattended updates where a site enables them.
 
 Technical constraints:
 
@@ -114,8 +125,11 @@ Known open items future work must not treat as settled:
 
 - Capability grants run only on plugin activation; an in-place update of an
   already-active install needs a deactivate/reactivate cycle.
-- Palette detection has never been exercised against a real Elementor or
-  Bricks site.
+- Palette detection has been verified against a real Elementor kit
+  (bookmakersreview.com: ink from `text`, accent from `primary`). Two things
+  remain open there — it maps our accent to Elementor's *primary* rather
+  than the colour Elementor itself calls "accent", and it has still never
+  run against a real Bricks palette.
 
 ## Brand Commitments
 

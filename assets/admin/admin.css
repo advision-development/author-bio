@@ -33,3 +33,5 @@
 }
 .abio-stat__num { color: #a7aaad; font-family: ui-monospace, Menlo, monospace; }
 .abio-stat [hidden] { display: none; }
+
+.abio-admin .abio-field__help { margin: 0 0 8px; max-width: 60em; }
