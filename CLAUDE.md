@@ -92,6 +92,13 @@ this is the short list of things that look harmless and are not.
 - **Absence renders as less page.** Never a placeholder value, a blank cell, or
   an empty bordered frame. `ABIO_Profile` drops what cannot resolve, and
   templates guard every section with `! empty()`.
+- **Never build an article teaser with `get_the_excerpt()`.** Generating an
+  excerpt runs `the_content`, and page builders hook that filter to inject
+  their widget CSS — which then arrives in the teaser as prose. Elementor's
+  stylesheet appearing mid-sentence on a live site is how this was found.
+  `ABIO_Articles::summary()` works from raw `post_content` and re-applies
+  `wptexturize()` by hand, because smart quotes are the only part of that
+  pipeline a teaser wants.
 - **Never fabricate profile content.** Credentials, badges, affiliations and
   bylines are claims the site stands behind. Where material is missing the
   correct behaviour is to show less. Do not attach demo data to a real person.

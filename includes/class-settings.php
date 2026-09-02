@@ -27,6 +27,8 @@ class ABIO_Settings {
 			'default_count'      => 6,
 			'default_post_types' => 'post',
 			'typeface'           => 'theme',
+			'show_pitch'         => 1,
+			'show_breadcrumbs'   => 1,
 			'palette_ink'        => '',
 			'palette_paper'      => '',
 			'palette_accent'     => '',
@@ -154,6 +156,13 @@ class ABIO_Settings {
 
 		$clean['pitch_body'] = isset( $input['pitch_body'] ) ? wp_kses_post( self::scalar( $input['pitch_body'] ) ) : '';
 
+		// An unchecked checkbox is absent from the POST body entirely, so a
+		// missing key means off. Falling back to the default here would make a
+		// toggle impossible to switch off.
+		foreach ( array( 'show_pitch', 'show_breadcrumbs' ) as $flag ) {
+			$clean[ $flag ] = empty( $input[ $flag ] ) ? 0 : 1;
+		}
+
 		$face                = isset( $input['typeface'] ) ? sanitize_key( self::scalar( $input['typeface'] ) ) : 'theme';
 		$clean['typeface']   = array_key_exists( $face, self::typefaces() ) ? $face : 'theme';
 
@@ -236,6 +245,29 @@ class ABIO_Settings {
 		);
 
 		self::section(
+			__( 'Sections', 'author-bio' ),
+			array(
+				array(
+					'show_pitch',
+					__( 'Pitch box', 'author-bio' ),
+					'checkbox',
+					__( 'Show the contributor pitch and its contact button', 'author-bio' ),
+				),
+				array(
+					'show_breadcrumbs',
+					__( 'Breadcrumbs', 'author-bio' ),
+					'checkbox',
+					__( 'Show the breadcrumb trail above the profile', 'author-bio' ),
+				),
+			),
+			$values
+		);
+
+		echo '<p class="description">'
+			. esc_html__( 'The pitch appears as a bordered box in most templates and as the hero button in templates 8 and 10; switching it off removes both. Breadcrumbs are shown by template 1. Individual shortcodes can still suppress either with hide="pitch" or hide="breadcrumbs".', 'author-bio' )
+			. '</p>';
+
+		self::section(
 			__( 'Defaults', 'author-bio' ),
 			array(
 				array( 'default_template', __( 'Default template (1–10)', 'author-bio' ), 'text' ),
@@ -270,9 +302,21 @@ class ABIO_Settings {
 			$name  = self::OPTION . '[' . $key . ']';
 			$value = isset( $values[ $key ] ) ? $values[ $key ] : '';
 
-			echo '<tr><th scope="row"><label for="abio-' . esc_attr( $key ) . '">' . esc_html( $label ) . '</label></th><td>';
+			if ( 'checkbox' === $type ) {
+				echo '<tr><th scope="row">' . esc_html( $label ) . '</th><td>';
+			} else {
+				echo '<tr><th scope="row"><label for="abio-' . esc_attr( $key ) . '">' . esc_html( $label ) . '</label></th><td>';
+			}
 
-			if ( 'textarea' === $type ) {
+			if ( 'checkbox' === $type ) {
+				printf(
+					'<label><input type="checkbox" id="abio-%s" name="%s" value="1"%s /> %s</label>',
+					esc_attr( $key ),
+					esc_attr( $name ),
+					checked( ! empty( $value ), true, false ),
+					esc_html( isset( $field[3] ) ? $field[3] : '' )
+				);
+			} elseif ( 'textarea' === $type ) {
 				echo '<textarea class="large-text" rows="3" id="abio-' . esc_attr( $key ) . '" name="' . esc_attr( $name ) . '">' . esc_textarea( $value ) . '</textarea>';
 			} else {
 				echo '<input type="' . esc_attr( 'url' === $type ? 'url' : 'text' ) . '" class="regular-text" id="abio-' . esc_attr( $key ) . '" name="' . esc_attr( $name ) . '" value="' . esc_attr( $value ) . '" />';

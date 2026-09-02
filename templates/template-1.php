@@ -14,15 +14,16 @@ $a = $d['author'];
 ?>
 <div class="abio-t1">
 
-	<nav class="abio-t1__crumbs">
-		<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'author-bio' ); ?></a>
-		<?php if ( $d['site']['authorsUrl'] ) : ?>
-			<span>/</span>
-			<a href="<?php echo esc_url( $d['site']['authorsUrl'] ); ?>"><?php esc_html_e( 'Authors', 'author-bio' ); ?></a>
-		<?php endif; ?>
-		<span>/</span>
-		<span><?php echo esc_html( $a['name'] ); ?></span>
-	</nav>
+	<?php if ( ! empty( $d['breadcrumbs'] ) ) : ?>
+		<nav class="abio-t1__crumbs" aria-label="<?php esc_attr_e( 'Breadcrumb', 'author-bio' ); ?>">
+			<?php foreach ( $d['breadcrumbs'] as $abio_i => $abio_crumb ) : ?>
+				<?php if ( $abio_i ) : ?>
+					<span aria-hidden="true">/</span>
+				<?php endif; ?>
+				<?php echo ABIO_View::optional_link( $abio_crumb['url'], $abio_crumb['label'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php endforeach; ?>
+		</nav>
+	<?php endif; ?>
 
 	<div class="abio-t1__grid">
 		<main class="abio-t1__main">

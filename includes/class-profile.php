@@ -134,7 +134,8 @@ class ABIO_Profile {
 			'pitch'       => in_array( 'pitch', $hide, true ) ? array( 'title' => '', 'body' => '', 'cta' => '' ) : $this->pitch(),
 		);
 
-		$data['nav'] = $this->nav( $data );
+		$data['breadcrumbs'] = in_array( 'breadcrumbs', $hide, true ) ? array() : $this->breadcrumbs();
+		$data['nav']         = $this->nav( $data );
 
 		return $data;
 	}
@@ -304,12 +305,13 @@ class ABIO_Profile {
 		$cta   = ABIO_Settings::get( 'pitch_cta', '' );
 		$url   = ABIO_Settings::get( 'contact_url', '' );
 
-		// A heading on its own is not content. Both pitch_title and pitch_cta
-		// ship with defaults, so a site that never filled the pitch in would
-		// otherwise render an empty bordered box on every template carrying
-		// one. Templates guard on the title, so blanking the whole group here
+		// Switched off site-wide, or with nothing in it worth a box. A heading
+		// on its own is not content: both pitch_title and pitch_cta ship with
+		// defaults, so a site that never filled the pitch in would otherwise
+		// render an empty bordered box on every template carrying one.
+		// Templates guard on the title, so blanking the whole group here
 		// suppresses the block everywhere without touching them.
-		if ( '' === $body && ! ( $cta && $url ) ) {
+		if ( ! ABIO_Settings::get( 'show_pitch', 1 ) || ( '' === $body && ! ( $cta && $url ) ) ) {
 			return array(
 				'title' => '',
 				'body'  => '',
@@ -322,6 +324,48 @@ class ABIO_Profile {
 			'body'  => $body,
 			'cta'   => $cta,
 		);
+	}
+
+	/**
+	 * The breadcrumb trail, as rows of label plus url. The last row carries no
+	 * url because it is the current page.
+	 *
+	 * Built as data rather than as markup in the template so the site-wide
+	 * toggle and hide="breadcrumbs" both collapse to the same empty array, and
+	 * a template that wants a trail does not have to rebuild the logic.
+	 *
+	 * @return array
+	 */
+	private function breadcrumbs() {
+		if ( ! ABIO_Settings::get( 'show_breadcrumbs', 1 ) ) {
+			return array();
+		}
+
+		$author = $this->author();
+		$crumbs = array(
+			array(
+				'label' => __( 'Home', 'author-bio' ),
+				'url'   => home_url( '/' ),
+			),
+		);
+
+		$authors_url = ABIO_Settings::get( 'authors_url', '' );
+
+		if ( $authors_url ) {
+			$crumbs[] = array(
+				'label' => __( 'Authors', 'author-bio' ),
+				'url'   => $authors_url,
+			);
+		}
+
+		if ( '' !== $author['name'] ) {
+			$crumbs[] = array(
+				'label' => $author['name'],
+				'url'   => '',
+			);
+		}
+
+		return $crumbs;
 	}
 
 	/**

@@ -24,7 +24,11 @@ Put the shortcode in a page, or in your theme's `author.php`:
 | `others` | `2` | other-author cards; `0` disables |
 
 Sections accepted by `hide`: `stats`, `gallery`, `focus`, `edits`,
-`experience`, `credentials`, `follows`, `others`, `pitch`.
+`experience`, `credentials`, `follows`, `others`, `pitch`, `breadcrumbs`.
+
+**Authors → Settings → Sections** carries site-wide toggles for the pitch box
+and the breadcrumb trail. A shortcode's `hide` can still suppress either on one
+page; the setting is the default, not an override of it.
 
 ## Templates
 

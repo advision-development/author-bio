@@ -313,6 +313,12 @@ likely to collide with the theme than a flat one.
 
 ### Named Rules
 
+**The Optional-Section Rule.** The pitch box and the breadcrumb trail are
+both site-configurable and both arrive as data — an emptied group or an
+empty array — so a template's ordinary `! empty()` guard is the only thing
+that has to know about them. Never gate a section on a settings read inside
+a template.
+
 **The White-Copy Rule.** Body text is never set on the recessed grey. Any
 box that holds copy — a pitch panel, a sidebar, a coverage tile, a career
 card — is filled Paper and bounded by a hairline. Wash tells a card from

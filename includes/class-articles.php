@@ -56,7 +56,7 @@ class ABIO_Articles {
 				'status'   => self::status_for( $post ),
 				'title'    => get_the_title( $post ),
 				'url'      => get_permalink( $post ),
-				'summary'  => get_the_excerpt( $post ),
+				'summary'  => self::summary( $post ),
 				'readTime' => self::read_time( $post->post_content ),
 			);
 		}
@@ -133,6 +133,52 @@ class ABIO_Articles {
 		$object = get_post_type_object( $post->post_type );
 
 		return $object ? $object->labels->singular_name : $post->post_type;
+	}
+
+	/**
+	 * The teaser shown under an article title.
+	 *
+	 * A hand-written excerpt is used as-is. Otherwise the summary is built from
+	 * the raw post content rather than from get_the_excerpt(), because
+	 * generating an excerpt runs the_content filters — and page builders hook
+	 * that filter to inject their widget CSS, which then arrives in the excerpt
+	 * as prose. Elementor's stylesheet turning up mid-sentence on a live site
+	 * is what prompted this.
+	 *
+	 * @param WP_Post $post
+	 * @return string
+	 */
+	private static function summary( $post ) {
+		$manual = trim( (string) $post->post_excerpt );
+
+		if ( '' !== $manual ) {
+			return wptexturize( wp_strip_all_tags( $manual ) );
+		}
+
+		$content = strip_shortcodes( (string) $post->post_content );
+
+		if ( function_exists( 'excerpt_remove_blocks' ) ) {
+			$content = excerpt_remove_blocks( $content );
+		}
+
+		// Style and script blocks, contents included.
+		$content = preg_replace( '@<(script|style)[^>]*?>.*?</\1>@si', ' ', $content );
+		$content = wp_strip_all_tags( $content );
+
+		// Builder CSS can survive tag stripping as literal text, so clear
+		// comment blocks and anything still shaped like a rule.
+		$content = preg_replace( '#/\*.*?\*/#s', ' ', $content );
+		$content = preg_replace( '#[.\#@][-\w][^{}]{0,120}\{[^{}]*\}#s', ' ', $content );
+
+		$content = preg_replace( '#\s+#u', ' ', (string) $content );
+
+		/** This filter is documented in wp-includes/formatting.php */
+		$words = (int) apply_filters( 'excerpt_length', 55 );
+
+		// Skipping the_content also skips wptexturize, which is the one part of
+		// that pipeline a teaser actually wants: straight quotes and hyphens
+		// would otherwise read as a downgrade beside the rest of the page.
+		return wptexturize( wp_trim_words( trim( (string) $content ), $words, '…' ) );
 	}
 
 	/**

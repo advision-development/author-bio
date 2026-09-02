@@ -97,7 +97,8 @@ Confirmed and implemented:
   count within one post type) or hold a typed value; a tile that cannot
   compute is omitted rather than rendered empty.
 - Site-wide settings for site name, editorial-policy / contact / authors URLs,
-  a contributor pitch, rendering defaults, and palette overrides.
+  a contributor pitch, rendering defaults, palette overrides, typeface, and
+  on/off toggles for the pitch box and the breadcrumb trail.
 - Color adapts to the host: three seed colors detected from Elementor's global
   kit or the Bricks palette, with the rest derived, plus manual override.
 - Layout responds to the width of its container rather than the viewport, so
