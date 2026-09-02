@@ -91,7 +91,11 @@ this is the short list of things that look harmless and are not.
   paints a visibly dead cell, because these grids show their gaps.
 - **Absence renders as less page.** Never a placeholder value, a blank cell, or
   an empty bordered frame. `ABIO_Profile` drops what cannot resolve, and
-  templates guard every section with `! empty()`.
+  templates guard every section with `! empty()`. The sharpest version of
+  this bug is a decorative stand-in that can never be filled — the comp's
+  hatched avatar circle shipped in "Other authors" for weeks before anyone
+  noticed it was not a portrait waiting for an image, it was a drawing. If
+  a comp shows a placeholder, ask what real data belongs there.
 - **Never build an article teaser with `get_the_excerpt()`.** Generating an
   excerpt runs `the_content`, and page builders hook that filter to inject
   their widget CSS — which then arrives in the teaser as prose. Elementor's

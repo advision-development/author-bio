@@ -280,9 +280,10 @@ class ABIO_Profile {
 			$author = $profile->author();
 
 			$out[] = array(
-				'name' => $author['name'],
-				'role' => $author['role'],
-				'url'  => $author['url'],
+				'name'     => $author['name'],
+				'role'     => $author['role'],
+				'url'      => $author['url'],
+				'portrait' => $author['portrait'],
 			);
 		}
 

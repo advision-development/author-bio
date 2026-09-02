@@ -172,10 +172,30 @@ $a = $d['author'];
 			<?php if ( ! empty( $d['others'] ) ) : ?>
 				<div class="abio-t1__block">
 					<h3><?php esc_html_e( 'Other authors', 'author-bio' ); ?></h3>
-					<ul class="abio-t1__others">
+					<?php
+					// Keep the avatar column only when at least one of the listed
+					// authors actually has a portrait. Nobody gets a drawn stand-in:
+					// a decorative circle that can never be filled is the placeholder
+					// this system refuses everywhere else.
+					$abio_others_avatars = false;
+
+					foreach ( $d['others'] as $abio_o ) {
+						if ( ! empty( $abio_o['portrait'] ) ) {
+							$abio_others_avatars = true;
+							break;
+						}
+					}
+					?>
+					<ul class="<?php echo esc_attr( 'abio-t1__others' . ( $abio_others_avatars ? '' : ' abio-t1__others--flat' ) ); ?>">
 						<?php foreach ( $d['others'] as $o ) : ?>
 							<li>
-								<span class="abio-t1__others-dot"></span>
+								<?php if ( $abio_others_avatars ) : ?>
+									<?php if ( ! empty( $o['portrait'] ) ) : ?>
+										<?php echo ABIO_View::media( $o['portrait'], 'thumbnail', '', 'abio-t1__others-avatar', $o['name'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+									<?php else : ?>
+										<span class="abio-t1__others-avatar-none" aria-hidden="true"></span>
+									<?php endif; ?>
+								<?php endif; ?>
 								<span class="abio-t1__others-text">
 									<?php echo ABIO_View::optional_link( $o['url'], $o['name'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 									<span><?php echo esc_html( $o['role'] ); ?></span>

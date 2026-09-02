@@ -333,12 +333,20 @@ img.abio-media { border: 1px solid var(--abio-line); }
 
 .abio-t1__others { display: flex; flex-direction: column; gap: 14px; }
 .abio-t1__others li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: center; }
-.abio-t1__others-dot {
-	aspect-ratio: 1;
+.abio-t1__others-avatar {
+	width: 44px;
+	height: 44px;
 	border-radius: 50%;
-	background-image: repeating-linear-gradient(45deg, var(--abio-line) 0 4px, var(--abio-wash) 4px 8px);
-	border: 1px solid var(--abio-line);
+	object-fit: cover;
+	min-height: 0;
+	font-size: 0;
+	flex-shrink: 0;
 }
+/* Holds the grid cell for an author with no portrait so the names in a mixed
+   list still align. Deliberately draws nothing. */
+.abio-t1__others-avatar-none { display: block; }
+/* No listed author has a portrait, so there is no column to hold. */
+.abio-t1__others--flat li { grid-template-columns: minmax(0, 1fr); }
 .abio-t1__others-text { display: flex; flex-direction: column; gap: 3px; }
 .abio-t1__others-text a { font-size: 13px; font-weight: 600; }
 .abio-t1__others-text span { font-size: 12px; color: var(--abio-muted); line-height: 1.4; }
