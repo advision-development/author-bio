@@ -243,6 +243,14 @@ considering Task 13 complete.
 
 ## Structured data
 
+- [ ] With **Authors → Settings → General → Structured data** left off — the
+      default — view source on a profile page and an index. There must be **no**
+      `application/ld+json` block from this plugin at all. Any SEO plugin's own
+      block is not ours; check the graph is not a `ProfilePage` or `ItemList`.
+- [ ] Switch the setting on for the checks below, and decide deliberately
+      whether to leave it on: if the site runs Yoast or Rank Math, the author
+      archive will then carry two descriptions of the same person.
+
 - [ ] View source on a profile page. There must be exactly one
       `application/ld+json` block, it must be `ProfilePage` with a `Person` in
       `mainEntity`, and it must parse — paste it into
@@ -260,9 +268,10 @@ considering Task 13 complete.
 - [ ] Put `</script>` and a tag into a profile's Name and Bio, save, and view
       source. The page must still have exactly one `<script>` opening tag in
       the JSON-LD block and the JSON must still parse.
-- [ ] If the site runs Yoast or Rank Math, check the author archive for a
-      second `Person` block from the SEO plugin. Two descriptions of one
-      person is a reason to set `abio_schema_enabled` to false.
+- [ ] With it on, and the site running Yoast or Rank Math, confirm the author
+      archive now carries two `Person` blocks. That is the duplication the
+      default exists to avoid — switch the setting back off, or narrow it with
+      `abio_schema_enabled` per context.
 
 ## Design tokens (added with the admin token controls)
 

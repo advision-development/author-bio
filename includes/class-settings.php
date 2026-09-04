@@ -40,6 +40,10 @@ class ABIO_Settings {
 			'show_pitch'         => 1,
 			'show_breadcrumbs'   => 1,
 			'fallback_profiles'  => 1,
+			// Off by default. Yoast and Rank Math both already describe authors
+			// on an author archive, and two Person graphs for one person is
+			// worse than none from us.
+			'show_schema'        => 0,
 			'index_all_profiles' => 1,
 			'index_users'        => array(),
 			'palette_ink'        => '',
@@ -334,7 +338,7 @@ class ABIO_Settings {
 		// An unchecked checkbox is absent from the POST body entirely, so a
 		// missing key means off. Falling back to the default here would make a
 		// toggle impossible to switch off.
-		foreach ( array( 'show_pitch', 'show_breadcrumbs', 'fallback_profiles', 'index_all_profiles' ) as $flag ) {
+		foreach ( array( 'show_pitch', 'show_breadcrumbs', 'fallback_profiles', 'index_all_profiles', 'show_schema' ) as $flag ) {
 			$clean[ $flag ] = empty( $input[ $flag ] ) ? 0 : 1;
 		}
 
@@ -527,6 +531,27 @@ class ABIO_Settings {
 
 				echo '<p class="description">'
 					. esc_html__( 'These apply to any [author_bio] or [author_bio_list] that does not set the attribute itself.', 'author-bio' )
+					. '</p>';
+
+				self::section(
+					__( 'Structured data', 'author-bio' ),
+					array(
+						array(
+							'show_schema',
+							__( 'schema.org JSON-LD', 'author-bio' ),
+							'checkbox',
+							__( 'Describe the author in structured data', 'author-bio' ),
+						),
+					),
+					$values
+				);
+
+				echo '<p class="description">'
+					. esc_html__( 'Off by default, and worth leaving off unless you know nothing else is doing this. An SEO plugin — Yoast and Rank Math both do — already describes authors on an author archive, and two descriptions of one person is worse than one. Switch it on where the plugin is rendering a page nothing else covers.', 'author-bio' )
+					. '</p>';
+
+				echo '<p class="description">'
+					. esc_html__( 'When on, a profile page emits a ProfilePage with the author as its main entity, and an index emits an ItemList. Both are built only from fields that are filled in.', 'author-bio' )
 					. '</p>';
 				break;
 

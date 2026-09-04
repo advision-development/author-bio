@@ -214,7 +214,13 @@ so it now runs only for `orderby="posts"`, where the order depends on it.
 
 ## Structured data
 
-Both shortcodes emit schema.org JSON-LD.
+**Off by default.** Turn it on in **Authors → Settings → General →
+Structured data**. It opts in rather than out because an SEO plugin — Yoast and
+Rank Math both do this — already describes authors on an author archive, and two
+`Person` graphs for one person is worse than none from here. Switch it on where
+this plugin is rendering a page nothing else covers.
+
+With it on, both shortcodes emit schema.org JSON-LD.
 
 A profile page emits a `ProfilePage` whose `mainEntity` is a `Person` — the
 markup Google documents for author and profile pages. An index emits an
@@ -242,12 +248,15 @@ invented issuer or date, and `dateCreated`/`dateModified` appear only where
 there is an Author Profile post to date — a profile built from a WordPress user
 alone has no authored record behind it.
 
-If your SEO plugin already describes authors — Yoast and Rank Math both emit
-`Person` for author archives — you may not want two descriptions of the same
-person on one page:
+The setting is the base answer and `abio_schema_enabled` has the last word in
+both directions, so a site can force it on where the setting is off, or off
+where it is on. It also receives the context, which is how you keep the profile
+graph and drop the index one:
 
 ```php
-add_filter( 'abio_schema_enabled', '__return_false' );
+add_filter( 'abio_schema_enabled', function ( $on, $context ) {
+	return 'profile' === $context;
+}, 10, 2 );
 ```
 
 The graphs are also filterable before output: `abio_schema_person`,

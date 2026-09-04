@@ -16,9 +16,12 @@ defined( 'ABSPATH' ) || exit;
  * instead of a placeholder. Credentials in particular are claims the site
  * stands behind, so they are passed through verbatim or not at all.
  *
- * A site that already emits Person markup for author archives — Yoast and Rank
- * Math both do — can suppress this with the `abio_schema_enabled` filter rather
- * than shipping two descriptions of the same person.
+ * None of it is emitted unless Authors → Settings switches it on, and the
+ * default is off. Yoast and Rank Math both already describe authors on an
+ * author archive, and two Person graphs for one person is worse than none from
+ * us — so this opts in rather than out. `abio_schema_enabled` still has the
+ * last word in both directions, and receives the context, for a site that wants
+ * the profile graph but not the index one.
  */
 class ABIO_Schema {
 
@@ -351,13 +354,18 @@ class ABIO_Schema {
 	 * @return bool
 	 */
 	private static function enabled( $context ) {
+		// The setting is the base answer and the filter still has the last word,
+		// in both directions: a site can force this on where the setting is off,
+		// or off where it is on, and can decide per context.
+		$enabled = (bool) ABIO_Settings::get( 'show_schema', 0 );
+
 		/**
 		 * Whether to emit structured data at all.
 		 *
-		 * @param bool   $enabled
-		 * @param string $context
+		 * @param bool   $enabled Whether Authors → Settings has it switched on.
+		 * @param string $context 'profile' or 'list'.
 		 */
-		return (bool) apply_filters( 'abio_schema_enabled', true, $context );
+		return (bool) apply_filters( 'abio_schema_enabled', $enabled, $context );
 	}
 
 	/**

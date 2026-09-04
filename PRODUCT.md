@@ -104,12 +104,15 @@ Confirmed and implemented:
   depends on it. Who appears is a setting: all saved profiles, a hand-picked set
   of users, or both — so an index can be exhaustive or curated without touching
   a shortcode.
-- schema.org JSON-LD on both surfaces: `ProfilePage`/`Person` for a profile,
-  `ItemList` of `Person` for an index, sharing one `@id` per author so the two
-  describe one person. Derived only from fields an editor filled in — keys that
-  do not resolve are dropped, credentials carry no invented issuer or date, and
-  record dates are emitted only for a real Author Profile post. Suppressible
-  where an SEO plugin already describes authors.
+- Optional schema.org JSON-LD on both surfaces: `ProfilePage`/`Person` for a
+  profile, `ItemList` of `Person` for an index, sharing one `@id` per author so
+  the two describe one person. Derived only from fields an editor filled in —
+  keys that do not resolve are dropped, credentials carry no invented issuer or
+  date, and record dates are emitted only for a real Author Profile post.
+  **Off by default**, and opt-in rather than opt-out: the SEO plugins these
+  sites already run describe authors themselves, so the common case is that
+  emitting ours would duplicate rather than add. A filter overrides the setting
+  either way and can decide per surface.
 - Full design-token control in the admin, beyond colour: the ten derived
   colours as optional overrides (blank keeps deriving from the three seeds, so
   automatic re-toning stays the default), plus Corners, Content width and

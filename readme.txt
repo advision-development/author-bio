@@ -2,7 +2,7 @@
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.9
-Stable tag: 1.2.1
+Stable tag: 1.3.0
 
 Renders a full author page from an [author_bio] shortcode, backed by a
 dedicated Author Profile admin screen linked to a WordPress user.
@@ -42,9 +42,12 @@ profiles, users. Each of the ten templates has its own index view. Who appears
 is set in Authors -> Settings -> Author index: all saved profiles, a chosen set
 of users, or both.
 
-Both shortcodes emit schema.org JSON-LD - ProfilePage/Person for a profile,
-ItemList for an index - derived only from fields that are filled in. Suppress it
-with the abio_schema_enabled filter if your SEO plugin already describes authors.
+Both shortcodes can emit schema.org JSON-LD - ProfilePage/Person for a profile,
+ItemList for an index - derived only from fields that are filled in. This is off
+by default and switched on in Authors -> Settings -> General, because an SEO
+plugin such as Yoast or Rank Math already describes authors and two Person
+graphs for one person is worse than one. The abio_schema_enabled filter
+overrides the setting either way.
 
 Templates:
 

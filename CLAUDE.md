@@ -215,7 +215,9 @@ both `[author_bio_list]` and every template's "Other authors" block go through
 it, so the two can never disagree about who counts as an author.
 `ABIO_Schema` turns either shape into JSON-LD (`ProfilePage`/`Person` for a
 profile, `ItemList` for an index) and both shortcodes append it after the styled
-root. The index has ten views of its own, `templates/list-1.php` … `list-10.php`,
+root — but only when the Structured data setting is on, which it is not by
+default; the `abio_schema_enabled` filter takes the setting as its default and
+can override it per context. The index has ten views of its own, `templates/list-1.php` … `list-10.php`,
 one per template; the row contract they all render — portrait, kicker, name,
 role, short line — comes from `ABIO_Directory` and is the thing to hold constant
 when editing them.
