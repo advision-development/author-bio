@@ -150,6 +150,14 @@ this is the short list of things that look harmless and are not.
   hold several capability-granting roles — it happens on bookmakersreview.
   De-duplicate by ID before rendering a list of users, or a multi-select
   shows duplicate options and can submit an ID twice.
+- **The author token field must strip the fallback select's `name`.** The
+  server renders a `<select multiple>`; `settings.js` reads the options and the
+  current selection out of it and builds the tokens, then removes its `name`
+  attribute. Hiding it with CSS is not enough — a hidden select still posts its
+  selection, so every chosen ID would arrive twice and the token field would
+  look like it was duplicating people. The select stays in the DOM on purpose:
+  it is the whole control when nothing scripts the page, which is why no part of
+  who-can-be-listed lives in the script.
 - **The settings screen is one form, and it must stay one form.** The five
   tabs are `display` toggled on one `<form>`; every field posts on every save.
   Giving each tab its own form looks tidier and silently destroys data:

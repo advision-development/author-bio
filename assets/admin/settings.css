@@ -7,11 +7,21 @@
  * scheme. Nothing here restyles a core component — it only lays out the panels
  * and the swatches.
  *
- * The design detector flags two values here against DESIGN.md. Both are
- * deliberate: DESIGN.md describes the author-page world, and this surface
- * belongs to the admin. The swatch hairline is a translucent black rather than
- * an admin grey because it sits over an arbitrary user-chosen colour, and its
- * 2px radius is the admin's own corner language, not the front end's.
+ * The design detector flags a handful of values here against DESIGN.md. All of
+ * them are deliberate: DESIGN.md describes the author-page world, and this
+ * surface belongs to the admin, so it uses the admin's palette and type sizes
+ * rather than the plugin's. Specifically:
+ *
+ * - #50575e, #c3c4c7, #f0f0f1 and #d63638 are WordPress admin greys and its
+ *   destructive red. Core exposes no custom properties for these, only for the
+ *   theme colour, so they are written as literals that match core.
+ * - 13px and 17px are admin control sizes, not steps on the front end's ramp.
+ * - The swatch hairline is a translucent black rather than an admin grey
+ *   because it sits over an arbitrary user-chosen colour.
+ * - The 2px radius is the admin's corner language, not the front end's.
+ *
+ * The one value that is not a literal is the focus ring, which reads
+ * --wp-admin-theme-color so it follows the user's chosen admin scheme.
  */
 
 /* Panels are visible by default and only hidden once the document is marked as
@@ -93,4 +103,82 @@
    taller than the label beside it. */
 .abio-settings .wp-picker-container {
 	vertical-align: top;
+}
+
+/* Author token field ------------------------------------------------------
+ *
+ * The server renders a <select multiple>; settings.js reads it and builds the
+ * tokens. Both exist in the DOM, so exactly one of them is shown: the select
+ * when nothing scripted the page, the tokens when something did.
+ */
+.abio-tokens__ui {
+	display: none;
+}
+
+.js .abio-settings .abio-tokens__ui {
+	display: block;
+	max-width: 40em;
+}
+
+.js .abio-settings .abio-tokens > select[multiple],
+.js .abio-settings .abio-tokens__fallback-hint {
+	display: none;
+}
+
+.abio-settings .abio-tokens__add {
+	max-width: 100%;
+}
+
+.abio-settings .abio-tokens__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin: 10px 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.abio-settings .abio-tokens__token {
+	display: inline-flex;
+	align-items: center;
+	gap: 2px;
+	margin: 0;
+	padding: 3px 3px 3px 10px;
+	background: #f0f0f1;
+	border: 1px solid #c3c4c7;
+	border-radius: 2px;
+	font-size: 13px;
+	line-height: 1.6;
+}
+
+.abio-settings .abio-tokens__remove {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 22px;
+	height: 22px;
+	padding: 0;
+	background: none;
+	border: 0;
+	border-radius: 2px;
+	color: #50575e;
+	font-size: 17px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.abio-settings .abio-tokens__remove:hover,
+.abio-settings .abio-tokens__remove:focus-visible {
+	background: #d63638;
+	color: #fff;
+}
+
+.abio-settings .abio-tokens__remove:focus-visible {
+	outline: 2px solid var( --wp-admin-theme-color, #2271b1 );
+	outline-offset: 1px;
+}
+
+.abio-settings .abio-tokens__empty {
+	margin: 10px 0 0;
+	font-style: italic;
 }

@@ -118,6 +118,7 @@
 		}
 
 		colors();
+		tokens();
 	}
 
 	/**
@@ -173,6 +174,183 @@
 
 		if ( text ) {
 			note.textContent = text;
+		}
+	}
+
+	/**
+	 * Turn the author multi-select into a token field.
+	 *
+	 * Enhancement, not replacement: the <select multiple> the server rendered is
+	 * the data source and stays the whole control when this never runs. Its name
+	 * is removed once the tokens exist, because a hidden select still posts its
+	 * selection and every ID would arrive twice.
+	 */
+	function tokens() {
+		var wrap = document.querySelector( '.abio-tokens' );
+
+		if ( ! wrap ) {
+			return;
+		}
+
+		var select = wrap.querySelector( 'select[multiple]' );
+
+		if ( ! select ) {
+			return;
+		}
+
+		var field = wrap.dataset.name;
+		var people = Array.prototype.map.call( select.options, function ( option ) {
+			return {
+				id: option.value,
+				label: option.textContent,
+				login: option.getAttribute( 'data-login' ) || '',
+				chosen: option.selected
+			};
+		} );
+
+		select.removeAttribute( 'name' );
+		select.setAttribute( 'aria-hidden', 'true' );
+		select.tabIndex = -1;
+
+		var ui = document.createElement( 'div' );
+		ui.className = 'abio-tokens__ui';
+
+		var adder = document.createElement( 'select' );
+		adder.className = 'abio-tokens__add';
+		adder.id = 'abio-tokens-add';
+
+		var list = document.createElement( 'ul' );
+		list.className = 'abio-tokens__list';
+
+		var empty = document.createElement( 'p' );
+		empty.className = 'description abio-tokens__empty';
+		empty.textContent = wrap.dataset.empty;
+
+		// Additions and removals are silent to a screen reader otherwise: the
+		// focused control does not change, only the list beside it.
+		var live = document.createElement( 'p' );
+		live.className = 'screen-reader-text';
+		live.setAttribute( 'aria-live', 'polite' );
+
+		ui.appendChild( adder );
+		ui.appendChild( list );
+		ui.appendChild( empty );
+		ui.appendChild( live );
+		wrap.appendChild( ui );
+
+		// Strings come from PHP so they stay translatable; the script only
+		// substitutes the name.
+		function fill( template, name ) {
+			return String( template || '%s' ).replace( '%s', name );
+		}
+
+		function announce( person, added ) {
+			live.textContent = fill(
+				added ? wrap.dataset.added : wrap.dataset.removed,
+				person.label
+			);
+		}
+
+		function refreshAdder() {
+			var open = people.filter( function ( person ) {
+				return ! person.chosen;
+			} );
+
+			adder.innerHTML = '';
+
+			var head = document.createElement( 'option' );
+			head.value = '';
+			head.textContent = open.length ? wrap.dataset.add : wrap.dataset.full;
+			adder.appendChild( head );
+
+			open.forEach( function ( person ) {
+				var option = document.createElement( 'option' );
+				option.value = person.id;
+				// Two people can share a display name; the login separates them.
+				option.textContent = person.login && person.login !== person.label
+					? person.label + ' (' + person.login + ')'
+					: person.label;
+				adder.appendChild( option );
+			} );
+
+			adder.disabled = ! open.length;
+			adder.value = '';
+		}
+
+		function refreshList() {
+			list.innerHTML = '';
+
+			var chosen = people.filter( function ( person ) {
+				return person.chosen;
+			} );
+
+			chosen.forEach( function ( person ) {
+				var item = document.createElement( 'li' );
+				item.className = 'abio-tokens__token';
+
+				var name = document.createElement( 'span' );
+				name.className = 'abio-tokens__name';
+				name.textContent = person.label;
+
+				var remove = document.createElement( 'button' );
+				remove.type = 'button';
+				remove.className = 'abio-tokens__remove';
+				remove.innerHTML = '<span aria-hidden="true">&times;</span>';
+				// "Remove" alone repeated down a list tells a screen-reader user
+				// nothing about which one they are on.
+				remove.setAttribute( 'aria-label', fill( wrap.dataset.remove, person.label ) );
+				remove.addEventListener( 'click', function () {
+					person.chosen = false;
+					sync();
+					announce( person, false );
+					adder.focus();
+				} );
+
+				var hidden = document.createElement( 'input' );
+				hidden.type = 'hidden';
+				hidden.name = field;
+				hidden.value = person.id;
+
+				item.appendChild( name );
+				item.appendChild( remove );
+				item.appendChild( hidden );
+				list.appendChild( item );
+			} );
+
+			empty.hidden = 0 !== chosen.length;
+		}
+
+		function sync() {
+			refreshList();
+			refreshAdder();
+		}
+
+		adder.addEventListener( 'change', function () {
+			if ( ! adder.value ) {
+				return;
+			}
+
+			var picked = people.filter( function ( person ) {
+				return person.id === adder.value;
+			} )[ 0 ];
+
+			if ( ! picked ) {
+				return;
+			}
+
+			picked.chosen = true;
+			sync();
+			announce( picked, true );
+			adder.focus();
+		} );
+
+		sync();
+
+		// The label the server wrote points at the select that is now decorative.
+		var label = document.querySelector( 'label[for="abio-index_users"]' );
+
+		if ( label ) {
+			label.setAttribute( 'for', adder.id );
 		}
 	}
 

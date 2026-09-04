@@ -317,3 +317,24 @@ considering Task 13 complete.
       under its own heading, and Save Changes still saves everything.
 - [ ] Switch the admin color scheme in your user profile. The focus ring on the
       tabs follows it rather than staying WordPress blue.
+
+## The author token field
+
+- [ ] **Authors → Settings → Author index.** Every already-selected author shows
+      as a token under the dropdown, and the dropdown lists everyone else.
+- [ ] Pick someone. They become a token and leave the dropdown; the dropdown
+      returns to "Add an author…" with focus still on it, so several can be
+      added in a row without reaching for the mouse.
+- [ ] Remove a token. They reappear in the dropdown, in alphabetical position.
+- [ ] **The duplication check.** Add two authors, save, and re-open. Each must
+      appear once. Two of each means the fallback select kept its `name` and is
+      posting alongside the tokens.
+- [ ] Remove every token and save. The list must save as empty, not fall back to
+      the previous selection.
+- [ ] Add every eligible user. The dropdown disables itself and reads "Every
+      eligible user has been added."
+- [ ] Keyboard only: tab to the dropdown, choose with the keyboard, then tab to
+      a token's × and press Enter. Each token's button names the person it
+      removes rather than just saying "Remove".
+- [ ] Disable JavaScript and reload. The original multi-select is there with the
+      Command-click instruction, and saving from it still works.

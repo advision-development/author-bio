@@ -687,8 +687,6 @@ class ABIO_Settings {
 		$all      = ! empty( $values['index_all_profiles'] );
 		$selected = isset( $values['index_users'] ) ? (array) $values['index_users'] : array();
 
-
-
 		echo '<table class="form-table" role="presentation"><tbody>';
 
 		echo '<tr><th scope="row">' . esc_html__( 'Configured authors', 'author-bio' ) . '</th><td>';
@@ -731,24 +729,56 @@ class ABIO_Settings {
 		if ( ! $users ) {
 			echo '<p class="description">' . esc_html__( 'No users on this site can be listed as authors yet.', 'author-bio' ) . '</p>';
 		} else {
+			// The multi-select is the whole control when scripting is off, and
+			// the data source when it is on: settings.js reads the options and
+			// the current selection out of it, then builds the token field from
+			// them. Nothing about who can be listed lives in the script.
+			printf(
+				'<div class="abio-tokens" data-name="%s" data-empty="%s" data-add="%s"'
+					. ' data-full="%s" data-added="%s" data-removed="%s" data-remove="%s">',
+				esc_attr( self::OPTION . '[index_users][]' ),
+				esc_attr__( 'No authors added yet.', 'author-bio' ),
+				esc_attr__( 'Add an author…', 'author-bio' ),
+				esc_attr__( 'Every eligible user has been added.', 'author-bio' ),
+				/* translators: %s: an author's name, announced after adding them. */
+				esc_attr__( '%s added', 'author-bio' ),
+				/* translators: %s: an author's name, announced after removing them. */
+				esc_attr__( '%s removed', 'author-bio' ),
+				/* translators: %s: an author's name, on the button that removes them. */
+				esc_attr__( 'Remove %s', 'author-bio' )
+			);
+
 			printf(
 				'<select id="abio-index_users" name="%s" multiple size="%d" class="abio-multiselect">',
 				esc_attr( self::OPTION . '[index_users][]' ),
 				(int) min( 12, max( 5, count( $users ) ) )
 			);
 
+			$chosen = array_map( 'absint', $selected );
+
 			foreach ( $users as $user ) {
+				$label = $user->display_name ? $user->display_name : $user->user_login;
+
 				printf(
-					'<option value="%d"%s>%s</option>',
+					'<option value="%d"%s data-login="%s">%s</option>',
 					(int) $user->ID,
-					selected( in_array( (int) $user->ID, array_map( 'absint', $selected ), true ), true, false ),
-					esc_html( $user->display_name ? $user->display_name : $user->user_login )
+					selected( in_array( (int) $user->ID, $chosen, true ), true, false ),
+					esc_attr( $user->user_login ),
+					esc_html( $label )
 				);
 			}
 
 			echo '</select>';
+			echo '</div>';
+
 			echo '<p class="description">'
-				. esc_html__( 'Adds these people to the index whether or not they have an Author Profile. Anyone already covered by a profile is listed once, from that profile. Hold Command or Control to select several, and to deselect.', 'author-bio' )
+				. esc_html__( 'Adds these people to the index whether or not they have an Author Profile. Anyone already covered by a profile is listed once, from that profile.', 'author-bio' )
+				. '</p>';
+
+			// The Command-click instruction is only true of the fallback, so it
+			// is hidden once the token field replaces it.
+			echo '<p class="description abio-tokens__fallback-hint">'
+				. esc_html__( 'Hold Command or Control to select several, and to deselect.', 'author-bio' )
 				. '</p>';
 		}
 

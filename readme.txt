@@ -2,7 +2,7 @@
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.9
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 
 Renders a full author page from an [author_bio] shortcode, backed by a
 dedicated Author Profile admin screen linked to a WordPress user.

@@ -198,7 +198,9 @@ band in templates 4, 6, 7 and 10, circular headshots in 5, rounded cards in 8.
 - **Configured authors** — on by default, listing everyone with a saved Author
   Profile. Switch it off to list only the people you pick, which is how you
   curate an exact index.
-- **Select authors** — a multi-select of site users. Anyone chosen appears
+- **Select authors** — pick people from a dropdown and each one stays as a
+  removable token beneath it, so the current selection is readable at a glance
+  instead of being scattered through a long scrolling list. Anyone chosen appears
   whether or not they have an Author Profile, shown from what WordPress holds:
   display name and avatar. Somebody who already has a profile is listed once,
   from that profile.
