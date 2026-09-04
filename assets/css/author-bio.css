@@ -1282,3 +1282,90 @@ img.abio-media { border: 1px solid var(--abio-line); }
 @container (max-width: 560px) {
 	.abio-t10__name { font-size: 34px; }
 }
+
+/* ------------------------------------------------------- author index list */
+
+/* One vertical layout for all ten templates. The palette, typeface and label
+   treatment arrive from the tokens on the root, so only the genuinely
+   template-specific decisions are restated below. */
+
+.abio-list { max-width: 1000px; margin: 0 auto; padding: 40px 32px 72px; }
+
+.abio-list__head { padding-bottom: 16px; border-bottom: 1px solid var(--abio-ink); }
+
+.abio-list__rows { display: flex; flex-direction: column; }
+
+/* Selector ends in `li` deliberately: `.abio li` in the reset is (0,1,1) and
+   would otherwise outrank a class on the element and strip this padding. */
+.abio-list__rows > li {
+	display: grid;
+	grid-template-columns: 96px minmax(0, 1fr) auto;
+	gap: 24px;
+	align-items: center;
+	padding: 24px 0;
+	border-bottom: 1px solid var(--abio-line);
+}
+
+.abio-list__portrait .abio-media {
+	width: 96px;
+	aspect-ratio: 1;
+	object-fit: cover;
+	min-height: 0;
+	font-size: 9px;
+}
+
+.abio-list__body { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.abio-list__name { font-size: 20px; font-weight: 600; line-height: 1.25; }
+.abio-list__role { font-size: 14px; color: var(--abio-dim); }
+.abio-list__short { font-size: 14px; line-height: 1.6; color: var(--abio-soft); text-wrap: pretty; }
+
+.abio-list__meta { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; text-align: end; }
+.abio-list__count { font-size: 22px; line-height: 1; font-variant-numeric: tabular-nums; }
+.abio-list__count-label {
+	font-size: 11px;
+	font-weight: 500;
+	letter-spacing: .12em;
+	text-transform: uppercase;
+	color: var(--abio-muted);
+}
+
+/* Template dialects. Circular crops in 5, the rounded product language in 8,
+   and an inverted heading band in the four templates built around one. */
+.abio--t5 .abio-list__portrait .abio-media { border-radius: 50%; }
+
+.abio--t8 .abio-list { max-width: 1200px; }
+.abio--t8 .abio-list__portrait .abio-media { border-radius: 6px; }
+.abio--t8 .abio-list__rows > li { border-bottom-color: var(--abio-wash); }
+
+.abio--t4 .abio-list__head,
+.abio--t6 .abio-list__head,
+.abio--t7 .abio-list__head,
+.abio--t10 .abio-list__head {
+	background: var(--abio-ink);
+	color: var(--abio-wash);
+	border-bottom: 0;
+	padding: 18px 20px;
+	margin-bottom: 8px;
+}
+.abio--t4 .abio-list__head .abio-kicker,
+.abio--t6 .abio-list__head .abio-kicker,
+.abio--t7 .abio-list__head .abio-kicker,
+.abio--t10 .abio-list__head .abio-kicker { color: var(--abio-onink); }
+
+/* The centred templates centre their index heading too. */
+.abio--t3 .abio-list__head,
+.abio--t10 .abio-list__head { text-align: center; }
+
+@container (max-width: 768px) {
+	.abio-list { padding: 24px 20px 56px; }
+	.abio-list__rows > li { grid-template-columns: 64px minmax(0, 1fr); gap: 16px; align-items: start; }
+	.abio-list__portrait .abio-media { width: 64px; }
+	.abio-list__name { font-size: 17px; }
+	/* The count moves under the name rather than squeezing a third column. */
+	.abio-list__meta { grid-column: 2; flex-direction: row; align-items: baseline; gap: 6px; text-align: start; }
+	.abio-list__count { font-size: 15px; }
+}
+
+@container (max-width: 560px) {
+	.abio-list__rows > li { padding: 18px 0; }
+}

@@ -89,6 +89,9 @@ Confirmed and implemented:
 
 - Ten interchangeable author-page layouts, selected per shortcode by number or
   slug.
+- An author index, `[author_bio_list]`, listing every saved profile vertically
+  with headshot, name, role and published-article count, inheriting the look of
+  whichever template is selected.
 - Author resolution order: explicit attribute, then the author archive's
   queried object, then the current post's author.
 - Per-profile content: identity, biography, badges, credentials, portrait,
@@ -117,8 +120,9 @@ Technical constraints:
 - PHP 7.4 floor, WordPress 6.0 floor.
 - Zero dependencies — no Composer, no npm, no build step, no ACF or other
   field framework. This is deliberate and should be preserved.
-- Shortcode only. No Gutenberg block and no page-builder widget exist; adding
-  either is an open product decision, not an assumed direction.
+- Shortcodes only — `[author_bio]` and `[author_bio_list]`. No Gutenberg block
+  and no page-builder widget exist; adding either is an open product decision,
+  not an assumed direction.
 - No automated test suite, by explicit choice. Verification is manual, and
   `docs/VERIFICATION.md` is the checklist of record.
 

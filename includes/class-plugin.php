@@ -16,10 +16,12 @@ class ABIO_Plugin {
 			'includes/class-settings.php',
 			'includes/class-articles.php',
 			'includes/class-stats.php',
+			'includes/class-directory.php',
 			'includes/class-profile.php',
 			'includes/class-view.php',
 			'includes/class-assets.php',
 			'includes/class-shortcode.php',
+			'includes/class-list-shortcode.php',
 			'includes/class-updater.php',
 		);
 
@@ -45,6 +47,7 @@ class ABIO_Plugin {
 		add_action( 'admin_notices', array( 'ABIO_Updater', 'check_notice' ) );
 		add_action( 'upgrader_process_complete', array( 'ABIO_Updater', 'flush' ) );
 		add_action( 'init', array( 'ABIO_Shortcode', 'register' ) );
+		add_action( 'init', array( 'ABIO_Shortcode_List', 'register' ) );
 		add_action( 'init', array( 'ABIO_Assets', 'register' ) );
 		add_filter( 'manage_' . ABIO_Post_Type::SLUG . '_posts_columns', array( 'ABIO_Post_Type', 'columns' ) );
 		add_action( 'manage_' . ABIO_Post_Type::SLUG . '_posts_custom_column', array( 'ABIO_Post_Type', 'column' ), 10, 2 );

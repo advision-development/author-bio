@@ -92,6 +92,39 @@ No webfont is ever loaded. Metadata — dates, statuses, ordinals, stat units �
 is set uppercase and tracked rather than in a monospace, with `tabular-nums`
 so figures still align in a column.
 
+## The author index
+
+`[author_bio_list]` lists every saved Author Profile as a vertical index —
+headshot, name, role, one-line summary, and how many articles they have
+published — with each name linking to that author's archive.
+
+```
+[author_bio_list]
+[author_bio_list template=7]
+[author_bio_list orderby="posts" order="desc"]
+[author_bio_list count=10 counts="0"]
+```
+
+| Attribute | Default | Meaning |
+|---|---|---|
+| `template` | settings default | which template's look to inherit, `1`–`10` or a slug |
+| `count` | `0` (all) | how many authors to list |
+| `orderby` | `name` | `name`, `posts` (most published first), or `recent` |
+| `order` | `asc` | `asc` or `desc` |
+| `counts` | `1` | show the article count; `0` also skips counting it |
+| `heading` | — | replaces the default "Authors · N" label |
+
+It renders inside the same root element as a single profile, so it inherits the
+selected template's palette, typeface, corner language and label treatment from
+the same tokens — plus the details that genuinely differ: an inverted heading
+band in templates 4, 6, 7 and 10, circular headshots in 5, rounded cards in 8.
+
+Only saved profiles appear, so the index stays something you curate. An author
+who only has the catch-all page is not listed until someone writes them up.
+
+Each article count is one query per author. On a large index, `counts="0"`
+removes both the figure and the queries.
+
 ## Unconfigured authors
 
 By default an author with no Author Profile still gets a page. The shortcode

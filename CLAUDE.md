@@ -81,6 +81,12 @@ this is the short list of things that look harmless and are not.
   full-bleed builder section on one site and a ~620px themed content column on
   the next, and `@media` cannot tell those apart. All 30 breakpoint blocks are
   `@container` against `.abio`, which declares `container-type: inline-size`.
+- **A class on an `li` loses to the reset.** `.abio li { padding: 0 }` in the
+  reset is (0,1,1); `.abio-list__row` is (0,1,0), so the reset strips it. Every
+  template dodges this by ending the selector in `li`
+  (`.abio-list__rows > li`), which ties the reset and wins on source order.
+  Do not weaken the reset with `:where()` here — unlike the link rule, it is
+  what defends list markup against host CSS.
 - **Base element styles use `:where()`.** `.abio a` is (0,1,1) and outranks any
   single-class component rule, so a bare base rule silently strips every button
   of its own colour. This is what made a filled CTA render black-on-black.
@@ -130,7 +136,9 @@ archive's queried object → current post's author) and includes one template; i
 that author has no profile it falls back to `ABIO_Profile::fallback_for_user()`,
 a virtual profile backed by the WordPress user alone.
 Colour comes from `ABIO_Palette`, articles and stats from `ABIO_Articles` and
-`ABIO_Stats`.
+`ABIO_Stats`. `ABIO_Directory` is the one query path for listing profiles —
+both `[author_bio_list]` and every template's "Other authors" block go through
+it, so the two can never disagree about who counts as an author.
 
 ## Conventions
 

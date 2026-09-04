@@ -364,46 +364,30 @@ class ABIO_Profile {
 			return array();
 		}
 
-		$ids = get_posts(
+		// Same query path as the author index, so the two can never disagree
+		// about who counts as an author. Counts are skipped: the rail shows a
+		// name and a role, and a byline count per author is a query each.
+		$rows = ABIO_Directory::authors(
 			array(
-				'post_type'        => ABIO_Post_Type::SLUG,
-				'post_status'      => 'publish',
-				'numberposts'      => -1,
-				'exclude'          => array( $this->post_id ),
-				'orderby'          => 'ID',
-				'order'            => 'ASC',
-				'fields'           => 'ids',
-				'suppress_filters' => false,
+				'exclude' => array( $this->post_id ),
+				'limit'   => $limit,
+				'orderby' => 'name',
+				'counts'  => false,
 			)
 		);
 
 		$out = array();
 
-		foreach ( $ids as $id ) {
-			$profile = self::for_post( $id );
-
-			if ( ! $profile ) {
-				continue;
-			}
-
-			$author = $profile->author();
-
+		foreach ( $rows as $row ) {
 			$out[] = array(
-				'name'     => $author['name'],
-				'role'     => $author['role'],
-				'url'      => $author['url'],
-				'portrait' => $author['portrait'],
+				'name'     => $row['name'],
+				'role'     => $row['role'],
+				'url'      => $row['url'],
+				'portrait' => $row['portrait'],
 			);
 		}
 
-		usort(
-			$out,
-			static function ( $a, $b ) {
-				return strcasecmp( $a['name'], $b['name'] );
-			}
-		);
-
-		return array_slice( $out, 0, $limit );
+		return $out;
 	}
 
 	/**
