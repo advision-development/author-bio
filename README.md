@@ -67,7 +67,7 @@ edit, or link an Author Profile.
 
 | Tab | Holds |
 |---|---|
-| Author index | who appears in `[author_bio_list]` |
+| Author index | who appears in `[author_bio_list]`, and whether the index has a header |
 | General | site name, the three URLs, and the shortcode defaults |
 | Content | section toggles and the pitch box copy |
 | Appearance | typeface, corners, content width, density |
@@ -184,7 +184,7 @@ profile does not set one, so a row is never unlabelled.
 | `orderby` | `name` | `name`, `posts` (most published first), or `recent` |
 | `order` | `asc` | `asc` or `desc` |
 | `stats` | `1` | `0` hides articles published and writing since, and skips the query |
-| `heading` | — | replaces the default "Authors · N" label |
+| `heading` | — | replaces the default "Authors · N" label; `none` removes the header entirely |
 | `profiles` | settings | `0` lists only the selected authors |
 | `users` | settings | comma-separated IDs, logins or nicenames to list |
 
@@ -192,6 +192,20 @@ It renders inside the same root element as a single profile, so it inherits the
 selected template's palette, typeface, corner language and label treatment from
 the same tokens — plus the details that genuinely differ: an inverted heading
 band in templates 4, 6, 7 and 10, circular headshots in 5, rounded cards in 8.
+
+### The header
+
+Each index view opens with a `<header>` holding an "Authors · 6" title. Switch it
+off in **Authors → Settings → Author index → Heading**, or per placement with
+`heading="none"`.
+
+It **removes the element** rather than hiding it, which is the point: a table of
+contents plugin reads the rendered markup, so a heading hidden with CSS is still
+listed in the contents. Plugins of that kind generally offer no way to exclude
+one heading, so not emitting it is the only fix available.
+
+Each author's name stays an `h3`. If those are also reaching a table of
+contents, the level is not configurable yet — say so and it can be.
 
 ### Who appears
 

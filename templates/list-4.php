@@ -5,7 +5,7 @@
  * Mirrors the composition of templates/template-4.php so the index reads as
  * that template's own directory rather than a generic list.
  *
- * @var array $d authors, heading, stats, site
+ * @var array $d authors, header, heading, stats, site
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -18,9 +18,11 @@ $abio_label = '' !== $d['heading']
 ?>
 
 <div class="abio-l4">
+	<?php if ( $d['header'] ) : ?>
 	<header class="abio-l4__head abio-panel--dark">
 		<span class="abio-kicker"><?php echo esc_html( $abio_label ); ?></span>
 	</header>
+	<?php endif; ?>
 
 	<ul class="abio-l4__rows">
 		<?php foreach ( $d['authors'] as $a ) : ?>

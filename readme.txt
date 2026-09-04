@@ -2,7 +2,7 @@
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.9
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 
 Renders a full author page from an [author_bio] shortcode, backed by a
 dedicated Author Profile admin screen linked to a WordPress user.
@@ -38,7 +38,10 @@ The author index:
 [author_bio_list count=10 heading="The desk"]
 
 Attributes: template, count, orderby (name|posts|recent), order, stats,
-heading, profiles, users. Each of the ten templates has its own index view. Who appears
+heading, profiles, users. heading="none" removes the index's header element -
+useful when a table-of-contents plugin is picking up its "Authors - 6" title,
+since such plugins read the markup and a heading hidden with CSS is still
+listed. There is a site-wide toggle for it in Authors -> Settings. Each of the ten templates has its own index view. Who appears
 is set in Authors -> Settings -> Author index: all saved profiles, a chosen set
 of users, or both.
 

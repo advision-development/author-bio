@@ -357,3 +357,27 @@ considering Task 13 complete.
       removes rather than just saying "Remove".
 - [ ] Disable JavaScript and reload. The original multi-select is there with the
       Command-click instruction, and saving from it still works.
+
+## The index header
+
+- [ ] **Authors → Settings → Author index → Heading** is on by default, and each
+      of the ten index views opens with an "Authors · N" title.
+- [ ] Switch it off. View source: there must be **no `<header>` element** and no
+      `<h2>` from the plugin on any of the ten. Hidden-but-present is a failure,
+      not a pass — the whole point is that a table-of-contents plugin reads the
+      markup.
+- [ ] With it off, check templates **4** and **6** specifically. Four's first
+      cell must still have a top border (the dark band used to supply that
+      edge), and six's first rule must not sit flush against the top of the
+      block.
+- [ ] With it **on**, check 4 and 6 again: no doubled border under the band, no
+      extra gap. The fixes above are scoped to the header-off case and must not
+      leak into this one.
+- [ ] `[author_bio_list heading="none"]` removes the header even with the
+      setting on. `[author_bio_list heading="The desk"]` shows it with that
+      title even with the setting off — passing a title is asking for one.
+- [ ] With structured data on and `heading="none"`, the `ItemList` must have no
+      `name` key. The literal "none" must never reach the graph.
+- [ ] If a table-of-contents block is on the page, confirm the index no longer
+      contributes to it. Note that each author's name is still an `h3`, so a TOC
+      configured for h2–h3 will still list the names.

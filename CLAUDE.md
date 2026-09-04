@@ -165,6 +165,21 @@ this is the short list of things that look harmless and are not.
   look like it was duplicating people. The select stays in the DOM on purpose:
   it is the whole control when nothing scripts the page, which is why no part of
   who-can-be-listed lives in the script.
+- **The index header is removed, never hidden.** `show_index_header` and
+  `heading="none"` stop the `<header>` being rendered. Do not "simplify" this
+  into a `display: none` rule: it exists because a table-of-contents plugin was
+  listing the "Authors · 6" title, and those plugins read the rendered markup —
+  `table-of-contents-block`, the one in use, collects by XPath and offers no
+  exclude mechanism at all, so an element that exists is an element in the
+  contents. Hiding it visually would look like a fix and change nothing.
+- **With the header off, the rows become the first child.** That is the only
+  signal the stylesheet gets, and two templates need it: template 4's cells
+  carry `border-top: 0` because the dark header band supplied that edge, so
+  `ul.abio-l4__rows:first-child > li:first-child` puts it back; template 6's
+  first 2px rule would otherwise sit flush against the top of the block. Both
+  rules are scoped with `:first-child` precisely so they cannot affect a block
+  whose header is present — verified by computed style, not by reading the
+  selector.
 - **The settings screen is one form, and it must stay one form.** The five
   tabs are `display` toggled on one `<form>`; every field posts on every save.
   Giving each tab its own form looks tidier and silently destroys data:

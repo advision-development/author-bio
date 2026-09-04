@@ -108,6 +108,12 @@ Confirmed and implemented:
   and `stats="0"` skips it. Who appears is a setting: all saved profiles, a hand-picked set
   of users, or both — so an index can be exhaustive or curated without touching
   a shortcode.
+- The index's header is optional, site-wide or per placement, and switching it
+  off removes the element rather than hiding it. That distinction is the whole
+  requirement: it exists because a table-of-contents plugin was listing the
+  "Authors · 6" title, those plugins read rendered markup, and they generally
+  offer no way to exclude a single heading. Each author's name remains an `h3`;
+  making that level configurable is wanted but not built.
 - Optional schema.org JSON-LD on both surfaces: `ProfilePage`/`Person` for a
   profile, `ItemList` of `Person` for an index, sharing one `@id` per author so
   the two describe one person. Derived only from fields an editor filled in —

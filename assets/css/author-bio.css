@@ -1717,6 +1717,24 @@ ul.abio-l8__rows { display: flex; flex-direction: column; gap: calc(12px * var(-
 	color: var(--abio-muted);
 }
 
+/* Header switched off ---------------------------------------------------- */
+/* The setting removes the <header> element rather than hiding it, so the rows
+   become the first child — which is the only signal the stylesheet gets, and a
+   precise one: these rules cannot affect a block whose header is present.
+
+   Two templates leaned on the header for structure rather than for its title.
+   Four's cells carry no top border because the dark band supplied that edge, so
+   the first cell restores it. Six's first rule needs the space the band used to
+   occupy, or it sits flush against the top of the block. */
+
+ul.abio-l4__rows:first-child > li:first-child {
+	border-top: 1px solid var(--abio-ink);
+}
+
+ul.abio-l6__rows:first-child {
+	padding-top: calc(32px * var(--abio-space));
+}
+
 /* Narrow containers. Measured against the container, not the viewport: a host
    theme routinely gives this shortcode a ~620px column at a 1440px window. */
 @container (max-width: 900px) {

@@ -49,6 +49,29 @@ class ABIO_Shortcode_List {
 			? $atts['orderby']
 			: 'name';
 
+		// heading does three jobs, and they collapse into two values the views
+		// read: whether the <header> is rendered at all, and what its title says.
+		//
+		//   (unset)        the setting decides, title is "Authors · N"
+		//   "none"         no header element, whatever the setting says
+		//   anything else  header rendered with that title, whatever the setting
+		//                  says — passing one is asking for it
+		//
+		// Removing the element is the point rather than hiding it: a table of
+		// contents plugin reads the rendered markup, so a heading hidden with
+		// CSS is still listed in the contents.
+		$heading  = trim( (string) $atts['heading'] );
+		$suppress = 'none' === strtolower( $heading );
+
+		if ( $suppress ) {
+			$header  = false;
+			$heading = '';
+		} elseif ( '' !== $heading ) {
+			$header = true;
+		} else {
+			$header = (bool) ABIO_Settings::get( 'show_index_header', 1 );
+		}
+
 		// Authors → Settings → Author index supplies the defaults; a shortcode
 		// attribute overrides them for one placement.
 		$profiles = '' === (string) $atts['profiles']
@@ -96,10 +119,11 @@ class ABIO_Shortcode_List {
 		}
 
 		// The same shape a single profile gets: every list view reads these
-		// four keys and nothing else.
+		// five keys and nothing else.
 		$d = array(
 			'authors' => $authors,
-			'heading' => (string) $atts['heading'],
+			'header'  => $header,
+			'heading' => $heading,
 			'stats'   => '0' !== (string) $atts['stats'],
 			'site'    => array(
 				'name'       => ABIO_Settings::get( 'site_name', get_bloginfo( 'name' ) ),
@@ -128,7 +152,8 @@ class ABIO_Shortcode_List {
 
 		echo '</div>';
 
-		echo ABIO_Schema::item_list( $authors, (string) $atts['heading'] ); // phpcs:ignore WordPress.Security.EscapeOutput
+		// The resolved title, so "none" never lands in the graph as a list name.
+		echo ABIO_Schema::item_list( $authors, $heading ); // phpcs:ignore WordPress.Security.EscapeOutput
 
 		return ob_get_clean();
 	}

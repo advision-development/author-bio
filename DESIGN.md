@@ -474,6 +474,13 @@ because a bordered tile inside a text row reads as a nested box (2, 5, 10). Six
 carries them right-aligned in its meta column, and nine folds them into its one
 meta line so they inherit its dot separator.
 
+The header is optional — a site-wide setting, or `heading="none"` on one
+placement — and switching it off removes the element rather than hiding it.
+Two templates lean on it for structure rather than for its title: four's cells
+carry no top border because the dark band supplied that edge, and six's first
+rule needs the space the band occupied. Both are restored by scoping off
+`:first-child`, which is what the rows become once the header is gone.
+
 Three patterns cover the ten:
 
 - **Box grid** (1, 3): boxes flowing horizontally and wrapping, on a Wash

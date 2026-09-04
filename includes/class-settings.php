@@ -45,6 +45,7 @@ class ABIO_Settings {
 			// worse than none from us.
 			'show_schema'        => 0,
 			'index_all_profiles' => 1,
+			'show_index_header'  => 1,
 			'index_users'        => array(),
 			'palette_ink'        => '',
 			'palette_paper'      => '',
@@ -338,7 +339,7 @@ class ABIO_Settings {
 		// An unchecked checkbox is absent from the POST body entirely, so a
 		// missing key means off. Falling back to the default here would make a
 		// toggle impossible to switch off.
-		foreach ( array( 'show_pitch', 'show_breadcrumbs', 'fallback_profiles', 'index_all_profiles', 'show_schema' ) as $flag ) {
+		foreach ( array( 'show_pitch', 'show_breadcrumbs', 'fallback_profiles', 'index_all_profiles', 'show_schema', 'show_index_header' ) as $flag ) {
 			$clean[ $flag ] = empty( $input[ $flag ] ) ? 0 : 1;
 		}
 
@@ -809,6 +810,27 @@ class ABIO_Settings {
 
 		echo '</td></tr>';
 		echo '</tbody></table>';
+
+		self::section(
+			__( 'Heading', 'author-bio' ),
+			array(
+				array(
+					'show_index_header',
+					__( 'Index header', 'author-bio' ),
+					'checkbox',
+					__( 'Show the heading above the list', 'author-bio' ),
+				),
+			),
+			$values
+		);
+
+		echo '<p class="description">'
+			. esc_html__( 'The heading is an <header> holding an "Authors · 6" title. Switching it off removes the element rather than hiding it, which is what keeps it out of a table of contents — a TOC plugin reads the markup, so a heading hidden with CSS still gets listed.', 'author-bio' )
+			. '</p>';
+
+		echo '<p class="description">'
+			. esc_html__( 'Each author\'s name stays an h3. A single placement can override this with heading="none", or replace the title with heading="The desk".', 'author-bio' )
+			. '</p>';
 	}
 
 	/**
