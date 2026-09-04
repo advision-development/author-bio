@@ -99,9 +99,13 @@ Confirmed and implemented:
   index out as a grid of boxes flowing horizontally, template 7 as full-width
   cards; a box is Paper with a hairline on a wash ground, because on
   Paper-over-Paper the hairline alone is invisible and the box does not read as
-  one. No index shows a published-article count — the figure was
-  removed from all ten, and counting it now runs only where the requested order
-  depends on it. Who appears is a setting: all saved profiles, a hand-picked set
+  one. Every row also carries two figures derived from the
+  author's real posts — articles published, and the year of their earliest one,
+  shown as "writing since". They were removed from all ten at one point and put
+  back deliberately: they are the part of an index a reader uses to judge
+  whether a byline has a track record, and nobody types them, so they cannot
+  drift out of date. The pair costs one query per listed author rather than two,
+  and `stats="0"` skips it. Who appears is a setting: all saved profiles, a hand-picked set
   of users, or both — so an index can be exhaustive or curated without touching
   a shortcode.
 - Optional schema.org JSON-LD on both surfaces: `ProfilePage`/`Person` for a

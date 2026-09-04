@@ -149,8 +149,9 @@ so figures still align in a column.
 ## The author index
 
 `[author_bio_list]` lists authors as a vertical index. Each row carries the
-portrait, the kicker, the name, the role and the short line, with the name
-linking to their archive.
+portrait, the kicker, the name, the role, the short line and two derived
+figures — articles published and writing since — with the name linking to their
+archive.
 
 The index has its own view per template, so `template=7` gives you the sports
 desk's boxed cards on a wash and `template=9` gives you the research note's
@@ -182,6 +183,7 @@ profile does not set one, so a row is never unlabelled.
 | `count` | `0` (all) | how many authors to list |
 | `orderby` | `name` | `name`, `posts` (most published first), or `recent` |
 | `order` | `asc` | `asc` or `desc` |
+| `stats` | `1` | `0` hides articles published and writing since, and skips the query |
 | `heading` | — | replaces the default "Authors · N" label |
 | `profiles` | settings | `0` lists only the selected authors |
 | `users` | settings | comma-separated IDs, logins or nicenames to list |
@@ -209,8 +211,15 @@ Two attributes override those settings for a single placement:
 `profiles="0"` ignores the saved profiles, and `users="12,45"` (IDs, logins or
 nicenames) replaces the selected list.
 
-No index shows a published-article count. Counting one is a query per author,
-so it now runs only for `orderby="posts"`, where the order depends on it.
+Every row also carries two derived figures: how many articles that author has
+published, and the year of their earliest one — "writing since". Neither is
+typed by anyone; both come from the author's real published posts, so they stay
+current on their own.
+
+The pair costs one query per listed author, not two: asking for the oldest post
+in date order returns the total alongside it. `stats="0"` skips both the figures
+and that query on a placement that does not want them — though `orderby="posts"`
+needs the count regardless, so it is fetched there either way.
 
 ## Structured data
 

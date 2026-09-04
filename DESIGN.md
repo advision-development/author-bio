@@ -461,9 +461,18 @@ reader clicks through to. One shared layout was tried and rejected: with only
 tokens separating them, several templates differed by a corner radius alone and
 changing the template looked like it did nothing.
 
-Every view renders the same five-part row — portrait, kicker, name, role, short
-line — and drops whichever of them an author has no value for. None shows a
-published-article count.
+Every view renders the same row — portrait, kicker, name, role, short line, and
+two derived figures: articles published and the year of the author's earliest
+post — and drops whichever of them an author has no value for.
+
+The figures are laid out with flex, never a two-track grid. An author with
+nothing published, or nothing old enough to date, resolves one figure instead of
+two, and a fixed second track would paint the dead cell the stat tiles taught us
+to avoid. Where a template's language is boxes the pair is a pair of hairline
+tiles (1, 3, 4, 7, 8); where the row is hairline-separated text they run inline,
+because a bordered tile inside a text row reads as a nested box (2, 5, 10). Six
+carries them right-aligned in its meta column, and nine folds them into its one
+meta line so they inherit its dot separator.
 
 Three patterns cover the ten:
 

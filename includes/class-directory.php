@@ -20,11 +20,11 @@ class ABIO_Directory {
 	 *
 	 * @param array $args exclude (post IDs), limit (0 for all),
 	 *                    orderby ('name'|'posts'|'recent'), order ('asc'|'desc'),
-	 *                    counts (include the published-article count),
+	 *                    stats (include the published count and first year),
 	 *                    users (extra WordPress user IDs to list even though
 	 *                    they have no Author Profile),
 	 *                    profiles (false to list only the given users).
-	 * @return array Rows of name, kicker, role, short, url, portrait, posts.
+	 * @return array Rows of name, kicker, role, short, url, portrait, posts, since.
 	 */
 	public static function authors( $args = array() ) {
 		$args = array_merge(
@@ -33,7 +33,7 @@ class ABIO_Directory {
 				'limit'   => 0,
 				'orderby' => 'name',
 				'order'   => 'asc',
-				'counts'  => true,
+				'stats'   => true,
 				'users'   => array(),
 				'profiles' => true,
 			),
@@ -53,8 +53,10 @@ class ABIO_Directory {
 			)
 		);
 
-		$rows        = array();
-		$want_counts = ! empty( $args['counts'] ) || 'posts' === $args['orderby'];
+		$rows = array();
+
+		// Ordering by volume needs the figures even when they are not shown.
+		$want_stats = ! empty( $args['stats'] ) || 'posts' === $args['orderby'];
 
 		foreach ( $ids as $id ) {
 			$user_id = (int) get_post_meta( $id, ABIO_Fields::meta_key( 'user' ), true );
@@ -85,6 +87,10 @@ class ABIO_Directory {
 
 			$kicker = (string) get_post_meta( $id, ABIO_Fields::meta_key( 'kicker' ), true );
 
+			$stats = $want_stats && $user_id
+				? ABIO_Stats::byline_summary( $user_id, ABIO_Articles::post_types() )
+				: array( 'posts' => 0, 'since' => '' );
+
 			$rows[] = array(
 				'id'       => $id,
 				'user'     => $user_id,
@@ -96,9 +102,8 @@ class ABIO_Directory {
 				'short'    => (string) get_post_meta( $id, ABIO_Fields::meta_key( 'short' ), true ),
 				'url'      => $user_id ? get_author_posts_url( $user_id ) : '',
 				'portrait' => $portrait,
-				'posts'    => $want_counts && $user_id
-					? ABIO_Stats::byline_count( $user_id, ABIO_Articles::post_types() )
-					: 0,
+				'posts'    => $stats['posts'],
+				'since'    => $stats['since'],
 			);
 		}
 
@@ -114,7 +119,7 @@ class ABIO_Directory {
 				continue;
 			}
 
-			$row = self::user_row( $user_id, $want_counts );
+			$row = self::user_row( $user_id, $want_stats );
 
 			if ( $row ) {
 				$rows[]   = $row;
@@ -136,10 +141,10 @@ class ABIO_Directory {
 	 * so those cells stay empty rather than being filled with a guess.
 	 *
 	 * @param int  $user_id
-	 * @param bool $want_counts
+	 * @param bool $want_stats
 	 * @return array|false
 	 */
-	private static function user_row( $user_id, $want_counts ) {
+	private static function user_row( $user_id, $want_stats ) {
 		$user = get_userdata( $user_id );
 
 		if ( ! $user || '' === trim( (string) $user->display_name ) ) {
@@ -156,6 +161,10 @@ class ABIO_Directory {
 			}
 		}
 
+		$stats = $want_stats
+			? ABIO_Stats::byline_summary( $user_id, ABIO_Articles::post_types() )
+			: array( 'posts' => 0, 'since' => '' );
+
 		return array(
 			'id'       => 0,
 			'user'     => $user_id,
@@ -165,9 +174,8 @@ class ABIO_Directory {
 			'short'    => '',
 			'url'      => get_author_posts_url( $user_id ),
 			'portrait' => $portrait,
-			'posts'    => $want_counts
-				? ABIO_Stats::byline_count( $user_id, ABIO_Articles::post_types() )
-				: 0,
+			'posts'    => $stats['posts'],
+			'since'    => $stats['since'],
 		);
 	}
 

@@ -129,6 +129,13 @@ this is the short list of things that look harmless and are not.
   Paper plus a hairline.
 - **No font family outside `--abio-font`,** and no webfont ever. Type is
   inherited from the host theme by default.
+- **Both byline figures come from one query.** `ABIO_Stats::byline_summary()`
+  asks for the oldest published post in ascending date order and takes
+  `found_posts` off the same query, so an index gets the published count and the
+  first year for one query per listed author instead of two. Measured over 40
+  cold authors: 1.05 queries versus 2.02 for `byline_count()` plus
+  `first_year()`. Those two still exist for the single-profile path; do not
+  reintroduce them into a loop over authors.
 - **Fixed-track grids collapse to their content.** Stat tiles and gallery items
   come from variable-length lists; a grid that keeps four tracks for three items
   paints a visibly dead cell, because these grids show their gaps.

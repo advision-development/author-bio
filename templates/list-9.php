@@ -5,7 +5,7 @@
  * Mirrors the composition of templates/template-9.php so the index reads as
  * that template's own directory rather than a generic list.
  *
- * @var array $d authors, heading, site
+ * @var array $d authors, heading, stats, site
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -42,6 +42,25 @@ $abio_label = '' !== $d['heading']
 							<p class="abio-l9__meta">
 								<span class="abio-l9__kicker"><?php echo esc_html( $a['kicker'] ); ?></span>
 								<?php if ( '' !== $a['role'] ) : ?><span class="abio-l9__role"><?php echo esc_html( $a['role'] ); ?></span><?php endif; ?>
+								<?php if ( $d['stats'] && $a['posts'] ) : ?>
+									<span class="abio-l9__count">
+										<?php
+										printf(
+											/* translators: %s: number of published articles. */
+											esc_html( _n( '%s article', '%s articles', $a['posts'], 'author-bio' ) ),
+											esc_html( number_format_i18n( $a['posts'] ) )
+										);
+										?>
+									</span>
+								<?php endif; ?>
+								<?php if ( $d['stats'] && '' !== $a['since'] ) : ?>
+									<span class="abio-l9__since">
+										<?php
+										/* translators: %s: four-digit year. */
+										printf( esc_html__( 'writing since %s', 'author-bio' ), esc_html( $a['since'] ) );
+										?>
+									</span>
+								<?php endif; ?>
 							</p>
 							<?php if ( '' !== $a['short'] ) : ?><p class="abio-l9__short"><?php echo esc_html( $a['short'] ); ?></p><?php endif; ?>
 						</div>

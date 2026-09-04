@@ -2,7 +2,7 @@
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.9
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 
 Renders a full author page from an [author_bio] shortcode, backed by a
 dedicated Author Profile admin screen linked to a WordPress user.
@@ -37,10 +37,14 @@ The author index:
 [author_bio_list orderby="posts" order="desc"]
 [author_bio_list count=10 heading="The desk"]
 
-Attributes: template, count, orderby (name|posts|recent), order, heading,
-profiles, users. Each of the ten templates has its own index view. Who appears
+Attributes: template, count, orderby (name|posts|recent), order, stats,
+heading, profiles, users. Each of the ten templates has its own index view. Who appears
 is set in Authors -> Settings -> Author index: all saved profiles, a chosen set
 of users, or both.
+
+Every index row carries the portrait, kicker, name, role and short line, plus
+two figures derived from the author's real posts: articles published, and the
+year of their earliest one. stats="0" hides both and skips the query.
 
 Both shortcodes can emit schema.org JSON-LD - ProfilePage/Person for a profile,
 ItemList for an index - derived only from fields that are filled in. This is off

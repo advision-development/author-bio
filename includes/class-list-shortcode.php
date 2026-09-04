@@ -36,6 +36,7 @@ class ABIO_Shortcode_List {
 				'count'    => '0',
 				'orderby'  => 'name',
 				'order'    => 'asc',
+				'stats'    => '1',
 				'heading'  => '',
 				'users'    => '',
 				'profiles' => '',
@@ -73,9 +74,11 @@ class ABIO_Shortcode_List {
 				'limit'    => absint( $atts['count'] ),
 				'orderby'  => $orderby,
 				'order'    => 'desc' === strtolower( (string) $atts['order'] ) ? 'desc' : 'asc',
-				// Counted only when the order depends on it. No index view shows
-				// the figure, and counting is a query per author.
-				'counts'   => 'posts' === $orderby,
+				// One query per listed author, for the published count and the
+				// first year together. stats="0" skips it on a placement that
+				// does not want the figures — though ordering by volume needs
+				// them regardless, which ABIO_Directory enforces.
+				'stats'    => '0' !== (string) $atts['stats'],
 				'users'    => $users,
 				'profiles' => $profiles,
 			)
@@ -93,10 +96,11 @@ class ABIO_Shortcode_List {
 		}
 
 		// The same shape a single profile gets: every list view reads these
-		// three keys and nothing else.
+		// four keys and nothing else.
 		$d = array(
 			'authors' => $authors,
 			'heading' => (string) $atts['heading'],
+			'stats'   => '0' !== (string) $atts['stats'],
 			'site'    => array(
 				'name'       => ABIO_Settings::get( 'site_name', get_bloginfo( 'name' ) ),
 				'authorsUrl' => ABIO_Settings::get( 'authors_url', '' ),

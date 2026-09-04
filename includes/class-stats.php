@@ -81,6 +81,47 @@ class ABIO_Stats {
 	 * @param array $post_types
 	 * @return int
 	 */
+	/**
+	 * Both derived byline figures in one query.
+	 *
+	 * An index needs the published count and the first year for every author it
+	 * lists, and asking separately is two queries per person. Ordering ascending
+	 * by date and taking one row answers both at once: found_posts is the total,
+	 * and the single row returned is the earliest post.
+	 *
+	 * @param int          $user_id
+	 * @param array|string $post_types
+	 * @return array posts (int), since (four-digit year or '')
+	 */
+	public static function byline_summary( $user_id, $post_types ) {
+		$user_id = absint( $user_id );
+
+		if ( ! $user_id ) {
+			return array( 'posts' => 0, 'since' => '' );
+		}
+
+		$query = new WP_Query(
+			array(
+				'author'                 => $user_id,
+				'post_type'              => $post_types,
+				'post_status'            => 'publish',
+				'posts_per_page'         => 1,
+				'orderby'                => 'date',
+				'order'                  => 'ASC',
+				'fields'                 => 'ids',
+				'ignore_sticky_posts'    => true,
+				'no_found_rows'          => false,
+				'update_post_meta_cache' => false,
+				'update_post_term_cache' => false,
+			)
+		);
+
+		return array(
+			'posts' => (int) $query->found_posts,
+			'since' => empty( $query->posts ) ? '' : get_the_date( 'Y', $query->posts[0] ),
+		);
+	}
+
 	public static function byline_count( $user_id, $post_types ) {
 		$query = new WP_Query(
 			array(

@@ -1309,8 +1309,10 @@ img.abio-media { border: 1px solid var(--abio-line); }
    block renders full-bleed with no inset, which is exactly how the sports-desk
    index shipped its cards edge-to-edge until a screenshot caught it.
 
-   No view shows a published-article count: the figure was dropped from all ten
-   deliberately, so nothing here reserves a column for one. */
+   Every view carries two derived figures — articles published and writing since
+   — and no view reserves a fixed track for them: they are laid out with flex so
+   an author who resolves only one does not leave a dead cell. See the "Derived
+   byline figures" block below. */
 
 .abio-list-root { --abio-l-max: 1000px; }
 
@@ -1588,6 +1590,133 @@ ul.abio-l8__rows { display: flex; flex-direction: column; gap: calc(12px * var(-
 	max-width: 56ch; font-size: 16px; line-height: 1.6; color: var(--abio-soft); text-wrap: pretty;
 }
 
+/* Derived byline figures ------------------------------------------------- */
+/* Published count and first year, per template. Laid out with flex rather than
+   a two-track grid on purpose: an author with no published posts, or none old
+   enough to date, renders one figure instead of two, and a fixed second track
+   would leave a dead cell exactly as the stat tiles once did.
+
+   Padding and gaps go through --abio-space like everything else, or the Density
+   setting would stop at these blocks. */
+
+.abio-l1__stats,
+.abio-l2__stats,
+.abio-l3__stats,
+.abio-l4__stats,
+.abio-l5__stats,
+.abio-l6__stats,
+.abio-l7__stats,
+.abio-l8__stats,
+.abio-l10__stats {
+	display: flex;
+	flex-wrap: wrap;
+	gap: calc(10px * var(--abio-space));
+	margin-top: calc(4px * var(--abio-space));
+}
+
+.abio-l1__stat,
+.abio-l3__stat,
+.abio-l4__stat,
+.abio-l7__stat,
+.abio-l8__stat {
+	display: flex;
+	flex-direction: column;
+	gap: calc(2px * var(--abio-space));
+	padding: calc(8px * var(--abio-space)) calc(12px * var(--abio-space));
+	border: 1px solid var(--abio-line);
+}
+
+.abio-l1__stat-value,
+.abio-l3__stat-value,
+.abio-l4__stat-value,
+.abio-l7__stat-value,
+.abio-l8__stat-value {
+	font-size: 18px;
+	line-height: 1;
+	font-variant-numeric: tabular-nums;
+}
+
+.abio-l1__stat-label,
+.abio-l3__stat-label,
+.abio-l4__stat-label,
+.abio-l7__stat-label,
+.abio-l8__stat-label {
+	font-size: 10px;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--abio-muted);
+}
+
+/* 4 · bento keeps the cell's Ink hairline rather than the softer Line. */
+.abio-l4__stat { border-color: var(--abio-ink); }
+
+/* 7 · sports desk reads as a box score: heavier figure, tighter label. */
+.abio-l7__stat-value { font-weight: 700; font-size: 20px; }
+.abio-l7__stat-label { font-size: 9px; }
+
+/* 8 · fintech takes the product-UI corner. */
+.abio-l8__stat { border-radius: var(--abio-radius-sm); }
+
+/* 2 and 5 run inline: these rows are hairline-separated text, and a bordered
+   tile inside one reads as a nested box. */
+.abio-l2__stat,
+.abio-l5__stat {
+	display: flex;
+	align-items: baseline;
+	gap: calc(4px * var(--abio-space));
+	font-size: 12px;
+	color: var(--abio-muted);
+}
+
+.abio-l2__stat-value { font-variant-numeric: tabular-nums; color: var(--abio-dim); }
+.abio-l5__stat-value { font-variant-numeric: tabular-nums; color: var(--abio-accent); }
+
+.abio-l2__stat-label,
+.abio-l5__stat-label { letter-spacing: 0.04em; }
+
+/* 6 · dossier: right-aligned in the meta column, the figure carried large the
+   way that template carried its count before. */
+.abio-l6__stats {
+	justify-content: flex-end;
+	gap: calc(18px * var(--abio-space));
+	margin-top: calc(8px * var(--abio-space));
+}
+
+.abio-l6__stat {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: calc(2px * var(--abio-space));
+}
+
+.abio-l6__stat-value { font-size: 26px; line-height: 1; font-variant-numeric: tabular-nums; }
+
+.abio-l6__stat-label {
+	font-size: 9px;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--abio-muted);
+}
+
+/* 9 · research note: the figures join the existing meta line, so they inherit
+   its size, colour and the "·" separator between spans. */
+.abio-l9__count,
+.abio-l9__since { font-variant-numeric: tabular-nums; }
+
+/* 10 · brand feature carries them at the scale the rest of that row uses. */
+.abio-l10__stats { gap: calc(20px * var(--abio-space)); margin-top: calc(6px * var(--abio-space)); }
+
+.abio-l10__stat { display: flex; align-items: baseline; gap: calc(6px * var(--abio-space)); }
+
+.abio-l10__stat-value { font-size: 20px; font-variant-numeric: tabular-nums; }
+
+.abio-l10__stat-label {
+	font-size: 10px;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--abio-muted);
+}
+
 /* Narrow containers. Measured against the container, not the viewport: a host
    theme routinely gives this shortcode a ~620px column at a 1440px window. */
 @container (max-width: 900px) {
@@ -1636,6 +1765,9 @@ ul.abio-l8__rows { display: flex; flex-direction: column; gap: calc(12px * var(-
 	.abio-l5__img { width: 64px; }
 
 	.abio-l6__inner { grid-template-columns: 72px minmax(0, 1fr); gap: calc(18px * var(--abio-space)); }
+	.abio-l6__stats { justify-content: flex-start; }
+	.abio-l6__stat { align-items: flex-start; }
+	.abio-l6__stat-value { font-size: 18px; }
 	.abio-l6__img { width: 72px; }
 	.abio-l6__name { font-size: 19px; }
 	.abio-l6__h2 { font-size: 26px; }

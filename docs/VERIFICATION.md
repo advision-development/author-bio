@@ -230,7 +230,17 @@ considering Task 13 complete.
       entries for 9; oversized names for 10. If two are indistinguishable, the
       per-template CSS has been lost — check the rows selector still carries
       its element qualifier (`ul.abio-lN__rows`).
-- [ ] No index shows a published-article count, on any of the ten.
+- [ ] Every one of the ten shows both derived figures — articles published and
+      writing since — for an author who has published. Check the values against
+      the author's archive; nobody types these, so a wrong number means the
+      query is wrong, not the data.
+- [ ] An author with no published posts shows **neither** figure, and the row is
+      simply shorter — no empty tile, no "0 articles", no dangling label. Same
+      for an author with a count but no datable first post.
+- [ ] `[author_bio_list stats="0"]` hides both figures on that placement.
+- [ ] `[author_bio_list orderby="posts" order="desc"]` still sorts by volume
+      even with `stats="0"`, because the order depends on a figure it is not
+      showing.
 - [ ] Every row shows portrait, kicker, name, role and short line — and drops
       the ones the author has no value for rather than leaving a gap. Check
       against an author with a full profile *and* an author listed by ID with
