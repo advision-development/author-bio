@@ -24,7 +24,7 @@ class ABIO_Directory {
 	 *                    users (extra WordPress user IDs to list even though
 	 *                    they have no Author Profile),
 	 *                    profiles (false to list only the given users).
-	 * @return array Rows of name, role, short, url, portrait, posts.
+	 * @return array Rows of name, kicker, role, short, url, portrait, posts.
 	 */
 	public static function authors( $args = array() ) {
 		$args = array_merge(
@@ -83,10 +83,15 @@ class ABIO_Directory {
 				}
 			}
 
+			$kicker = (string) get_post_meta( $id, ABIO_Fields::meta_key( 'kicker' ), true );
+
 			$rows[] = array(
 				'id'       => $id,
 				'user'     => $user_id,
 				'name'     => $name,
+				// Same default as a single profile page, so a person's label
+				// does not change between the index and their own page.
+				'kicker'   => '' === trim( $kicker ) ? __( 'Author', 'author-bio' ) : $kicker,
 				'role'     => (string) get_post_meta( $id, ABIO_Fields::meta_key( 'role' ), true ),
 				'short'    => (string) get_post_meta( $id, ABIO_Fields::meta_key( 'short' ), true ),
 				'url'      => $user_id ? get_author_posts_url( $user_id ) : '',
@@ -155,6 +160,7 @@ class ABIO_Directory {
 			'id'       => 0,
 			'user'     => $user_id,
 			'name'     => $user->display_name,
+			'kicker'   => __( 'Author', 'author-bio' ),
 			'role'     => '',
 			'short'    => '',
 			'url'      => get_author_posts_url( $user_id ),

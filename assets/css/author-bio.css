@@ -1315,6 +1315,9 @@ img.abio-media { border: 1px solid var(--abio-line); }
 }
 
 .abio-list__body { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+/* Slightly tighter to the name than the rest of the stack, so it reads as
+   that name's eyebrow rather than as another line of its own. */
+.abio-list__kicker { margin-bottom: 1px; }
 .abio-list__name { font-size: 20px; font-weight: 600; line-height: 1.25; }
 .abio-list__role { font-size: 14px; color: var(--abio-dim); }
 .abio-list__short { font-size: 14px; line-height: 1.6; color: var(--abio-soft); text-wrap: pretty; }

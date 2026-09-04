@@ -94,9 +94,13 @@ so figures still align in a column.
 
 ## The author index
 
-`[author_bio_list]` lists every saved Author Profile as a vertical index —
-headshot, name, role, one-line summary, and how many articles they have
-published — with each name linking to that author's archive.
+`[author_bio_list]` lists authors as a vertical index. Each row carries the
+portrait, the kicker, the name, the role and the short line, plus how many
+articles that author has published, with the name linking to their archive.
+
+The kicker sits above the name as a tracked uppercase eyebrow, which is where
+all ten single-profile templates put it. It falls back to "Author" when a
+profile does not set one, so a row is never unlabelled.
 
 ```
 [author_bio_list]

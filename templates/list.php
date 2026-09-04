@@ -47,6 +47,10 @@ $abio_count = count( $d['authors'] );
 				</div>
 
 				<div class="abio-list__body">
+					<?php if ( '' !== $abio_author['kicker'] ) : ?>
+						<span class="abio-kicker abio-list__kicker"><?php echo esc_html( $abio_author['kicker'] ); ?></span>
+					<?php endif; ?>
+
 					<h3 class="abio-list__name">
 						<?php echo ABIO_View::optional_link( $abio_author['url'], $abio_author['name'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 					</h3>
