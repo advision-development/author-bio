@@ -302,11 +302,15 @@ attached the plugin falls back to GitHub's generated source archive and renames
 its folder on the way in, so the update still lands in the right place; it just
 carries the development files with it.
 
+Build it from the tag rather than by hand — `.gitattributes` already lists
+what a release excludes, so there is no list to keep in step:
+
 ```bash
-zip -r author-bio.zip author-bio \
-  -x 'author-bio/.git/*' 'author-bio/docs/*' 'author-bio/.superpowers/*' \
-     'author-bio/.impeccable/*' 'author-bio/PRODUCT.md' 'author-bio/DESIGN.md'
+git archive --format=zip --prefix=author-bio/ -o author-bio-1.2.0.zip v1.2.0
 ```
+
+The filename carries the version, the `--prefix` does not: that prefix names
+the folder the plugin installs into, so it stays `author-bio/` every time.
 
 ## Requirements
 

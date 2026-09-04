@@ -7,13 +7,18 @@ it cannot be scripted or run in CI.
 
 ## Installing the plugin
 
-1. From the plugin's working directory, zip the plugin folder, excluding the
-   non-plugin directories:
+1. Build the zip the way a release does, so you are verifying what ships.
+   `.gitattributes` carries the exclusions, so nothing has to be listed here —
+   and the hand-rolled `zip -r` this used to recommend left `CLAUDE.md` in the
+   package:
 
-       zip -r author-bio.zip . -x 'docs/*' -x '.git/*' -x '.superpowers/*'
+       git archive --format=zip --prefix=author-bio/ -o /tmp/author-bio-test.zip HEAD
 
-2. In wp-admin, go to **Plugins → Add New → Upload Plugin**, upload
-   `author-bio.zip`, and activate it.
+   To test uncommitted work, commit it to a scratch branch first and archive
+   that; `git archive` reads the tree, not the working directory.
+
+2. In wp-admin, go to **Plugins → Add New → Upload Plugin**, upload that zip,
+   and activate it.
 3. Turn on `WP_DEBUG` (and ideally `WP_DEBUG_LOG`) in `wp-config.php` before
    starting — several checks below depend on seeing (or not seeing) PHP
    notices.

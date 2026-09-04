@@ -40,27 +40,37 @@ git tag -a v1.1.0 -m "Author Bio 1.1.0"
 git push origin v1.1.0
 
 # 3. Build the distributable. export-ignore in .gitattributes strips docs/,
-#    PRODUCT.md, DESIGN.md, .impeccable/ and .superpowers/ — never hand-roll
-#    an exclude list, and never zip the working tree.
-git archive --format=zip --prefix=author-bio/ -o /tmp/author-bio.zip v1.1.0
+#    PRODUCT.md, DESIGN.md, CLAUDE.md, .impeccable/ and .superpowers/ — never
+#    hand-roll an exclude list, and never zip the working tree.
+#
+#    The filename carries the version; the --prefix does not. That prefix is
+#    what names the installed folder, so it stays `author-bio/` for every
+#    release regardless of what the file is called.
+git archive --format=zip --prefix=author-bio/ -o /tmp/author-bio-1.1.0.zip v1.1.0
 
 # 4. Publish, attaching that zip.
 gh release create v1.1.0 --repo advision-development/author-bio \
   --title "Author Bio 1.1.0" --notes-file /tmp/notes.md --latest \
-  /tmp/author-bio.zip
+  /tmp/author-bio-1.1.0.zip
 ```
 
-**Always attach the zip.** `ABIO_Updater::package_url()` prefers an attached
-`.zip` and falls back to GitHub's generated source archive, which unpacks to
-`author-bio-<tag>/`. The updater renames that folder on the way in, so updates
-survive it — but a human doing a manual first install from the source archive
-ends up with a wrongly named plugin directory. Say so in release notes.
+**Always attach the zip, and attach exactly one.**
+`ABIO_Updater::package_url()` walks the release's assets and takes the **first**
+one whose name ends in `.zip`; it matches on the extension, not on a filename,
+which is why versioning the filename is safe. It also means a second zip asset
+on the same release makes the choice arbitrary — if you need to replace a
+published asset, delete the old one before uploading the new one rather than
+after. With no zip at all it falls back to GitHub's generated source archive,
+which unpacks to `author-bio-<tag>/`. The updater renames that folder on the way
+in, so updates survive it — but a human doing a manual first install from the
+source archive ends up with a wrongly named plugin directory. Say so in release
+notes.
 
 Sanity-check an archive before publishing: one top-level `author-bio/` folder,
 and nothing from `docs/`.
 
 ```bash
-unzip -Z1 /tmp/author-bio.zip | cut -d/ -f1 | sort -u   # => author-bio
+unzip -Z1 /tmp/author-bio-1.1.0.zip | cut -d/ -f1 | sort -u   # => author-bio
 ```
 
 ### Version numbering
