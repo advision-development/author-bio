@@ -115,6 +115,10 @@ this is the short list of things that look harmless and are not.
   `ABIO_Articles::summary()` works from raw `post_content` and re-applies
   `wptexturize()` by hand, because smart quotes are the only part of that
   pipeline a teaser wants.
+- **`get_users( capability: … )` can return the same person twice** when they
+  hold several capability-granting roles — it happens on bookmakersreview.
+  De-duplicate by ID before rendering a list of users, or a multi-select
+  shows duplicate options and can submit an ID twice.
 - **Never fabricate profile content.** Credentials, badges, affiliations and
   bylines are claims the site stands behind. Where material is missing the
   correct behaviour is to show less. Do not attach demo data to a real person.

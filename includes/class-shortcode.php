@@ -144,17 +144,7 @@ class ABIO_Shortcode {
 		$explicit = '' !== $atts['user'] ? $atts['user'] : $atts['id'];
 
 		if ( '' !== $explicit ) {
-			if ( is_numeric( $explicit ) ) {
-				return absint( $explicit );
-			}
-
-			$user = get_user_by( 'login', sanitize_user( $explicit ) );
-
-			if ( ! $user ) {
-				$user = get_user_by( 'slug', sanitize_title( $explicit ) );
-			}
-
-			return $user ? (int) $user->ID : 0;
+			return self::user_from_token( $explicit );
 		}
 
 		if ( is_author() ) {
@@ -174,6 +164,36 @@ class ABIO_Shortcode {
 		}
 
 		return 0;
+	}
+
+	/**
+	 * One user reference — an ID, a login, or a nicename — as a user ID.
+	 *
+	 * Shared with the author index so both shortcodes accept the same forms.
+	 *
+	 * @param string|int $token
+	 * @return int User ID, or 0 when nothing matches.
+	 */
+	public static function user_from_token( $token ) {
+		$token = is_string( $token ) ? trim( $token ) : $token;
+
+		if ( '' === $token || null === $token ) {
+			return 0;
+		}
+
+		if ( is_numeric( $token ) ) {
+			$id = absint( $token );
+
+			return get_userdata( $id ) ? $id : 0;
+		}
+
+		$user = get_user_by( 'login', sanitize_user( $token ) );
+
+		if ( ! $user ) {
+			$user = get_user_by( 'slug', sanitize_title( $token ) );
+		}
+
+		return $user ? (int) $user->ID : 0;
 	}
 
 	/**

@@ -20,7 +20,10 @@ class ABIO_Directory {
 	 *
 	 * @param array $args exclude (post IDs), limit (0 for all),
 	 *                    orderby ('name'|'posts'|'recent'), order ('asc'|'desc'),
-	 *                    counts (include the published-article count).
+	 *                    counts (include the published-article count),
+	 *                    users (extra WordPress user IDs to list even though
+	 *                    they have no Author Profile),
+	 *                    profiles (false to list only the given users).
 	 * @return array Rows of name, role, short, url, portrait, posts.
 	 */
 	public static function authors( $args = array() ) {
@@ -31,11 +34,13 @@ class ABIO_Directory {
 				'orderby' => 'name',
 				'order'   => 'asc',
 				'counts'  => true,
+				'users'   => array(),
+				'profiles' => true,
 			),
 			$args
 		);
 
-		$ids = get_posts(
+		$ids = empty( $args['profiles'] ) ? array() : get_posts(
 			array(
 				'post_type'        => ABIO_Post_Type::SLUG,
 				'post_status'      => 'publish',
@@ -80,6 +85,7 @@ class ABIO_Directory {
 
 			$rows[] = array(
 				'id'       => $id,
+				'user'     => $user_id,
 				'name'     => $name,
 				'role'     => (string) get_post_meta( $id, ABIO_Fields::meta_key( 'role' ), true ),
 				'short'    => (string) get_post_meta( $id, ABIO_Fields::meta_key( 'short' ), true ),
@@ -91,10 +97,72 @@ class ABIO_Directory {
 			);
 		}
 
+		// Authors named explicitly who have no profile of their own. Anyone
+		// already covered by a profile above is skipped: that record is the
+		// richer one, and listing a person twice is worse than either.
+		$listed = wp_list_pluck( $rows, 'user' );
+
+		foreach ( (array) $args['users'] as $user_id ) {
+			$user_id = absint( $user_id );
+
+			if ( ! $user_id || in_array( $user_id, $listed, true ) ) {
+				continue;
+			}
+
+			$row = self::user_row( $user_id, $want_counts );
+
+			if ( $row ) {
+				$rows[]   = $row;
+				$listed[] = $user_id;
+			}
+		}
+
 		$rows = self::sort( $rows, $args['orderby'], $args['order'] );
 		$limit = absint( $args['limit'] );
 
 		return $limit ? array_slice( $rows, 0, $limit ) : $rows;
+	}
+
+	/**
+	 * A row for a WordPress user with no Author Profile.
+	 *
+	 * The same reasoning as the catch-all page: only what WordPress already
+	 * holds. There is no role or summary because WordPress has no such field,
+	 * so those cells stay empty rather than being filled with a guess.
+	 *
+	 * @param int  $user_id
+	 * @param bool $want_counts
+	 * @return array|false
+	 */
+	private static function user_row( $user_id, $want_counts ) {
+		$user = get_userdata( $user_id );
+
+		if ( ! $user || '' === trim( (string) $user->display_name ) ) {
+			return false;
+		}
+
+		$portrait = 0;
+
+		if ( get_option( 'show_avatars' ) ) {
+			$avatar = get_avatar_url( $user_id, array( 'size' => 300 ) );
+
+			if ( $avatar ) {
+				$portrait = $avatar;
+			}
+		}
+
+		return array(
+			'id'       => 0,
+			'user'     => $user_id,
+			'name'     => $user->display_name,
+			'role'     => '',
+			'short'    => '',
+			'url'      => get_author_posts_url( $user_id ),
+			'portrait' => $portrait,
+			'posts'    => $want_counts
+				? ABIO_Stats::byline_count( $user_id, ABIO_Articles::post_types() )
+				: 0,
+		);
 	}
 
 	/**
@@ -130,6 +198,17 @@ class ABIO_Directory {
 				usort(
 					$rows,
 					static function ( $a, $b ) {
+						// Users listed without a profile have no profile date to
+						// sort on, so they sit after the ones that do rather
+						// than sorting as if they were the oldest.
+						if ( ! $a['id'] || ! $b['id'] ) {
+							if ( $a['id'] === $b['id'] ) {
+								return strcasecmp( $a['name'], $b['name'] );
+							}
+
+							return $a['id'] ? -1 : 1;
+						}
+
 						return $b['id'] < $a['id'] ? -1 : 1;
 					}
 				);

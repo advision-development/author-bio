@@ -31,6 +31,8 @@ class ABIO_Shortcode_List {
 				'order'    => 'asc',
 				'counts'   => '1',
 				'heading'  => '',
+				'users'    => '',
+				'profiles' => '',
 			),
 			is_array( $atts ) ? $atts : array(),
 			self::TAG
@@ -40,12 +42,34 @@ class ABIO_Shortcode_List {
 			? $atts['orderby']
 			: 'name';
 
+		// Authors → Settings → Author index supplies the defaults; a shortcode
+		// attribute overrides them for one placement.
+		$profiles = '' === (string) $atts['profiles']
+			? (bool) ABIO_Settings::get( 'index_all_profiles', 1 )
+			: '0' !== (string) $atts['profiles'];
+
+		if ( '' === (string) $atts['users'] ) {
+			$users = (array) ABIO_Settings::get( 'index_users', array() );
+		} else {
+			$users = array();
+
+			foreach ( explode( ',', (string) $atts['users'] ) as $token ) {
+				$id = ABIO_Shortcode::user_from_token( trim( $token ) );
+
+				if ( $id ) {
+					$users[] = $id;
+				}
+			}
+		}
+
 		$authors = ABIO_Directory::authors(
 			array(
-				'limit'   => absint( $atts['count'] ),
-				'orderby' => $orderby,
-				'order'   => 'desc' === strtolower( (string) $atts['order'] ) ? 'desc' : 'asc',
-				'counts'  => '0' !== (string) $atts['counts'],
+				'limit'    => absint( $atts['count'] ),
+				'orderby'  => $orderby,
+				'order'    => 'desc' === strtolower( (string) $atts['order'] ) ? 'desc' : 'asc',
+				'counts'   => '0' !== (string) $atts['counts'],
+				'users'    => $users,
+				'profiles' => $profiles,
 			)
 		);
 
@@ -107,7 +131,7 @@ class ABIO_Shortcode_List {
 		}
 
 		return '<p class="abio-missing">'
-			. esc_html__( 'Author Bio: no published author profiles to list yet.', 'author-bio' )
+			. esc_html__( 'Author Bio: nothing to list. Either no Author Profiles are published, or Authors → Settings → Author index is set to list only selected authors and none are selected.', 'author-bio' )
 			. '</p>';
 	}
 }

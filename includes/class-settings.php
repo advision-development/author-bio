@@ -30,6 +30,8 @@ class ABIO_Settings {
 			'show_pitch'         => 1,
 			'show_breadcrumbs'   => 1,
 			'fallback_profiles'  => 1,
+			'index_all_profiles' => 1,
+			'index_users'        => array(),
 			'palette_ink'        => '',
 			'palette_paper'      => '',
 			'palette_accent'     => '',
@@ -160,8 +162,20 @@ class ABIO_Settings {
 		// An unchecked checkbox is absent from the POST body entirely, so a
 		// missing key means off. Falling back to the default here would make a
 		// toggle impossible to switch off.
-		foreach ( array( 'show_pitch', 'show_breadcrumbs', 'fallback_profiles' ) as $flag ) {
+		foreach ( array( 'show_pitch', 'show_breadcrumbs', 'fallback_profiles', 'index_all_profiles' ) as $flag ) {
 			$clean[ $flag ] = empty( $input[ $flag ] ) ? 0 : 1;
+		}
+
+		$chosen               = isset( $input['index_users'] ) ? (array) $input['index_users'] : array();
+		$clean['index_users'] = array();
+
+		foreach ( $chosen as $candidate ) {
+			$id = absint( $candidate );
+
+			// Only real users, and never the same person twice.
+			if ( $id && get_userdata( $id ) && ! in_array( $id, $clean['index_users'], true ) ) {
+				$clean['index_users'][] = $id;
+			}
 		}
 
 		$face                = isset( $input['typeface'] ) ? sanitize_key( self::scalar( $input['typeface'] ) ) : 'theme';
@@ -278,6 +292,8 @@ class ABIO_Settings {
 			. esc_html__( 'With unconfigured authors enabled, an author who has no Author Profile still gets a page in the selected template: their name, their picture, their WordPress biography and their published articles. Nothing is invented — a field WordPress does not hold is left out, so the section simply does not appear. Switch it off to leave those archives empty instead.', 'author-bio' )
 			. '</p>';
 
+		self::index_fields( $values );
+
 		self::section(
 			__( 'Defaults', 'author-bio' ),
 			array(
@@ -336,6 +352,84 @@ class ABIO_Settings {
 			echo '</td></tr>';
 		}
 
+		echo '</tbody></table>';
+	}
+
+	/**
+	 * Who appears in [author_bio_list].
+	 *
+	 * @param array $values
+	 */
+	private static function index_fields( $values ) {
+		$all      = ! empty( $values['index_all_profiles'] );
+		$selected = isset( $values['index_users'] ) ? (array) $values['index_users'] : array();
+
+		echo '<h2>' . esc_html__( 'Author index', 'author-bio' ) . '</h2>';
+
+		echo '<table class="form-table" role="presentation"><tbody>';
+
+		echo '<tr><th scope="row">' . esc_html__( 'Configured authors', 'author-bio' ) . '</th><td>';
+		printf(
+			'<label><input type="checkbox" name="%s" value="1"%s /> %s</label>',
+			esc_attr( self::OPTION . '[index_all_profiles]' ),
+			checked( $all, true, false ),
+			esc_html__( 'Show all authors who have a saved Author Profile', 'author-bio' )
+		);
+		echo '<p class="description">'
+			. esc_html__( 'Leave this on for the usual case. Switch it off to list only the authors you pick below, which is how you curate an exact index.', 'author-bio' )
+			. '</p>';
+		echo '</td></tr>';
+
+		echo '<tr><th scope="row"><label for="abio-index_users">'
+			. esc_html__( 'Select authors', 'author-bio' ) . '</label></th><td>';
+
+		// The same population as a profile's Linked user field, so the two
+		// screens offer the same people.
+		$users = get_users(
+			array(
+				'capability' => array( 'edit_posts' ),
+				'orderby'    => 'display_name',
+				'order'      => 'ASC',
+				'fields'     => array( 'ID', 'display_name', 'user_login' ),
+			)
+		);
+
+		// A capability query can return the same person more than once when they
+		// hold several capability-granting roles, and a duplicated option in a
+		// multi-select is both confusing and able to submit an ID twice.
+		$unique = array();
+
+		foreach ( $users as $user ) {
+			$unique[ (int) $user->ID ] = $user;
+		}
+
+		$users = array_values( $unique );
+
+		if ( ! $users ) {
+			echo '<p class="description">' . esc_html__( 'No users on this site can be listed as authors yet.', 'author-bio' ) . '</p>';
+		} else {
+			printf(
+				'<select id="abio-index_users" name="%s" multiple size="%d" class="abio-multiselect">',
+				esc_attr( self::OPTION . '[index_users][]' ),
+				(int) min( 12, max( 5, count( $users ) ) )
+			);
+
+			foreach ( $users as $user ) {
+				printf(
+					'<option value="%d"%s>%s</option>',
+					(int) $user->ID,
+					selected( in_array( (int) $user->ID, array_map( 'absint', $selected ), true ), true, false ),
+					esc_html( $user->display_name ? $user->display_name : $user->user_login )
+				);
+			}
+
+			echo '</select>';
+			echo '<p class="description">'
+				. esc_html__( 'Adds these people to the index whether or not they have an Author Profile. Anyone already covered by a profile is listed once, from that profile. Hold Command or Control to select several, and to deselect.', 'author-bio' )
+				. '</p>';
+		}
+
+		echo '</td></tr>';
 		echo '</tbody></table>';
 	}
 

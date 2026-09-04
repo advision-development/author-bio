@@ -89,9 +89,11 @@ Confirmed and implemented:
 
 - Ten interchangeable author-page layouts, selected per shortcode by number or
   slug.
-- An author index, `[author_bio_list]`, listing every saved profile vertically
-  with headshot, name, role and published-article count, inheriting the look of
-  whichever template is selected.
+- An author index, `[author_bio_list]`, listing authors vertically with
+  headshot, name, role and published-article count, inheriting the look of
+  whichever template is selected. Who appears is a setting: all saved profiles,
+  a hand-picked set of users, or both — so an index can be exhaustive or
+  curated without touching a shortcode.
 - Author resolution order: explicit attribute, then the author archive's
   queried object, then the current post's author.
 - Per-profile content: identity, biography, badges, credentials, portrait,

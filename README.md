@@ -113,14 +113,29 @@ published — with each name linking to that author's archive.
 | `order` | `asc` | `asc` or `desc` |
 | `counts` | `1` | show the article count; `0` also skips counting it |
 | `heading` | — | replaces the default "Authors · N" label |
+| `profiles` | settings | `0` lists only the selected authors |
+| `users` | settings | comma-separated IDs, logins or nicenames to list |
 
 It renders inside the same root element as a single profile, so it inherits the
 selected template's palette, typeface, corner language and label treatment from
 the same tokens — plus the details that genuinely differ: an inverted heading
 band in templates 4, 6, 7 and 10, circular headshots in 5, rounded cards in 8.
 
-Only saved profiles appear, so the index stays something you curate. An author
-who only has the catch-all page is not listed until someone writes them up.
+### Who appears
+
+**Authors → Settings → Author index** decides:
+
+- **Configured authors** — on by default, listing everyone with a saved Author
+  Profile. Switch it off to list only the people you pick, which is how you
+  curate an exact index.
+- **Select authors** — a multi-select of site users. Anyone chosen appears
+  whether or not they have an Author Profile, shown from what WordPress holds:
+  display name, avatar, and their published-article count. Somebody who already
+  has a profile is listed once, from that profile.
+
+Two attributes override those settings for a single placement:
+`profiles="0"` ignores the saved profiles, and `users="12,45"` (IDs, logins or
+nicenames) replaces the selected list.
 
 Each article count is one query per author. On a large index, `counts="0"`
 removes both the figure and the queries.
