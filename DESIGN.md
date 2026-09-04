@@ -296,6 +296,19 @@ page does not know how wide the window is and must not care.
 list adapts its track count to what actually rendered. Empty cells are visible
 in this system because grids paint their gaps.
 
+### Density and width
+
+Two unitless multipliers scale the system without redesigning it:
+`--abio-space` on every padding and gap, `--abio-width` on every content
+max-width above 700px. Both are `1` by default, and every affected value is
+written `calc(<authored px> * var(--abio-…))` so that at `1` it computes to the
+pixel it was authored as — the settings are inert until someone moves them.
+
+They are multipliers rather than absolute values so proportion survives: at
+Narrow the masthead is still narrower than the product-UI template. A
+max-width below 700px is left alone, because at that size it is capping an
+element — a measure, a rail — not the page column.
+
 ## Elevation & Depth
 
 The system is currently flat throughout: zero box-shadows, zero gradients, and
@@ -340,6 +353,14 @@ status pills.
 the ten layouts sets its own corner language; most chose square. A new template
 may choose otherwise, provided it commits to that choice consistently across
 every surface it owns rather than mixing radii within one layout.
+
+The three non-zero radii are tokens — `--abio-radius-sm` (4px),
+`--abio-radius-md` (6px) and `--abio-radius-pill` (99px) — and a Corners
+setting swaps all three at once between Square (0), Soft (the values above) and
+Rounded (8/12/99). Use a token rather than a literal for any new corner, or the
+setting will not reach it. Circular crops stay a literal `50%` on purpose: a
+round portrait is one template's identity, and a site choosing square corners
+must not end up with a boxed portrait.
 
 Borders are uniformly one pixel of Line. Image frames carry the same border as
 cards, so a photograph sits in the page with the same weight as a panel.
@@ -431,6 +452,38 @@ otherwise only discover after the tab had already switched.
 The one diagnostic surface: a dashed Line border, Muted text at 13px, shown
 only to users who can edit posts. It is deliberately the only dashed border in
 the system, so it never reads as content.
+
+### Author Index
+
+`[author_bio_list]` has its own view per template, `templates/list-1.php`
+through `list-10.php`, each echoing the composition of the profile page a
+reader clicks through to. One shared layout was tried and rejected: with only
+tokens separating them, several templates differed by a corner radius alone and
+changing the template looked like it did nothing.
+
+Every view renders the same five-part row — portrait, kicker, name, role, short
+line — and drops whichever of them an author has no value for. None shows a
+published-article count.
+
+Three patterns cover the ten:
+
+- **Box grid** (1, 3): boxes flowing horizontally and wrapping, on a Wash
+  ground so the Paper box reads as raised — the step Cards / Containers
+  describes. Tracks are `repeat(auto-fill, …)`, never a fixed count and never
+  `auto-fit`: a fixed count paints dead cells, and `auto-fit` collapses the
+  spare tracks so two authors stretch to half the width each, which balloons a
+  1:1 portrait to several hundred pixels. Template 3 caps its tracks so a
+  part-filled row has free space to centre into under the centred masthead.
+- **Full-width card** (7): one boxed card per row on a Wash ground.
+- **Hairline rows** (2, 4, 5, 6, 8, 9, 10): rows separated by a rule, a 2px Ink
+  rule, or dotted Line, per that template's own language. 8 keeps the
+  product-UI 6px corner; 9 encloses its rows in a single bordered sheet.
+
+Grids and rows both size their text track with `minmax(0, 1fr)`, and every name
+carries `overflow-wrap: break-word` — a name is one unbroken token often enough
+that it decides the layout. Where a name sits in a flex row beside a pill it
+also needs `min-width: 0`, because a flex item's `auto` minimum floors it at the
+width of its longest word and `overflow-wrap` does not reduce that.
 
 ## Do's and Don'ts
 

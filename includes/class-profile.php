@@ -103,6 +103,17 @@ class ABIO_Profile {
 	}
 
 	/**
+	 * The Author Profile post behind this profile, or 0 for a virtual one built
+	 * from a WordPress user alone. Structured data uses it for the record's
+	 * dates, which a virtual profile has no honest answer for.
+	 *
+	 * @return int
+	 */
+	public function post_id() {
+		return (int) $this->post_id;
+	}
+
+	/**
 	 * @param string $key
 	 * @return mixed
 	 */

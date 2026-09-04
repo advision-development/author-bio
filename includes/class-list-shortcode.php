@@ -5,10 +5,17 @@ defined( 'ABSPATH' ) || exit;
 /**
  * [author_bio_list] — every saved Author Profile as a vertical index.
  *
- * Renders inside the same root element as a single profile page, under the
- * selected template's modifier class, so it inherits that template's palette,
- * typeface, corner language and label treatment from the tokens rather than
- * from a second set of styles.
+ * Each of the ten templates has its own index view in templates/list-N.php,
+ * mirroring the composition of templates/template-N.php. Tokens alone were not
+ * enough: with one shared layout, several templates differed only in a corner
+ * radius and read as identical, so changing `template` looked like it did
+ * nothing. The trade is ten files to keep in step; the row contract they all
+ * render — portrait, name, kicker, role, short line — is fixed by
+ * ABIO_Directory and is the thing to hold constant when editing them.
+
+ * Renders inside the same root element as a single profile page, under that
+ * template's modifier class, so palette, typeface and label treatment still
+ * come from the tokens rather than from a second set of styles.
  */
 class ABIO_Shortcode_List {
 
@@ -29,7 +36,6 @@ class ABIO_Shortcode_List {
 				'count'    => '0',
 				'orderby'  => 'name',
 				'order'    => 'asc',
-				'counts'   => '1',
 				'heading'  => '',
 				'users'    => '',
 				'profiles' => '',
@@ -67,7 +73,9 @@ class ABIO_Shortcode_List {
 				'limit'    => absint( $atts['count'] ),
 				'orderby'  => $orderby,
 				'order'    => 'desc' === strtolower( (string) $atts['order'] ) ? 'desc' : 'asc',
-				'counts'   => '0' !== (string) $atts['counts'],
+				// Counted only when the order depends on it. No index view shows
+				// the figure, and counting is a query per author.
+				'counts'   => 'posts' === $orderby,
 				'users'    => $users,
 				'profiles' => $profiles,
 			)
@@ -78,18 +86,17 @@ class ABIO_Shortcode_List {
 		}
 
 		$number = ABIO_Shortcode::template_number( $atts['template'] );
-		$file   = ABIO_PATH . 'templates/list.php';
+		$file   = ABIO_PATH . 'templates/list-' . $number . '.php';
 
 		if ( ! file_exists( $file ) ) {
 			return '';
 		}
 
-		// The same shape a single profile gets, so the list is styled by the
-		// tokens already on the root rather than by anything of its own.
+		// The same shape a single profile gets: every list view reads these
+		// three keys and nothing else.
 		$d = array(
 			'authors' => $authors,
 			'heading' => (string) $atts['heading'],
-			'counts'  => '0' !== (string) $atts['counts'],
 			'site'    => array(
 				'name'       => ABIO_Settings::get( 'site_name', get_bloginfo( 'name' ) ),
 				'authorsUrl' => ABIO_Settings::get( 'authors_url', '' ),
@@ -116,6 +123,8 @@ class ABIO_Shortcode_List {
 		include $file;
 
 		echo '</div>';
+
+		echo ABIO_Schema::item_list( $authors, (string) $atts['heading'] ); // phpcs:ignore WordPress.Security.EscapeOutput
 
 		return ob_get_clean();
 	}

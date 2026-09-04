@@ -81,19 +81,40 @@ this is the short list of things that look harmless and are not.
   full-bleed builder section on one site and a ~620px themed content column on
   the next, and `@media` cannot tell those apart. All 30 breakpoint blocks are
   `@container` against `.abio`, which declares `container-type: inline-size`.
-- **A class on an `li` loses to the reset.** `.abio li { padding: 0 }` in the
-  reset is (0,1,1); `.abio-list__row` is (0,1,0), so the reset strips it. Every
-  template dodges this by ending the selector in `li`
-  (`.abio-list__rows > li`), which ties the reset and wins on source order.
-  Do not weaken the reset with `:where()` here — unlike the link rule, it is
-  what defends list markup against host CSS.
+- **A class on an `li` — or on the `ul`/`ol` — loses to the reset.**
+  `.abio li { padding: 0 }` is (0,1,1); `.abio-l1__rows > li` ties it and wins
+  on source order, which is why every row rule ends in `li`. The same rule
+  covers the list element itself: `.abio ul, .abio ol` zero margin *and*
+  padding, so anything setting `max-width`, `margin: 0 auto` or `padding` on a
+  rows container must be written `ul.abio-lN__rows` / `ol.…`. Bare-class
+  versions fail silently — the block renders full-bleed with no inset, which is
+  exactly how the sports-desk index shipped its cards edge-to-edge until a
+  screenshot caught it. Do not weaken the reset with `:where()` here — unlike
+  the link rule, it is what defends list markup against host CSS.
 - **Base element styles use `:where()`.** `.abio a` is (0,1,1) and outranks any
   single-class component rule, so a bare base rule silently strips every button
   of its own colour. This is what made a filled CTA render black-on-black.
-- **Three colour seeds only** — ink, paper, accent. Everything else is
-  `color-mix()` off them, which is how the palette re-tones to a host site. A
-  literal hex belongs only in the seed declarations and their `@supports`
-  fallback.
+- **Three colour seeds, and derivation is still the default.** Ink, paper and
+  accent are the seeds; the other ten colours are `color-mix()` off them, which
+  is how the palette re-tones to a host site. In the stylesheet a literal hex
+  still belongs only in the seed declarations and their `@supports` fallback.
+  Authors → Settings now exposes the ten derived colours as *optional*
+  overrides — blank means "keep deriving", and only a filled field is emitted
+  into the root element's inline style, where it outranks the `color-mix()`.
+  Do not turn that into a full manual palette by giving those fields defaults:
+  the moment every colour is literal, a site that changes its brand colour no
+  longer re-tones, which is the property the three seeds exist to provide.
+  `ABIO_Palette::MIXES` is the single description of how each one is mixed, and
+  it must stay in step with the `@supports` block by hand — the CSS is not
+  generated from it.
+- **The two scales are multipliers that must be inert at 1.** `--abio-space`
+  (density) and `--abio-width` (content width) are unitless, and every value
+  they touch is written `calc(<authored px> * var(--abio-…))` so that at 1 it
+  computes to exactly the authored pixel. That is what makes the settings safe
+  to ship: a site that never opens them renders identically. Verified once by
+  measuring every element's box geometry before and after the refactor — all
+  92 rects on a profile page were byte-identical. If you add a padding or gap,
+  wrap it the same way or density silently stops applying to it.
 - **Wash is never behind body text.** It is a page ground. A box holding copy is
   Paper plus a hairline.
 - **No font family outside `--abio-font`,** and no webfont ever. Type is
@@ -119,9 +140,40 @@ this is the short list of things that look harmless and are not.
   hold several capability-granting roles — it happens on bookmakersreview.
   De-duplicate by ID before rendering a list of users, or a multi-select
   shows duplicate options and can submit an ID twice.
+- **The settings screen is one form, and it must stay one form.** The five
+  tabs are `display` toggled on one `<form>`; every field posts on every save.
+  Giving each tab its own form looks tidier and silently destroys data:
+  `ABIO_Settings::sanitize()` reads a missing checkbox as "off" — correct,
+  because an unchecked box posts nothing — so saving the Colors tab would
+  switch off Pitch box, Breadcrumbs and Unconfigured authors and empty the
+  selected-authors list. Verified by counting inputs: all 32 settings keys
+  appear inside the single form.
+- **The admin is WordPress's surface, not this plugin's.** `DESIGN.md` governs
+  the author page. The settings screen uses core's `nav-tab`, `form-table`,
+  `button`, `wp-color-picker` and `--wp-admin-theme-color`, so it follows the
+  user's admin colour scheme and stays legible when core restyles. The design
+  detector will flag a couple of admin values against `DESIGN.md`; those are
+  documented exceptions at the top of `assets/admin/settings.css`, not drift to
+  correct. Do not import the Dossier palette into the admin.
+- **Never reconstruct a screen's hook suffix.** `ABIO_Settings::assets()`
+  compares against the value `add_submenu_page()` returned, captured into
+  `$hook_suffix`. The obvious guess is wrong: the page under the Authors menu
+  reports `admin_page_abio-settings`, not `author_profile_page_abio-settings`.
+  A wrong guess loads the colour picker on no screen or on every screen.
 - **Never fabricate profile content.** Credentials, badges, affiliations and
   bylines are claims the site stands behind. Where material is missing the
   correct behaviour is to show less. Do not attach demo data to a real person.
+  This governs `ABIO_Schema` as hard as it governs the templates: structured
+  data is the machine-readable version of the same claims, and a padded graph
+  is a padded claim. `prune()` drops every key that did not resolve, credentials
+  carry a name and nothing else — no invented issuer, level or date — and
+  `dateCreated`/`dateModified` are emitted only for a post-backed profile,
+  because a virtual one has no authored record to date.
+- **JSON-LD is encoded with `JSON_HEX_TAG`.** It is the only thing standing
+  between a profile field and a `</script>` breakout, since the payload is
+  dropped inside a `<script>` element where `esc_html()` would corrupt the JSON.
+  `ABIO_Schema::script()` is the single place any of this is emitted; do not
+  hand-build a second one.
 
 - **`get_post_meta( 0, … )` returns `false`, not `''`.** A virtual profile —
   the catch-all built from a WordPress user with no Author Profile post — has
@@ -143,6 +195,12 @@ Colour comes from `ABIO_Palette`, articles and stats from `ABIO_Articles` and
 `ABIO_Stats`. `ABIO_Directory` is the one query path for listing profiles —
 both `[author_bio_list]` and every template's "Other authors" block go through
 it, so the two can never disagree about who counts as an author.
+`ABIO_Schema` turns either shape into JSON-LD (`ProfilePage`/`Person` for a
+profile, `ItemList` for an index) and both shortcodes append it after the styled
+root. The index has ten views of its own, `templates/list-1.php` … `list-10.php`,
+one per template; the row contract they all render — portrait, kicker, name,
+role, short line — comes from `ABIO_Directory` and is the thing to hold constant
+when editing them.
 
 ## Conventions
 

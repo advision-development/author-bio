@@ -1,0 +1,42 @@
+<?php
+/**
+ * Author index — sports desk.
+ *
+ * Mirrors the composition of templates/template-7.php so the index reads as
+ * that template's own directory rather than a generic list.
+ *
+ * @var array $d authors, heading, site
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+$abio_n     = 0;
+$abio_total = count( $d['authors'] );
+$abio_label = '' !== $d['heading']
+	? $d['heading']
+	: sprintf( _n( 'Author · %d', 'Authors · %d', $abio_total, 'author-bio' ), $abio_total );
+?>
+
+<div class="abio-l7">
+	<header class="abio-l7__banner abio-panel--dark">
+		<h2 class="abio-l7__h2"><?php echo esc_html( $abio_label ); ?></h2>
+	</header>
+
+	<ul class="abio-l7__rows">
+		<?php foreach ( $d['authors'] as $a ) : ?>
+			<li>
+				<?php
+					echo ABIO_View::media( // phpcs:ignore WordPress.Security.EscapeOutput
+						$a['portrait'], 'medium', 'portrait 1:1', 'abio-l7__img', $a['name']
+					);
+					?>
+				<div class="abio-l7__body">
+					<span class="abio-l7__tag"><?php echo esc_html( $a['kicker'] ); ?></span>
+					<h3 class="abio-l7__name"><?php echo ABIO_View::optional_link( $a['url'], $a['name'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></h3>
+					<?php if ( '' !== $a['role'] ) : ?><p class="abio-l7__role"><?php echo esc_html( $a['role'] ); ?></p><?php endif; ?>
+					<?php if ( '' !== $a['short'] ) : ?><p class="abio-l7__short"><?php echo esc_html( $a['short'] ); ?></p><?php endif; ?>
+				</div>
+			</li>
+		<?php endforeach; ?>
+	</ul>
+</div>

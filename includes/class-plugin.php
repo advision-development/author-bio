@@ -19,6 +19,7 @@ class ABIO_Plugin {
 			'includes/class-directory.php',
 			'includes/class-profile.php',
 			'includes/class-view.php',
+			'includes/class-schema.php',
 			'includes/class-assets.php',
 			'includes/class-shortcode.php',
 			'includes/class-list-shortcode.php',
@@ -33,6 +34,7 @@ class ABIO_Plugin {
 		add_action( 'add_meta_boxes', array( 'ABIO_Metaboxes', 'register' ) );
 		add_action( 'save_post', array( 'ABIO_Metaboxes', 'save' ) );
 		add_action( 'admin_enqueue_scripts', array( 'ABIO_Metaboxes', 'admin_assets' ) );
+		add_action( 'admin_enqueue_scripts', array( 'ABIO_Settings', 'assets' ) );
 		add_action( 'admin_menu', array( 'ABIO_Settings', 'menu' ) );
 		add_action( 'admin_init', array( 'ABIO_Settings', 'register' ) );
 		add_action( 'admin_post_abio_redetect', array( 'ABIO_Palette', 'handle_redetect' ) );

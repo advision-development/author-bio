@@ -2,7 +2,7 @@
 Requires at least: 6.0
 Requires PHP: 7.4
 Tested up to: 6.9
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 
 Renders a full author page from an [author_bio] shortcode, backed by a
 dedicated Author Profile admin screen linked to a WordPress user.
@@ -29,6 +29,22 @@ others     - other-author cards; 0 disables. Default: 2.
 
 Sections accepted by hide: stats, gallery, focus, edits, experience,
 credentials, follows, others, pitch.
+
+The author index:
+
+[author_bio_list]                         every saved Author Profile, vertically
+[author_bio_list template=7]              in that template's own index layout
+[author_bio_list orderby="posts" order="desc"]
+[author_bio_list count=10 heading="The desk"]
+
+Attributes: template, count, orderby (name|posts|recent), order, heading,
+profiles, users. Each of the ten templates has its own index view. Who appears
+is set in Authors -> Settings -> Author index: all saved profiles, a chosen set
+of users, or both.
+
+Both shortcodes emit schema.org JSON-LD - ProfilePage/Person for a profile,
+ItemList for an index - derived only from fields that are filled in. Suppress it
+with the abio_schema_enabled filter if your SEO plugin already describes authors.
 
 Templates:
 

@@ -319,11 +319,134 @@ class ABIO_Palette {
 	public static function css_vars() {
 		$palette = self::resolve();
 
-		return sprintf(
-			'--abio-ink:%s;--abio-paper:%s;--abio-accent:%s',
-			$palette['ink'],
-			$palette['paper'],
-			$palette['accent']
+		$parts = array(
+			'--abio-ink:' . $palette['ink'],
+			'--abio-paper:' . $palette['paper'],
+			'--abio-accent:' . $palette['accent'],
+		);
+
+		// A derived colour is only emitted when someone typed one in. Left
+		// blank it stays absent from the inline style, so the stylesheet's
+		// color-mix() keeps deriving it and the palette keeps re-toning itself
+		// from the three seeds. That is the whole point of the three-seed rule;
+		// these fields are an escape hatch, not a replacement for it.
+		foreach ( array_keys( self::MIXES ) as $key ) {
+			$override = ABIO_Settings::get( 'palette_' . str_replace( '-', '_', $key ), '' );
+
+			if ( $override ) {
+				$parts[] = '--abio-' . $key . ':' . $override;
+			}
+		}
+
+		foreach ( ABIO_Settings::shape_vars() as $prop => $value ) {
+			$parts[] = $prop . ':' . $value;
+		}
+
+		return implode( ';', $parts );
+	}
+
+	/**
+	 * How each non-seed colour is mixed, mirroring the @supports block in
+	 * author-bio.css. Kept here so the admin can show an editor the value a
+	 * blank field will actually produce, rather than an empty box.
+	 *
+	 * Each entry is array( base, percentage, other ) for
+	 * `color-mix( in srgb, base pct%, other )`.
+	 */
+	const MIXES = array(
+		'wash'        => array( 'paper', 97, 'ink' ),
+		'line'        => array( 'paper', 89, 'ink' ),
+		'muted'       => array( 'ink', 50, 'paper' ),
+		'dim'         => array( 'ink', 71, 'paper' ),
+		'soft'        => array( 'ink', 61, 'paper' ),
+		'faint'       => array( 'ink', 33, 'paper' ),
+		'onink'       => array( 'paper', 77, 'ink' ),
+		'onink-dim'   => array( 'paper', 64, 'ink' ),
+		'onink-line'  => array( 'paper', 15, 'ink' ),
+		'accent-soft' => array( 'accent', 61, 'paper' ),
+	);
+
+	/**
+	 * The ten derived colours, computed from the resolved seeds.
+	 *
+	 * `color-mix( in srgb, … )` interpolates in gamma-encoded sRGB, so this is
+	 * a per-channel weighted average. Eight of the ten land on exactly the hex
+	 * the browser paints; two sit on a half step where the browser's float
+	 * order rounds the other way, so treat these as accurate to one level out
+	 * of 255. They are shown to tell an editor what they are about to
+	 * override, and a difference that small is not visible.
+	 *
+	 * @return array key => hex
+	 */
+	public static function derived() {
+		$palette = self::resolve();
+		$out     = array();
+
+		foreach ( self::MIXES as $key => $mix ) {
+			list( $base, $pct, $other ) = $mix;
+
+			$out[ $key ] = self::mix(
+				isset( $palette[ $base ] ) ? $palette[ $base ] : self::DEFAULT_INK,
+				$pct,
+				isset( $palette[ $other ] ) ? $palette[ $other ] : self::DEFAULT_PAPER
+			);
+		}
+
+		return $out;
+	}
+
+	/**
+	 * @param string $base
+	 * @param int    $pct  Weight of $base, 0-100.
+	 * @param string $other
+	 * @return string Six-digit hex.
+	 */
+	private static function mix( $base, $pct, $other ) {
+		$a   = self::channels( $base );
+		$b   = self::channels( $other );
+		$pct = max( 0, min( 100, (int) $pct ) );
+
+		// Both weights come from the integer percentage. Deriving the second as
+		// `1 - $w` introduces float error large enough to move a channel by one
+		// step: 1 - 0.33 is 0.6699999999999999, not 0.67.
+		$wa = $pct / 100;
+		$wb = ( 100 - $pct ) / 100;
+
+		$out = '#';
+
+		foreach ( array( 0, 1, 2 ) as $i ) {
+			// Mixed in 0-1 space and scaled back, which is the order the
+			// browser uses and lands on its value more often than mixing the
+			// 8-bit values directly. Checked by sampling painted pixels — the
+			// serialised color(srgb ...) string is only six decimals wide and
+			// cannot settle a one-level difference either way.
+			$mixed = ( $a[ $i ] / 255 ) * $wa + ( $b[ $i ] / 255 ) * $wb;
+
+			$out .= str_pad( dechex( (int) round( $mixed * 255 ) ), 2, '0', STR_PAD_LEFT );
+		}
+
+		return $out;
+	}
+
+	/**
+	 * @param string $hex
+	 * @return array r, g, b as 0-255
+	 */
+	private static function channels( $hex ) {
+		$hex = ltrim( (string) $hex, '#' );
+
+		if ( 3 === strlen( $hex ) ) {
+			$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+		}
+
+		if ( 6 !== strlen( $hex ) || ! ctype_xdigit( $hex ) ) {
+			return array( 0, 0, 0 );
+		}
+
+		return array(
+			hexdec( substr( $hex, 0, 2 ) ),
+			hexdec( substr( $hex, 2, 2 ) ),
+			hexdec( substr( $hex, 4, 2 ) ),
 		);
 	}
 

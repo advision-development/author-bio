@@ -90,10 +90,42 @@ Confirmed and implemented:
 - Ten interchangeable author-page layouts, selected per shortcode by number or
   slug.
 - An author index, `[author_bio_list]`, listing authors vertically with
-  headshot, name, role and published-article count, inheriting the look of
-  whichever template is selected. Who appears is a setting: all saved profiles,
-  a hand-picked set of users, or both — so an index can be exhaustive or
-  curated without touching a shortcode.
+  headshot, kicker, name, role and short line. Each template has its own index
+  view rather than one shared layout wearing the template's colours: an index
+  built on the sports desk is boxed cards on a wash, on the research note it is
+  numbered entries on a single sheet. Sharing one layout was tried first and
+  rejected — several templates then differed only by a corner radius, so
+  changing the template looked like it did nothing. Templates 1 and 3 lay the
+  index out as a grid of boxes flowing horizontally, template 7 as full-width
+  cards; a box is Paper with a hairline on a wash ground, because on
+  Paper-over-Paper the hairline alone is invisible and the box does not read as
+  one. No index shows a published-article count — the figure was
+  removed from all ten, and counting it now runs only where the requested order
+  depends on it. Who appears is a setting: all saved profiles, a hand-picked set
+  of users, or both — so an index can be exhaustive or curated without touching
+  a shortcode.
+- schema.org JSON-LD on both surfaces: `ProfilePage`/`Person` for a profile,
+  `ItemList` of `Person` for an index, sharing one `@id` per author so the two
+  describe one person. Derived only from fields an editor filled in — keys that
+  do not resolve are dropped, credentials carry no invented issuer or date, and
+  record dates are emitted only for a real Author Profile post. Suppressible
+  where an SEO plugin already describes authors.
+- Full design-token control in the admin, beyond colour: the ten derived
+  colours as optional overrides (blank keeps deriving from the three seeds, so
+  automatic re-toning stays the default), plus Corners, Content width and
+  Density. Width and density are unitless multipliers rather than absolute
+  values, so each template keeps its proportion instead of the ten collapsing
+  to one measure, and both compute to the authored pixel at their default —
+  a site that never opens these settings renders identically. A type-scale
+  control was considered and deferred: it would mean rewriting 300 font-size
+  declarations and re-verifying all twenty views.
+- A tabbed settings screen — Author index, General, Content, Appearance,
+  Colors — holding 32 settings that had grown into one scroll. Author index is
+  the default tab because it is the one an editor revisits; the others are
+  configured once. Built in WordPress's own admin components rather than a
+  bespoke visual world, so it follows the user's admin colour scheme and
+  degrades to a single scroll without JavaScript. All tabs share one form, so
+  no tab's save can clear another's fields.
 - Author resolution order: explicit attribute, then the author archive's
   queried object, then the current post's author.
 - Per-profile content: identity, biography, badges, credentials, portrait,

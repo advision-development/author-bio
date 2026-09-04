@@ -98,6 +98,10 @@ class ABIO_Shortcode {
 
 		echo '</div>';
 
+		// Structured data last, outside the styled root: it describes the page
+		// rather than belonging to the layout.
+		echo ABIO_Schema::profile_page( $d, $profile ); // phpcs:ignore WordPress.Security.EscapeOutput
+
 		return ob_get_clean();
 	}
 

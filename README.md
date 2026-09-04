@@ -61,6 +61,29 @@ Administrators and Editors on activation — publishing an ordinary post is not
 enough. The Author role can still write posts as usual but cannot create,
 edit, or link an Author Profile.
 
+## The settings screen
+
+**Authors → Settings** is five tabs:
+
+| Tab | Holds |
+|---|---|
+| Author index | who appears in `[author_bio_list]` |
+| General | site name, the three URLs, and the shortcode defaults |
+| Content | section toggles and the pitch box copy |
+| Appearance | typeface, corners, content width, density |
+| Colors | the three seeds, plus the ten derived colors behind a disclosure |
+
+Author index opens first because it is the tab you come back to; the rest are
+set once when a site is configured. The tab is remembered per browser, so it
+survives saving.
+
+All five tabs are one form — every field is submitted on every save, whichever
+tab is open. Colors are native WordPress color pickers, and clearing one is
+what hands it back to being derived.
+
+With JavaScript off the tabs are inert and the page falls back to one long
+scroll with a heading per section, which is what it was before the tabs.
+
 ## Colors
 
 Templates are built from three CSS custom properties — `--abio-ink`,
@@ -68,6 +91,37 @@ Templates are built from three CSS custom properties — `--abio-ink`,
 `color-mix()`. On activation the plugin reads Elementor's global colors or the
 Bricks palette and seeds those three. **Authors → Settings** shows what was
 detected and lets you override any of them.
+
+### Derived colours
+
+The ten mixed colours — wash, line, muted, dim, soft, faint, accent-soft and
+the three on-ink values — each get a field under **Derived colours**. Every
+field is blank by default and shows the mixed value it will use, so you can see
+what you are about to override. Fill one in and it wins; clear it and the mix
+resumes.
+
+Leave them blank where you can. Derivation is what makes the palette re-tone
+itself when a site changes its brand colour — override several and a future
+brand change stops carrying through on its own.
+
+### Shape and spacing
+
+Three more controls under the same screen:
+
+| Control | Options | What it changes |
+|---|---|---|
+| Corners | Square, Soft (default), Rounded | `--abio-radius-sm/md/pill`, every rounded corner in the stylesheet |
+| Content width | Narrow (−20%), Default, Wide (+15%) | `--abio-width`, a multiplier on each template's own max-width |
+| Density | Compact (−15%), Default, Roomy (+20%) | `--abio-space`, a multiplier on every padding and gap |
+
+Width and density are proportional rather than absolute, so each template keeps
+its own character — the masthead stays narrower than the product-UI template
+instead of all ten collapsing to one measure. At the default setting the
+multiplier is `1` and every value computes to exactly the pixel it was authored
+as, so a site that never opens these renders identically.
+
+Round portraits are not affected by the corner setting: a circular portrait is
+template 5's identity, not a corner radius, and "Square" must not flatten it.
 
 ## Layout
 
@@ -95,8 +149,21 @@ so figures still align in a column.
 ## The author index
 
 `[author_bio_list]` lists authors as a vertical index. Each row carries the
-portrait, the kicker, the name, the role and the short line, plus how many
-articles that author has published, with the name linking to their archive.
+portrait, the kicker, the name, the role and the short line, with the name
+linking to their archive.
+
+The index has its own view per template, so `template=7` gives you the sports
+desk's boxed cards on a wash and `template=9` gives you the research note's
+numbered entries on a single bordered sheet, matching the profile page a reader
+lands on when they click through. With no `template` attribute it follows the
+default set in Authors → Settings.
+
+Templates 1 and 3 lay the index out as a grid of boxes that flows
+horizontally and wraps; template 7 keeps its cards full width, one per row. A
+box is Paper with a hairline on a wash ground — the wash is what makes it read
+as a box, and the copy is still on Paper, never on the wash. The grids use
+`auto-fill`, so a box stays the same size whether the index has two authors or
+twenty.
 
 The kicker sits above the name as a tracked uppercase eyebrow, which is where
 all ten single-profile templates put it. It falls back to "Author" when a
@@ -106,7 +173,7 @@ profile does not set one, so a row is never unlabelled.
 [author_bio_list]
 [author_bio_list template=7]
 [author_bio_list orderby="posts" order="desc"]
-[author_bio_list count=10 counts="0"]
+[author_bio_list count=10]
 ```
 
 | Attribute | Default | Meaning |
@@ -115,7 +182,6 @@ profile does not set one, so a row is never unlabelled.
 | `count` | `0` (all) | how many authors to list |
 | `orderby` | `name` | `name`, `posts` (most published first), or `recent` |
 | `order` | `asc` | `asc` or `desc` |
-| `counts` | `1` | show the article count; `0` also skips counting it |
 | `heading` | — | replaces the default "Authors · N" label |
 | `profiles` | settings | `0` lists only the selected authors |
 | `users` | settings | comma-separated IDs, logins or nicenames to list |
@@ -134,15 +200,56 @@ band in templates 4, 6, 7 and 10, circular headshots in 5, rounded cards in 8.
   curate an exact index.
 - **Select authors** — a multi-select of site users. Anyone chosen appears
   whether or not they have an Author Profile, shown from what WordPress holds:
-  display name, avatar, and their published-article count. Somebody who already
-  has a profile is listed once, from that profile.
+  display name and avatar. Somebody who already has a profile is listed once,
+  from that profile.
 
 Two attributes override those settings for a single placement:
 `profiles="0"` ignores the saved profiles, and `users="12,45"` (IDs, logins or
 nicenames) replaces the selected list.
 
-Each article count is one query per author. On a large index, `counts="0"`
-removes both the figure and the queries.
+No index shows a published-article count. Counting one is a query per author,
+so it now runs only for `orderby="posts"`, where the order depends on it.
+
+## Structured data
+
+Both shortcodes emit schema.org JSON-LD.
+
+A profile page emits a `ProfilePage` whose `mainEntity` is a `Person` — the
+markup Google documents for author and profile pages. An index emits an
+`ItemList` of `Person` nodes. Each `Person` is anchored to the author archive
+URL with an `@id` of `<archive>#person`, so the node in an index and the node
+on that author's own page describe one person rather than two.
+
+Fields map straight across, and only when they resolve:
+
+| Profile field | Property |
+|---|---|
+| Name | `name` |
+| Job title | `jobTitle` |
+| Bio, else short line | `description` (markup stripped) |
+| Portrait | `image` |
+| Location | `homeLocation` |
+| Site name | `worksFor` |
+| Areas of focus | `knowsAbout` |
+| Credentials | `hasCredential` |
+| Follows with a URL | `sameAs` |
+
+Nothing is inferred or padded. A key whose value does not resolve is dropped
+rather than emitted empty, credentials are passed through verbatim with no
+invented issuer or date, and `dateCreated`/`dateModified` appear only where
+there is an Author Profile post to date — a profile built from a WordPress user
+alone has no authored record behind it.
+
+If your SEO plugin already describes authors — Yoast and Rank Math both emit
+`Person` for author archives — you may not want two descriptions of the same
+person on one page:
+
+```php
+add_filter( 'abio_schema_enabled', '__return_false' );
+```
+
+The graphs are also filterable before output: `abio_schema_person`,
+`abio_schema_profile_page` and `abio_schema_item_list`.
 
 ## Unconfigured authors
 
